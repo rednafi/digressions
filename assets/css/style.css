@@ -473,6 +473,6 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 .output_text.output_execute_result pre { white-space: pre-wrap; }
 
-.input_area_pre, .input_area_div { font-size: 120%; }
+.input_area pre, .input_area div { font-size: 120%; }
 
 /*# sourceMappingURL=style.css.map */
