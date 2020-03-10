@@ -343,7 +343,7 @@ table td { border: 1px solid #e8e8e8; }
 
 .language-python + .language-plaintext pre { background-color: white !important; }
 
-.input_area pre, .input_area div { margin-bottom: 2rem !important; margin-top: 1.5rem !important; padding-bottom: 0 !important; padding-top: 0 !important; background: #323443 !important; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-family: Menlo, Monaco, Consolas, "Lucida Console", Roboto, Ubuntu, monospace; border-radius: 5px; font-size: 150%; }
+.input_area pre, .input_area div { margin-bottom: 2rem !important; margin-top: 1.5rem !important; padding-bottom: 0 !important; padding-top: 0 !important; background: #323443 !important; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-family: Menlo, Monaco, Consolas, "Lucida Console", Roboto, Ubuntu, monospace; border-radius: 5px; font-size: 100%; }
 
 .output_area pre, .output_area div { margin-bottom: 1rem !important; margin-top: 1rem !important; padding-bottom: 0 !important; padding-top: 0 !important; }
 
@@ -417,9 +417,9 @@ details.description:not([open]) summary::after { content: attr(data-close); }
 
 .notebook-badge-image { border: 0 !important; }
 
-.footnotes { font-size: 12px !important; }
+.footnotes { font-size: 15px !important; }
 
-.footnotes p, .footnotes li { font-size: 12px !important; }
+.footnotes p, .footnotes li { font-size: 15px !important; }
 
 .social-media-list .svg-icon, .pagination .svg-icon { width: 25px !important; height: 23px !important; }
 
