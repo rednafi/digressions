@@ -2,7 +2,7 @@
 layout: home
 search_exclude: false
 ---
-# A Glimpse of Personal Values
+# A Stream of Personal Values
 
 - Relax
 - But why?
