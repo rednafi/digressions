@@ -351,7 +351,7 @@ table td { border: 1px solid #e8e8e8; }
 
 .output_area pre { border-left: 1px solid grey; margin-left: 1rem !important; }
 
-.code_cell table { width: auto; font-size: 15px; }
+.code_cell table { width: auto; }
 
 .page-content { -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; font-family: "Segoe UI", SegoeUI, Roboto, "Segoe WP", "Helvetica Neue", "Helvetica", "Tahoma", "Arial", sans-serif !important; }
 
@@ -457,7 +457,7 @@ h1:hover .anchor-link, h2:hover .anchor-link, h3:hover .anchor-link, h4:hover .a
 
 .search-result-highlight { color: #2e0137; font-weight: bold; }
 
-table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 90%; border: none; }
+table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 200%; border: none; }
 
 table th { text-align: center !important; }
 
