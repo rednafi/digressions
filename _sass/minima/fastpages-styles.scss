@@ -56,7 +56,7 @@ $dt-green-light: rgb(172, 229, 145);
         text-rendering: optimizeLegibility;
         font-family: Menlo, Monaco, Consolas, "Lucida Console", Roboto, Ubuntu, monospace;
         border-radius: 5px;
-        font-size: 150%;
+        font-size: 100%;
 }
 .output_area pre, .output_area div {
         margin-bottom:1rem !important;
@@ -311,9 +311,9 @@ details.description:not([open]) summary::after {
 
 // Adjust font size for footnotes.
 .footnotes {
-  font-size: 12px !important;
+  font-size: 15px !important;
   p, li{
-    font-size: 12px !important;
+    font-size: 15px !important;
  }
 }
 
