@@ -1,0 +1,196 @@
+<h1 id="polymorphic-dispatching-with-pythons-singledispatch">Polymorphic Dispatching with Python’s Singledispatch</h1>
+
+<p>Recently, I was refactoring a portion of a Python function that somewhat looked like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">cond0</span> <span class="ow">and</span> <span class="n">cond1</span><span class="p">:</span>
+        <span class="c1"># apply func01 on data that satisfies the cond0 &amp; cond1
+</span>        <span class="k">return</span> <span class="n">func01</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cond2</span> <span class="ow">or</span> <span class="n">cond3</span><span class="p">:</span>
+        <span class="c1"># apply func23 on data that satisfies the cond2 &amp; cond3
+</span>        <span class="k">return</span> <span class="n">func23</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cond4</span> <span class="ow">and</span> <span class="n">cond5</span><span class="p">:</span>
+        <span class="c1"># apply func45 on data that satisfies cond4 &amp; cond5
+</span>        <span class="k">return</span> <span class="n">func45</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">func01</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="o">...</span>
+
+
+<span class="k">def</span> <span class="nf">func23</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="o">...</span>
+
+
+<span class="k">def</span> <span class="nf">func45</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+<p>This pattern gets tedious when the number of conditions and actionable functions starts to grow. I was looking for a functional approach to dynamically overload a function based on some specific conditions. Let’s see how Python’s <code class="highlighter-rouge">singledispatch</code> decorator can help to design a better solution.</p>
+
+<h2 id="function-overloading">Function Overloading</h2>
+
+<p>Function overloading is a specific type of polymorphism where multiple functions can have the same name with different implementations. Calling an overloaded function will run a specific implementation of that function based on some prior conditions or appropriate context of the call.</p>
+
+<h2 id="singledispatch">Singledispatch</h2>
+
+<p>Python fairly recently added partial support for <strong>function overloading</strong> in <em>Python 3.4</em>. They did this by adding a neat little decorator to the <strong>functools</strong> module called <code class="highlighter-rouge">singledispatch</code>.  In <em>python 3.8</em>, there is another decorator for methods called <code class="highlighter-rouge">singledispatchmethod</code>. This decorator will transform your regular function into a single dispatch generic function.</p>
+
+<blockquote>
+  <p>A generic function is composed of multiple functions implementing the same operation for different types. Which implementation should be used during a call is determined by the dispatch algorithm. When the implementation is chosen based on the type of a single argument, this is known as single dispatch.</p>
+</blockquote>
+
+<p>As PEP-443 said, singledispatch only happens based on the first argument’s type. Let’s take a look at an example to see how this works!</p>
+
+<h3 id="example-1-singledispatch-with-built-in-argument-type">Example-1: Singledispatch with built-in argument type</h3>
+
+<p>Let’s consider the following code:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># procedural.py
+</span>
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">process_int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">process_float</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">process_int</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="c1"># processing interger
+</span>    <span class="k">return</span> <span class="n">f</span><span class="s">"Integer {num} has been processed successfully!"</span>
+
+
+<span class="k">def</span> <span class="nf">process_float</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="c1"># processing float
+</span>    <span class="k">return</span> <span class="n">f</span><span class="s">"Float {num} has been processed successfully!"</span>
+
+
+<span class="c1"># use the function
+</span><span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="mf">12.0</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Running this code will return</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Float</span> <span class="mf">12.0</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<span class="o">&gt;&gt;</span> <span class="n">Integer</span> <span class="mi">1</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+</code></pre></div></div>
+<p>The above code snippet applies <code class="highlighter-rouge">process_int</code> or <code class="highlighter-rouge">process_float</code> functions on the incoming number based on its type. Now let’s see how the same thing can be achieved with <code class="highlighter-rouge">singledispatch</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># single_dispatch.py
+</span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
+
+
+<span class="o">@</span><span class="n">singledispatch</span>
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">NotImplementedError</span><span class="p">(</span><span class="s">"Implement process function."</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">process</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">sub_process</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="c1"># processing interger
+</span>    <span class="k">return</span> <span class="n">f</span><span class="s">"Integer {num} has been processed successfully!"</span>
+
+
+<span class="o">@</span><span class="n">process</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">sub_process</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="c1"># processing float
+</span>    <span class="k">return</span> <span class="n">f</span><span class="s">"Float {num} has been processed successfully!"</span>
+
+
+<span class="c1"># use the function
+</span><span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="mf">12.0</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</code></pre></div></div>
+<p>Running this will return the same result as before.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Float</span> <span class="mf">12.0</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<span class="o">&gt;&gt;</span> <span class="n">Integer</span> <span class="mi">1</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+</code></pre></div></div>
+
+<h3 id="example-2-singledispatch-with-custom-argument-type">Example-2: Singledispatch with custom argument type</h3>
+<p>Suppose, you want to dispatch your function based on custom argument type where the type will be deduced from data. Consider this example:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">"genus"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Felis"</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s">"bucket"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"cat"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">process_cat</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data</span><span class="p">[</span><span class="s">"genus"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Canis"</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s">"bucket"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"dog"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">process_dog</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">process_cat</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="c1"># processing cat
+</span>    <span class="k">return</span> <span class="s">"Cat data has been processed successfully!"</span>
+
+
+<span class="k">def</span> <span class="nf">process_dog</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="c1"># processing dog
+</span>    <span class="k">return</span> <span class="s">"Dog data has been processed successfully!"</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">cat_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"genus"</span><span class="p">:</span> <span class="s">"Felis"</span><span class="p">,</span> <span class="s">"species"</span><span class="p">:</span> <span class="s">"catus"</span><span class="p">,</span> <span class="s">"bucket"</span><span class="p">:</span> <span class="s">"cat"</span><span class="p">}</span>
+    <span class="n">dog_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"genus"</span><span class="p">:</span> <span class="s">"Canis"</span><span class="p">,</span> <span class="s">"species"</span><span class="p">:</span> <span class="s">"familiaris"</span><span class="p">,</span> <span class="s">"bucket"</span><span class="p">:</span> <span class="s">"dog"</span><span class="p">}</span>
+
+    <span class="c1"># using process
+</span>    <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="n">cat_data</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="n">dog_data</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Running this snippet will print out:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Cat</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<span class="o">&gt;&gt;</span> <span class="n">Dog</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+</code></pre></div></div>
+
+<p>To refactor this with <code class="highlighter-rouge">singledispatch</code>, you can create two data types <code class="highlighter-rouge">Cat</code> and <code class="highlighter-rouge">Dog</code>. A <code class="highlighter-rouge">class_factory</code> function will determine data type based on condition and <code class="highlighter-rouge">singledispatch</code> will take care of dispatching the appropriate implementation of the <code class="highlighter-rouge">process</code> function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+
+<span class="o">@</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">Cat</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span>
+
+
+<span class="o">@</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span>
+
+
+<span class="k">def</span> <span class="nf">class_factory</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">"genus"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Felis"</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s">"bucket"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"cat"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Cat</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data</span><span class="p">[</span><span class="s">"genus"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Canis"</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s">"bucket"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"dog"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Dog</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">singledispatch</span>
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">NotImplementedError</span><span class="p">(</span><span class="s">"Implement process for bucket"</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">process</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Cat</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">sub_process</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="c1"># processing cat
+</span>    <span class="k">return</span> <span class="s">"Cat data has been processed successfully!"</span>
+
+
+<span class="o">@</span><span class="n">process</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Dog</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">sub_process</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"Dog data has been processed successfully!"</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">cat_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"genus"</span><span class="p">:</span> <span class="s">"Felis"</span><span class="p">,</span> <span class="s">"species"</span><span class="p">:</span> <span class="s">"catus"</span><span class="p">,</span> <span class="s">"bucket"</span><span class="p">:</span> <span class="s">"cat"</span><span class="p">}</span>
+    <span class="n">dog_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"genus"</span><span class="p">:</span> <span class="s">"Canis"</span><span class="p">,</span> <span class="s">"species"</span><span class="p">:</span> <span class="s">"familiaris"</span><span class="p">,</span> <span class="s">"bucket"</span><span class="p">:</span> <span class="s">"dog"</span><span class="p">}</span>
+
+    <span class="n">cat_obj</span> <span class="o">=</span> <span class="n">class_factory</span><span class="p">(</span><span class="n">cat_data</span><span class="p">)</span>
+    <span class="n">dog_obj</span> <span class="o">=</span> <span class="n">class_factory</span><span class="p">(</span><span class="n">dog_data</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="n">cat_obj</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="n">dog_obj</span><span class="p">))</span>
+</code></pre></div></div>
+<p>Running this will print out the same output as before:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Cat</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<span class="o">&gt;&gt;</span> <span class="n">Dog</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+</code></pre></div></div>
