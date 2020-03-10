@@ -13,6 +13,6 @@ search_exclude: false
 - Abstraction is chaos concealed by confusion
 - He who has a why to live can bear almost any how - Nietzsche
 - The demand for certainty is one which is natural to man, but is nevertheless an intellectual vice - Russel
--
+
 
 # Posts
