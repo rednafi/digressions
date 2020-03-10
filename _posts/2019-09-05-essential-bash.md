@@ -700,6 +700,7 @@ forward in bash.
     /home/redowan/code/bash/files/numbers.txt
     /home/redowan/code/bash/files/sorted_numbers.txt
     ```
+    
 ## **Some Good Practices**
 
 ### **Use a Bash Strict Mode**
