@@ -82,8 +82,8 @@ $dt-green-light: rgb(172, 229, 145);
 
 // make non-headings slightly lighter
 .post-content p, .post-content li {
-   font-size: 20px;
-   color: #515151;
+   font-size: 18px;
+   color: #282a36;
 }
 
 .post-link{
@@ -96,25 +96,25 @@ h1 {
 }
 
 h2 {
-    margin-top:2rem !important;      
+    margin-top:2rem !important;
 }
 
 h3, h4 {
-    margin-top:1.5rem !important;      
+    margin-top:1.5rem !important;
 }
 
 p {
-    margin-top:1rem !important; 
-    margin-bottom:1rem !important;   
+    margin-top:1rem !important;
+    margin-bottom:1rem !important;
 }
 
 h1, h2, h3, h4 {
     font-weight: normal !important;
-    margin-bottom:0.5rem !important;  
+    margin-bottom:0.5rem !important;
 }
 
 pre {
-    margin-bottom:1.5rem !important; 
+    margin-bottom:1.5rem !important;
 }
 
 // make sure the post title doesn't have too much spacing
@@ -142,11 +142,11 @@ li {
  * Code licensed under the MIT license
  *
  */
- 
+
  /*
   * Styles
   */
- 
+
  .highlight {
    background: $dt-code-cell-background !important;
    color: $dt-gray-light !important;
@@ -154,7 +154,7 @@ li {
     background: $dt-code-cell-background;
     color: $dt-gray-light;
    }
-  
+
    .hll,
    .s,
    .sa,
@@ -172,11 +172,11 @@ li {
    .ss {
         color:rgb(231, 153, 122);
    }
- 
+
    .go {
      color: $dt-gray;
    }
- 
+
    .err,
    .g,
    .l,
@@ -209,21 +209,21 @@ li {
         font-weight: bold;
         color: rgb(102, 217, 239);
 }
- 
+
 //    .gh,
 //    .gi,
 //    .gu {
 //      font-weight: bold;
 //    }
- 
+
    .ge {
      text-decoration: underline;
    }
- 
+
    .bp {
      font-style: italic;
    }
- 
+
    .c,
    .ch,
    .cm,
@@ -232,7 +232,7 @@ li {
    .cs {
      color: $dt-blue;
    }
- 
+
    .kd,
    .kt,
    .nb,
@@ -244,7 +244,7 @@ li {
    .vm {
      color: $dt-cyan;
    }
- 
+
    .kd,
    .nb,
    .nl,
@@ -255,7 +255,7 @@ li {
    .vm {
      font-style: italic;
    }
- 
+
    .fm,
    .na,
    .nc,
@@ -263,7 +263,7 @@ li {
     {
      color: $dt-green-light;
    }
- 
+
    .k,
    .o,
    .cp,
@@ -277,9 +277,9 @@ li {
    }
 
    .kc {
-        color: $dt-green-light;   
+        color: $dt-green-light;
    }
- 
+
    .m,
    .mb,
    .mf,
@@ -289,7 +289,7 @@ li {
    .il {
      color: $dt-purple;
    }
- 
+
    .gd {
      color: $dt-red;
    }
@@ -314,7 +314,7 @@ details.description:not([open]) summary::after {
   font-size: 12px !important;
   p, li{
     font-size: 12px !important;
- } 
+ }
 }
 
 // Adjust with of social media icons were getting cut off
