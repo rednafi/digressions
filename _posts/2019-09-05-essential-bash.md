@@ -1,10 +1,9 @@
 ---
-title: "Essential Bash Scripting"
-date: 2019-09-05
+title: Essential Bash Scripting
 toc: true
-tags: ["Shell", "Bash"]
-categories: ["Linux"]
-author: Redowan Delowar
+layout: post
+description: A reference for basic scripting in bash.
+categories: [markdown]
 ---
 
 ![Example image](https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80)
