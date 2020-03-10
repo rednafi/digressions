@@ -353,8 +353,6 @@ table td { border: 1px solid #e8e8e8; }
 
 .code_cell table { width: auto; }
 
-pre, code { font-size: 15px; }
-
 .page-content { -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; font-family: "Segoe UI", SegoeUI, Roboto, "Segoe WP", "Helvetica Neue", "Helvetica", "Tahoma", "Arial", sans-serif !important; }
 
 .post-content p, .post-content li { font-size: 17px; color: #282a36; }
