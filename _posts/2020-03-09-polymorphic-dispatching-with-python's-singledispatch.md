@@ -1,10 +1,9 @@
 ---
-toc: true
+toc: false
 layout: post
 description: Using singledispatch in python.
 categories: [markdown]
 ---
-# Polymorphic Dispatching with Python's Singledispatch
 
 Recently, I was refactoring a portion of a Python function that somewhat looked like this:
 
