@@ -72,7 +72,7 @@ $dt-green-light: rgb(172, 229, 145);
         margin-left: 1rem !important;
 }
 
-.code_cell table { width: auto; font-size: 15px; }
+.code_cell table { width: auto; }
 
 .page-content {
         -webkit-font-smoothing: antialiased !important;
@@ -412,7 +412,7 @@ table {
   display: block !important;
   overflow-x: auto;
   white-space: nowrap;
-  font-size: 90%;
+  font-size: 200%;
   border:none;
   th{
     text-align: center! important;
