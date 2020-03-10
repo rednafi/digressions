@@ -1,4 +1,5 @@
 ---
+title: Polymorphic Dispatching with Python's Singledispatch
 toc: false
 layout: post
 description: Using singledispatch in python.
