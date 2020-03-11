@@ -1,9 +1,9 @@
 ---
-title: Python workflow for Sanity
+title: Python Workflow for Sanity
 toc: false
 layout: post
-description: 
-categories: [markdown]
+description:
+categories: [python]
 ---
 
 # Python Workflow

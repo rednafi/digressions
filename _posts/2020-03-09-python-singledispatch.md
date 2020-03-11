@@ -3,7 +3,7 @@ title: Polymorphic Dispatching with Python's Singledispatch
 toc: false
 layout: post
 description: A functional approach to polymorphism in python
-categories: [markdown]
+categories: [python]
 ---
 
 Recently, I was refactoring a portion of a Python function that somewhat looked like this:

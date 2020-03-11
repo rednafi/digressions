@@ -3,7 +3,7 @@ title: A Minimalistic Approach to ZSH
 toc: true
 layout: post
 description: Up and running with z-shell in no time
-categories: [markdown]
+categories: [linux]
 ---
 
 ![Imgur](https://imgur.com/OOe4F0e.png)
