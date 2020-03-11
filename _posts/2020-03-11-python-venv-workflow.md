@@ -62,7 +62,7 @@ To create another environment with a different python version, you have to:
   ```bash
   sudo apt install python3.8-venv
   ```
-* Create multiple environments with multiple versions and name them distinctively. i.e. `venv3.7`, `venv3.8` etc. Follow the instructions [above](#creating-virtual-environments).
+* Create multiple environments with multiple versions and name them distinctively. i.e. `venv3.7`, `venv3.8` etc. Follow the instructions [above](#creating-virtual-environment).
 * Activate and deactivate the desired virtual environment 
 
 
