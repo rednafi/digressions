@@ -8,7 +8,7 @@ categories: [python]
 
 There are multiple ways of installing Python, creating and switching between different virtual environments. Also, Python's package manager hyperspace is a mess. So, things can quickly get out of hands while dealing with projects that require quick environment switching across multiple versions of Python. I use Debian linux in my primary development environment and this is how I keep the option explosion in check:
 
-## Install Python 
+## Installing Python 
 
 Run the following commands one by one:
 
@@ -27,7 +27,7 @@ sudo apt install python3.7
 python3.7 --version
 ```
 
-## Create Virtual Environment
+## Creating Virtual Environment
 
 There are multiple ways creating and switching between different environments can be done. I use `venv` for creating virtual environments. For demonstration, here I'm creating a virtual environment that uses python3.7.
 
@@ -48,7 +48,7 @@ There are multiple ways creating and switching between different environments ca
    ```
 
 
-## Switch Between Different Environments
+## Switching Between Different Environments
 
 To create another environment with a different python version, you have to:
 
