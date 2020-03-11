@@ -1,12 +1,12 @@
 ---
-title: Python Workflow for Sanity
+title: Python Virtual Environment Workflow for Sanity
 toc: false
 layout: post
 description: Keeping python's virtual environment madness in check
 categories: [python]
 ---
 
-I use debian linux (Ubuntu, PopOS) as my primary operating system for development. Python's versioning, virtual environment creation, switching between multiple versions, package management can feel a bit overwhelming. Here's how I keep my sanity while working on a new python project:
+There are multiple ways of installing Python, creating and switching between different virtual environments. Also, Python's package manager hyperspace is a mess. So, things can quickly get out of hands while dealing with projects that require quick environment switching across multiple versions of Python. I use Debian linux in my primary development environment and this is how I keep the option explosion in check:
 
 ## Install Python 
 
