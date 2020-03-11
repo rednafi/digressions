@@ -1,4 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-10T14:10:42-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Polymorphic Dispatching with Python’s Singledispatch</title><link href="https://rednafi.github.io/digressions/markdown/2020/03/09/python-singledispatch.html" rel="alternate" type="text/html" title="Polymorphic Dispatching with Python's Singledispatch" /><published>2020-03-09T00:00:00-05:00</published><updated>2020-03-09T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/markdown/2020/03/09/python-singledispatch</id><content type="html" xml:base="https://rednafi.github.io/digressions/markdown/2020/03/09/python-singledispatch.html">&lt;p&gt;Recently, I was refactoring a portion of a Python function that somewhat looked like this:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-11T02:54:07-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Python workflow for Sanity</title><link href="https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html" rel="alternate" type="text/html" title="Python workflow for Sanity" /><published>2020-03-11T00:00:00-05:00</published><updated>2020-03-11T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow</id><content type="html" xml:base="https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html">&lt;h1 id=&quot;python-workflow&quot;&gt;Python Workflow&lt;/h1&gt;
+
+&lt;p&gt;I use debian linux (Ubuntu, PopOS) as my primary operating system for development. Python’s versioning, virtual environment creation, switching between multiple versions, package management can feel a bit overwhelming. Here’s how I keep my sanity while working on a new python projet:&lt;/p&gt;
+
+&lt;h2 id=&quot;install-python&quot;&gt;Install Python&lt;/h2&gt;
+
+&lt;p&gt;Run the following commands one by one:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# update the packages list and install the prerequisites&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt update
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;software-properties-common
+
+&lt;span class=&quot;c&quot;&gt;# add deadsnakes ppa to your sources' list (When prompted press Enter to continue)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;add-apt-repository ppa:deadsnakes/ppa
+
+&lt;span class=&quot;c&quot;&gt;# install python3.7&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python3.7
+
+&lt;span class=&quot;c&quot;&gt;# verify python installation&lt;/span&gt;
+python3.7 &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;create-virtual-environment&quot;&gt;Create Virtual Environment&lt;/h2&gt;
+
+&lt;p&gt;There are multiple ways creating and switching between different environments can be done. I use &lt;code class=&quot;highlighter-rouge&quot;&gt;venv&lt;/code&gt; for creating virtual environments. For demonstration, here I’m creating a virtual environment that uses python3.7.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;python3-venv&lt;/code&gt; for creating virtual environment
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python3.7-venv
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create virtual environment named &lt;code class=&quot;highlighter-rouge&quot;&gt;venv&lt;/code&gt; in the project folder&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; python3.7 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; venv venv
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Activate &lt;code class=&quot;highlighter-rouge&quot;&gt;venv&lt;/code&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;venv/bin/activate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;switch-between-different-environments&quot;&gt;Switch Between Different Environments&lt;/h2&gt;
+
+&lt;p&gt;To create another environment with a different python version, you have to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Install the desired version of python following the procedures stated above&lt;/li&gt;
+  &lt;li&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;python3-venv&lt;/code&gt; specific for your python version&lt;/li&gt;
+  &lt;li&gt;Activate and deactivate the desired virtual environment&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;package-management&quot;&gt;Package Management&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;For local development, I use &lt;a href=&quot;https://pip.pypa.io/en/stable/&quot;&gt;pip&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;For production application and libraries &lt;a href=&quot;https://python-poetry.org/&quot;&gt;poetry&lt;/a&gt; is preferred&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Python Workflow</summary></entry><entry><title type="html">Polymorphic Dispatching with Python’s Singledispatch</title><link href="https://rednafi.github.io/digressions/markdown/2020/03/09/python-singledispatch.html" rel="alternate" type="text/html" title="Polymorphic Dispatching with Python's Singledispatch" /><published>2020-03-09T00:00:00-05:00</published><updated>2020-03-09T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/markdown/2020/03/09/python-singledispatch</id><content type="html" xml:base="https://rednafi.github.io/digressions/markdown/2020/03/09/python-singledispatch.html">&lt;p&gt;Recently, I was refactoring a portion of a Python function that somewhat looked like this:&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cond0&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cond1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;

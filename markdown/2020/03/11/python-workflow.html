@@ -3,30 +3,34 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Tags | Redowan’s Digressions</title>
+<title>Python workflow for Sanity | Redowan’s Digressions</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Tags" />
+<meta property="og:title" content="Python workflow for Sanity" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Sporadic digressions on software, tech &amp; personal beliefs" />
-<meta property="og:description" content="Sporadic digressions on software, tech &amp; personal beliefs" />
-<link rel="canonical" href="https://rednafi.github.io/digressions/categories/" />
-<meta property="og:url" content="https://rednafi.github.io/digressions/categories/" />
+<meta name="description" content="Python Workflow" />
+<meta property="og:description" content="Python Workflow" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html" />
 <meta property="og:site_name" content="Redowan’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-11T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Sporadic digressions on software, tech &amp; personal beliefs","@type":"WebPage","url":"https://rednafi.github.io/digressions/categories/","headline":"Tags","@context":"https://schema.org"}</script>
+{"dateModified":"2020-03-11T00:00:00-05:00","description":"Python Workflow","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html"},"url":"https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html","headline":"Python workflow for Sanity","datePublished":"2020-03-11T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Redowan's Digressions" /><link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Tags | Redowan’s Digressions</title>
+<title>Python workflow for Sanity | Redowan’s Digressions</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Tags" />
+<meta property="og:title" content="Python workflow for Sanity" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Sporadic digressions on software, tech &amp; personal beliefs" />
-<meta property="og:description" content="Sporadic digressions on software, tech &amp; personal beliefs" />
-<link rel="canonical" href="https://rednafi.github.io/digressions/categories/" />
-<meta property="og:url" content="https://rednafi.github.io/digressions/categories/" />
+<meta name="description" content="Python Workflow" />
+<meta property="og:description" content="Python Workflow" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html" />
 <meta property="og:site_name" content="Redowan’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-11T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Sporadic digressions on software, tech &amp; personal beliefs","@type":"WebPage","url":"https://rednafi.github.io/digressions/categories/","headline":"Tags","@context":"https://schema.org"}</script>
+{"dateModified":"2020-03-11T00:00:00-05:00","description":"Python Workflow","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html"},"url":"https://rednafi.github.io/digressions/markdown/2020/03/11/python-workflow.html","headline":"Python workflow for Sanity","datePublished":"2020-03-11T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -97,53 +101,95 @@ window.onload = wrap_img;
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-<h2>Contents</h2>
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Python workflow for Sanity</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-03-11T00:00:00-05:00" itemprop="datePublished">
+        Mar 11, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
 
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/digressions/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="python-workflow">Python Workflow</h1>
+
+<p>I use debian linux (Ubuntu, PopOS) as my primary operating system for development. Python’s versioning, virtual environment creation, switching between multiple versions, package management can feel a bit overwhelming. Here’s how I keep my sanity while working on a new python projet:</p>
+
+<h2 id="install-python">Install Python</h2>
+
+<p>Run the following commands one by one:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># update the packages list and install the prerequisites</span>
+<span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>software-properties-common
+
+<span class="c"># add deadsnakes ppa to your sources' list (When prompted press Enter to continue)</span>
+<span class="nb">sudo </span>add-apt-repository ppa:deadsnakes/ppa
+
+<span class="c"># install python3.7</span>
+<span class="nb">sudo </span>apt <span class="nb">install </span>python3.7
+
+<span class="c"># verify python installation</span>
+python3.7 <span class="nt">--version</span>
+</code></pre></div></div>
+
+<h2 id="create-virtual-environment">Create Virtual Environment</h2>
+
+<p>There are multiple ways creating and switching between different environments can be done. I use <code class="highlighter-rouge">venv</code> for creating virtual environments. For demonstration, here I’m creating a virtual environment that uses python3.7.</p>
 
 <ul>
+  <li>Install <code class="highlighter-rouge">python3-venv</code> for creating virtual environment
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>python3.7-venv
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create virtual environment named <code class="highlighter-rouge">venv</code> in the project folder</p>
 
-  
-  <li><a href="#markdown">markdown</a></li>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> python3.7 <span class="nt">-m</span> venv venv
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Activate <code class="highlighter-rouge">venv</code></p>
 
-  
-  <li><a href="#jupyter">jupyter</a></li>
-
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nb">source </span>venv/bin/activate
+</code></pre></div>    </div>
+  </li>
 </ul>
 
+<h2 id="switch-between-different-environments">Switch Between Different Environments</h2>
 
+<p>To create another environment with a different python version, you have to:</p>
 
-    
+<ul>
+  <li>Install the desired version of python following the procedures stated above</li>
+  <li>Install <code class="highlighter-rouge">python3-venv</code> specific for your python version</li>
+  <li>Activate and deactivate the desired virtual environment</li>
+</ul>
 
-    <h3 id ="markdown"><i class="fas fa-tags category-tags-icon"></i></i> markdown</h3>
-    <a name="markdown"></a>
-    <article class="archive-item">
-      <p class="post-meta post-meta-title"><a class="page-meta" href="/digressions/markdown/2020/03/11/python-workflow.html">Python workflow for Sanity</a>  • Mar 11, 2020</p>
-    </article>
-    <article class="archive-item">
-      <p class="post-meta post-meta-title"><a class="page-meta" href="/digressions/markdown/2020/03/09/python-singledispatch.html">Polymorphic Dispatching with Python's Singledispatch</a>  • Mar 9, 2020</p>
-    </article>
-    <article class="archive-item">
-      <p class="post-meta post-meta-title"><a class="page-meta" href="/digressions/markdown/2019/10/29/minimal-zsh.html">A Minimalistic Approach to ZSH</a>  • Oct 29, 2019</p>
-    </article>
-    <article class="archive-item">
-      <p class="post-meta post-meta-title"><a class="page-meta" href="/digressions/markdown/2019/09/05/essential-bash.html">Essential Bash Scripting</a>  • Sep 5, 2019</p>
-    </article>
-    
+<h2 id="package-management">Package Management</h2>
 
-    
+<ul>
+  <li>For local development, I use <a href="https://pip.pypa.io/en/stable/">pip</a></li>
+  <li>For production application and libraries <a href="https://python-poetry.org/">poetry</a> is preferred</li>
+</ul>
 
-    <h3 id ="jupyter"><i class="fas fa-tags category-tags-icon"></i></i> jupyter</h3>
-    <a name="jupyter"></a>
-    <article class="archive-item">
-      <p class="post-meta post-meta-title"><a class="page-meta" href="/digressions/jupyter/2020/02/20/test.html">Fastpages Notebook Blog Post</a>  • Feb 20, 2020</p>
-    </article>
-    
-
-
-
-</div>
+  </div><a class="u-url" href="/digressions/markdown/2020/03/11/python-workflow.html" hidden></a>
+</article>
       </div>
     </main><footer class="site-footer h-card">
   <data class="u-url" href="/digressions/"></data>
