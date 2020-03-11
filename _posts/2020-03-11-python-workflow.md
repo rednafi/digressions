@@ -2,13 +2,13 @@
 title: Python Workflow for Sanity
 toc: false
 layout: post
-description:
+description: Keeping python's virtual environment madness in check
 categories: [python]
 ---
 
 # Python Workflow
 
-I use debian linux (Ubuntu, PopOS) as my primary operating system for development. Python's versioning, virtual environment creation, switching between multiple versions, package management can feel a bit overwhelming. Here's how I keep my sanity while working on a new python projet:
+I use debian linux (Ubuntu, PopOS) as my primary operating system for development. Python's versioning, virtual environment creation, switching between multiple versions, package management can feel a bit overwhelming. Here's how I keep my sanity while working on a new python project:
 
 ## Install Python
 
@@ -48,7 +48,6 @@ There are multiple ways creating and switching between different environments ca
    ```bash
    source venv/bin/activate
    ```
-
 
 
 ## Switch Between Different Environments
