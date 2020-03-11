@@ -46,18 +46,27 @@ There are multiple ways creating and switching between different environments ca
    ```bash
    source venv/bin/activate
    ```
+* Deactivate `venv`
+   ```bash
+   deactivate
+   ```
 
 
 ## Switching Between Different Environments
 
 To create another environment with a different python version, you have to:
 
-* Install the desired version of python following the procedures stated above
-* Install `python3-venv` specific for your python version
-* Activate and deactivate the desired virtual environment
+* Install the desired version of python following the procedures stated [above.](#installing-python)
+* Install `python3-venv` specific for your python version, like if you are using python3.8, 
+  you should run: 
+  ```bash
+  sudo apt install python3.8-venv
+  ```
+* Create multiple environments with multiple versions and name them distinctively. i.e. `venv3.7`, `venv3.8` etc. Follow the instructions [above](#creating-virtual-environments).
+* Activate and deactivate the desired virtual environment 
 
 
 ## Package Management
 
-* For local development, I use [pip](https://pip.pypa.io/en/stable/)
-* For production application and libraries [poetry](https://python-poetry.org/) is preferred
+* For local development, I use [pip](https://pip.pypa.io/en/stable/).
+* For production application and libraries [poetry](https://python-poetry.org/) is preferred.
