@@ -171,7 +171,7 @@ window.onload = wrap_img;
 <span class="k">print</span><span class="p">(</span><span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt; CartesianPoint(x = 1, y = 2, z = 3)
 </code></pre></div></div>
 
 <p>This class only creates a <code class="highlighter-rouge">CartesianPoint</code> type and shows a pretty output of the instances created from it. However, it already has two methods inside, <code class="highlighter-rouge">__init__</code> and <code class="highlighter-rouge">__repr__</code> that do not do much.</p>
@@ -196,7 +196,7 @@ window.onload = wrap_img;
 <span class="k">print</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt; CartesianPoint(x=1, y=2, z=3)
 </code></pre></div></div>
 
 <p>In the above code, the magic is done by the <code class="highlighter-rouge">dataclass</code> decorator. Dataclasses require you to use explicit <a href="https://docs.python.org/3/library/typing.html">type annotation</a> and it automatically implements methods like <code class="highlighter-rouge">__init__</code>, <code class="highlighter-rouge">__repr__</code>, <code class="highlighter-rouge">__eq__</code> etc beforehand. You can inspect the methods that <code class="highlighter-rouge">dataclass</code> auto defines via python’s help.</p>
@@ -290,7 +290,7 @@ class CartesianPoint(builtins.object)
 <span class="k">print</span><span class="p">(</span><span class="n">point_1</span> <span class="o">==</span> <span class="n">point_2</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="bp">False</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt; False
 </code></pre></div></div>
 
 <p>However, if you want to compare multiple instances of dataclasses, aka add <code class="highlighter-rouge">__gt__</code> or <code class="highlighter-rouge">__lt__</code> methods to your instances, you have to turn on the <code class="highlighter-rouge">order</code> flag manually.</p>
@@ -312,7 +312,7 @@ class CartesianPoint(builtins.object)
 <span class="k">print</span><span class="p">(</span><span class="n">point_1</span> <span class="o">&gt;</span> <span class="n">point_2</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="bp">True</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt; True
 </code></pre></div></div>
 
 <p>By default, while comparing intances, all of the fields are used. In our above case, all the fields  <code class="highlighter-rouge">x</code>, <code class="highlighter-rouge">y</code>, <code class="highlighter-rouge">z</code>of <code class="highlighter-rouge">point_1</code> instance are compared with all the fields of <code class="highlighter-rouge">point_2</code> instance. You can customize this using the <code class="highlighter-rouge">field</code> function.</p>
@@ -338,8 +338,8 @@ class CartesianPoint(builtins.object)
 <span class="k">print</span><span class="p">(</span><span class="n">point_1</span> <span class="o">&lt;</span> <span class="n">point_2</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="bp">True</span>
-<span class="o">&gt;&gt;</span> <span class="bp">False</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt; True
+&gt;&gt; False
 </code></pre></div></div>
 
 <p>You can see the above code prints out <code class="highlighter-rouge">True</code> despite the intances have different <code class="highlighter-rouge">y</code> and <code class="highlighter-rouge">z</code> attributes.</p>
@@ -370,7 +370,7 @@ class CartesianPoint(builtins.object)
 <span class="k">print</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="mf">10.488088481701515</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt; 10.488088481701515
 </code></pre></div></div>
 
 <h2 id="making-instances-immutable">
@@ -394,19 +394,19 @@ class CartesianPoint(builtins.object)
 <span class="n">point</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">23</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">---------------------------------------------------------------------------</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---------------------------------------------------------------------------
 
-<span class="n">FrozenInstanceError</span>                       <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+FrozenInstanceError                       Traceback (most recent call last)
 
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">34</span><span class="o">-</span><span class="n">b712968bd0eb</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-        <span class="mi">1</span> <span class="n">point</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-<span class="o">----&gt;</span> <span class="mi">2</span> <span class="n">point</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">23</span>
-
-
-<span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="n">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+&lt;ipython-input-34-b712968bd0eb&gt; in &lt;module&gt;
+        1 point = CartesianPoint(2, 4, 6)
+----&gt; 2 point.x = 23
 
 
-<span class="n">FrozenInstanceError</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">assign</span> <span class="n">to</span> <span class="n">field</span> <span class="s">'x'</span>
+&lt;string&gt; in __setattr__(self, name, value)
+
+
+FrozenInstanceError: cannot assign to field 'x'
 </code></pre></div></div>
 
 <h2 id="making-instances-hashable">
@@ -444,7 +444,7 @@ class CartesianPoint(builtins.object)
 <span class="k">print</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="p">{</span><span class="s">'x'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'y'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">'z'</span><span class="p">:</span> <span class="mi">6</span><span class="p">}</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt; {'x': 1, 'y': 5, 'z': 6}
 </code></pre></div></div>
 
 <h2 id="post-init-processing">
@@ -468,7 +468,7 @@ class CartesianPoint(builtins.object)
 <span class="k">print</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">tup</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt; (4, 5, 6)
 </code></pre></div></div>
 
 <h2 id="refactoring-the-entire-cartesian-point-class">
