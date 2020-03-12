@@ -444,7 +444,7 @@ class CartesianPoint(builtins.object)
 <span class="k">print</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'x': 1, 'y': 5, 'z': 6}
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="p">{</span><span class="s">'x'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'y'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">'z'</span><span class="p">:</span> <span class="mi">6</span><span class="p">}</span>
 </code></pre></div></div>
 
 <h2 id="post-init-processing">
@@ -468,7 +468,7 @@ class CartesianPoint(builtins.object)
 <span class="k">print</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">tup</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(4, 5, 6)
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="refactoring-the-entire-cartesian-point-class">
@@ -571,7 +571,7 @@ True
 {'CartesianPoint(x = 1, y = 2, z = 3)': 3.7416573867739413}
 </code></pre></div></div>
 
-<p>This is the same class refactored using dataclass</p>
+<p>Below is the same class refactored using dataclass.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 
