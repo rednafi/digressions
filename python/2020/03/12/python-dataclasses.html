@@ -540,8 +540,8 @@ class CartesianPoint(builtins.object)
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># create multiple instances of the class
 </span><span class="n">a</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">0</span> <span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
 
 <span class="c1"># checking the __repr__ method
@@ -560,7 +560,7 @@ class CartesianPoint(builtins.object)
 </span><span class="k">print</span><span class="p">(</span><span class="n">c</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">)</span>
 
 <span class="c1"># checking __hash__ and __dist__ method
-</span><span class="k">print</span><span class="p">({</span><span class="n">f</span><span class="s">'{a}'</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">dist</span><span class="p">()})</span>
+</span><span class="k">print</span><span class="p">({</span><span class="n">f</span><span class="s">"{a}"</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">dist</span><span class="p">()})</span>
 </code></pre></div></div>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CartesianPoint(x = 1, y = 2, z = 3)
@@ -598,8 +598,8 @@ True
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># create multiple instances of the class
 </span><span class="n">a</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">0</span> <span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
 
 <span class="c1"># checking the __repr__ method
@@ -618,7 +618,7 @@ True
 </span><span class="k">print</span><span class="p">(</span><span class="n">c</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">)</span>
 
 <span class="c1"># checking __hash__ and __dist__ method
-</span><span class="k">print</span><span class="p">({</span><span class="n">f</span><span class="s">'{a}'</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">dist</span><span class="p">()})</span>
+</span><span class="k">print</span><span class="p">({</span><span class="n">f</span><span class="s">"{a}"</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">dist</span><span class="p">()})</span>
 </code></pre></div></div>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CartesianPoint(x=1, y=2, z=3)
