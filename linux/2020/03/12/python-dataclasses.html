@@ -3,9 +3,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Reduce Boilerplate with Python’s Dataclasses | Redowan’s Digressions</title>
+<title>Reduce Boilerplate Code with Python’s Dataclasses | Redowan’s Digressions</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Reduce Boilerplate with Python’s Dataclasses" />
+<meta property="og:title" content="Reduce Boilerplate Code with Python’s Dataclasses" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Python dataclasses to auto generate code" />
 <meta property="og:description" content="Python dataclasses to auto generate code" />
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-03-12T00:00:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2020-03-12T00:00:00-05:00","description":"Python dataclasses to auto generate code","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/linux/2020/03/12/python-dataclasses.html"},"url":"https://rednafi.github.io/digressions/linux/2020/03/12/python-dataclasses.html","headline":"Reduce Boilerplate with Python’s Dataclasses","datePublished":"2020-03-12T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"dateModified":"2020-03-12T00:00:00-05:00","description":"Python dataclasses to auto generate code","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/linux/2020/03/12/python-dataclasses.html"},"url":"https://rednafi.github.io/digressions/linux/2020/03/12/python-dataclasses.html","headline":"Reduce Boilerplate Code with Python’s Dataclasses","datePublished":"2020-03-12T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Redowan's Digressions" /><script async src="https://www.googletagmanager.com/gtag/js?id=UA-160409032-1"></script>
 <script>
@@ -27,9 +27,9 @@
   gtag('config', 'UA-160409032-1');
 </script>
 <link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Reduce Boilerplate with Python’s Dataclasses | Redowan’s Digressions</title>
+<title>Reduce Boilerplate Code with Python’s Dataclasses | Redowan’s Digressions</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Reduce Boilerplate with Python’s Dataclasses" />
+<meta property="og:title" content="Reduce Boilerplate Code with Python’s Dataclasses" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Python dataclasses to auto generate code" />
 <meta property="og:description" content="Python dataclasses to auto generate code" />
@@ -39,7 +39,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-03-12T00:00:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2020-03-12T00:00:00-05:00","description":"Python dataclasses to auto generate code","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/linux/2020/03/12/python-dataclasses.html"},"url":"https://rednafi.github.io/digressions/linux/2020/03/12/python-dataclasses.html","headline":"Reduce Boilerplate with Python’s Dataclasses","datePublished":"2020-03-12T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"dateModified":"2020-03-12T00:00:00-05:00","description":"Python dataclasses to auto generate code","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/linux/2020/03/12/python-dataclasses.html"},"url":"https://rednafi.github.io/digressions/linux/2020/03/12/python-dataclasses.html","headline":"Reduce Boilerplate Code with Python’s Dataclasses","datePublished":"2020-03-12T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -122,7 +122,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Reduce Boilerplate with Python&#39;s Dataclasses</h1><p class="page-description">Python dataclasses to auto generate code</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-03-12T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Reduce Boilerplate Code with Python&#39;s Dataclasses</h1><p class="page-description">Python dataclasses to auto generate code</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-03-12T00:00:00-05:00" itemprop="datePublished">
         Mar 12, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
@@ -496,7 +496,6 @@ class CartesianPoint(builtins.object)
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span>
 
-
     <span class="k">def</span> <span class="nf">__nq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="s">"""Checks non equality."""</span>
 
@@ -530,7 +529,6 @@ class CartesianPoint(builtins.object)
         <span class="s">"""Finds distance of point from origin."""</span>
 
         <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-
 </code></pre></div></div>
 
 <p>Let’s see the class in action:</p>
@@ -572,14 +570,15 @@ True
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 
+
 <span class="o">@</span><span class="n">dataclass</span><span class="p">(</span><span class="n">unsafe_hash</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">CartesianPoint</span><span class="p">:</span>
     <span class="s">"""Immutable Cartesian point class.
        All the comparisons are done based on the first field only."""</span>
 
-    <span class="n">x</span> <span class="p">:</span> <span class="nb">float</span>
-    <span class="n">y</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">z</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s">"""Finds distance of point from origin."""</span>
