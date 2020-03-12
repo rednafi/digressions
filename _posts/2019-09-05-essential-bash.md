@@ -1,6 +1,7 @@
 ---
 title: Essential Bash Scripting
 toc: true
+comments: true
 layout: post
 description: A reference for basic scripting in bash
 categories: [linux]

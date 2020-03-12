@@ -1,6 +1,7 @@
 ---
 title: A Minimalistic Approach to ZSH
 toc: true
+comments: true
 layout: post
 description: Up and running with z-shell in no time
 categories: [linux]

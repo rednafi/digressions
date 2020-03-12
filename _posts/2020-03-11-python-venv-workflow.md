@@ -1,6 +1,7 @@
 ---
 title: Python Virtual Environment Workflow for Sanity
 toc: false
+comments: true
 layout: post
 description: Keeping python's virtual environment madness in check
 categories: [python]
@@ -8,7 +9,7 @@ categories: [python]
 
 There are multiple ways of installing Python, creating and switching between different virtual environments. Also, Python's package manager hyperspace is a mess. So, things can quickly get out of hands while dealing with projects that require quick environment switching across multiple versions of Python. I use Debian linux in my primary development environment and this is how I keep the option explosion in check:
 
-## Installing Python 
+## Installing Python
 
 Run the following commands one by one:
 
@@ -57,8 +58,8 @@ There are multiple ways creating and switching between different environments ca
 To create another environment with a different python version, you have to:
 
 * Install the desired version of python following the procedures stated [above](#installing-python).
-* Install `python3-venv` specific for your python version, like if you are using python3.8, 
-  you should run: 
+* Install `python3-venv` specific for your python version, like if you are using python3.8,
+  you should run:
 
   ```bash
   sudo apt install python3.8-venv

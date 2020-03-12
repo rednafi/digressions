@@ -1,6 +1,7 @@
 ---
 title: Polymorphic Dispatching with Python's Singledispatch
 toc: false
+comments: true
 layout: post
 description: A functional approach to polymorphism in python
 categories: [python]
