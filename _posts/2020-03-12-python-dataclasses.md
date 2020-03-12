@@ -1,5 +1,5 @@
 ---
-title: Reduce Boilerplate with Python's Dataclasses
+title: Reduce Boilerplate Code with Python's Dataclasses
 toc: true
 comments: true
 layout: post
@@ -375,7 +375,6 @@ class CartesianPoint:
 
         return self.x == other.x
 
-
     def __nq__(self, other):
         """Checks non equality."""
 
@@ -409,7 +408,6 @@ class CartesianPoint:
         """Finds distance of point from origin."""
 
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
-
 ```
 
 Let's see the class in action:
@@ -455,14 +453,15 @@ print({f'{a}': a.dist()})
 ```python
 from dataclasses import dataclass, field
 
+
 @dataclass(unsafe_hash=True, order=True)
 class CartesianPoint:
     """Immutable Cartesian point class.
        All the comparisons are done based on the first field only."""
 
-    x : float
-    y : float = field(compare=False)
-    z : float = field(compare=False)
+    x: float
+    y: float = field(compare=False)
+    z: float = field(compare=False)
 
     def dist(self):
         """Finds distance of point from origin."""
