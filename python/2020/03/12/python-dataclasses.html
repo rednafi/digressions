@@ -156,7 +156,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#post-init-processing">Post-init Processing</a></li>
 <li class="toc-entry toc-h2"><a href="#refactoring-the-entire-cartesian-point-class">Refactoring the Entire Cartesian Point Class</a></li>
 <li class="toc-entry toc-h2"><a href="#references">References</a></li>
-</ul><p>Recently, my work needed me to create lots of custom data types and compare between them. So my code had many classes that somewhat looked like this:</p>
+</ul><p>Recently, my work needed me to create lots of custom data types and draw comparison among them. So, my code was littered with many classes that somewhat looked like this:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CartesianPoint</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
@@ -174,7 +174,7 @@ window.onload = wrap_img;
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Our class only creates a <code class="highlighter-rouge">CartesianPoint</code> type and shows a pretty output of the instances created from it. However, the class already has an <code class="highlighter-rouge">__init__</code> and a <code class="highlighter-rouge">__repr__</code> method in it.</p>
+<p>This class only creates a <code class="highlighter-rouge">CartesianPoint</code> type and shows a pretty output of the instances created from it. However, it already has two methods inside, <code class="highlighter-rouge">__init__</code> and <code class="highlighter-rouge">__repr__</code> that do not do much.</p>
 
 <h2 id="dataclasses">
 <a class="anchor" href="#dataclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dataclasses</h2>
@@ -199,7 +199,7 @@ window.onload = wrap_img;
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">CartesianPoint</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>In the above code, the magic is done by the <code class="highlighter-rouge">dataclass</code> decorator. Dataclasses require you to use <a href="https://docs.python.org/3/library/typing.html">type annotation</a> and it automatically implements methods like <code class="highlighter-rouge">__init__</code>, <code class="highlighter-rouge">__repr__</code>, <code class="highlighter-rouge">__eq__</code> etc beforehand. You can inspect the methods that <code class="highlighter-rouge">dataclass</code> auto defines via python’s help.</p>
+<p>In the above code, the magic is done by the <code class="highlighter-rouge">dataclass</code> decorator. Dataclasses require you to use explicit <a href="https://docs.python.org/3/library/typing.html">type annotation</a> and it automatically implements methods like <code class="highlighter-rouge">__init__</code>, <code class="highlighter-rouge">__repr__</code>, <code class="highlighter-rouge">__eq__</code> etc beforehand. You can inspect the methods that <code class="highlighter-rouge">dataclass</code> auto defines via python’s help.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">help</span><span class="p">(</span><span class="n">CartesianPoint</span><span class="p">)</span>
 </code></pre></div></div>
@@ -293,7 +293,7 @@ class CartesianPoint(builtins.object)
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="bp">False</span>
 </code></pre></div></div>
 
-<p>However, if you want to compare multiple instances of dataclasses, add <code class="highlighter-rouge">greater than</code> or <code class="highlighter-rouge">less than</code> methods to your instances, you have to turn on the <code class="highlighter-rouge">order</code> flag manually.</p>
+<p>However, if you want to compare multiple instances of dataclasses, aka add <code class="highlighter-rouge">__gt__</code> or <code class="highlighter-rouge">__lt__</code> methods to your instances, you have to turn on the <code class="highlighter-rouge">order</code> flag manually.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
