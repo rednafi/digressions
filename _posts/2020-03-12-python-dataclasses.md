@@ -307,8 +307,9 @@ point = CartesianPoint(0, 0, 0)
 print({f"{point}": "origin"})
 ```
 
-    {'CartesianPoint(x=0, y=0, z=0)': 'origin'}
-
+```
+>> {'CartesianPoint(x=0, y=0, z=0)': 'origin'}
+```
 
 ## Converting Instances to Dicts
 
