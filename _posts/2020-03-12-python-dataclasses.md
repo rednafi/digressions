@@ -4,7 +4,7 @@ toc: true
 comments: true
 layout: post
 description: Python dataclasses to auto generate code
-categories: [linux]
+categories: [python]
 ---
 
 Recently, my work needed me to create lots of custom data types and compare between them. So my code had many classes that somewhat looked like this:
