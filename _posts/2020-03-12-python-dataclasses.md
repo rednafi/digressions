@@ -351,6 +351,7 @@ print(point.tup)
 
 ## Refactoring the Entire Cartesian Point Class
 
+The feature rich original `CartesianPoint` looks something like this:
 
 ```python
 import math
@@ -358,7 +359,10 @@ import math
 
 class CartesianPoint:
     """Immutable Cartesian point class.
-       All the comparisons are done based on the first field only."""
+       Although mathematically incorrect,
+       for demonstration purpose, all the 
+       comparisons are done based on 
+       the first field only."""
 
     def __init__(self, x, y, z):
         self.x = x
@@ -457,7 +461,10 @@ from dataclasses import dataclass, field
 @dataclass(unsafe_hash=True, order=True)
 class CartesianPoint:
     """Immutable Cartesian point class.
-       All the comparisons are done based on the first field only."""
+       Although mathematically incorrect,
+       for demonstration purpose, all the 
+       comparisons are done based on 
+       the first field only."""
 
     x: float
     y: float = field(compare=False)
