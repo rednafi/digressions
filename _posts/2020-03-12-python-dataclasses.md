@@ -321,7 +321,9 @@ point = CartesianPoint(1, 5, 6)
 print(asdict(point))
 ```
 
-    {'x': 1, 'y': 5, 'z': 6}
+```python
+>> {'x': 1, 'y': 5, 'z': 6}
+```
 
 
 ## Post-init Processing
@@ -346,7 +348,9 @@ point = CartesianPoint(4, 5, 6)
 print(point.tup)
 ```
 
-    (4, 5, 6)
+```python
+>> (4, 5, 6)
+```
 
 
 ## Refactoring the Entire Cartesian Point Class
@@ -443,15 +447,16 @@ print(c < a)
 print({f'{a}': a.dist()})
 ```
 
-    CartesianPoint(x = 1, y = 2, z = 3)
-    True
-    True
-    False
-    True
-    {'CartesianPoint(x = 1, y = 2, z = 3)': 3.7416573867739413}
+```
+CartesianPoint(x = 1, y = 2, z = 3)
+True
+True
+False
+True
+{'CartesianPoint(x = 1, y = 2, z = 3)': 3.7416573867739413}
+```
 
-
- This is the same class refactored using dataclass
+Below is the same class refactored using dataclass.
 
 
 ```python
@@ -505,14 +510,15 @@ print(c < a)
 print({f'{a}': a.dist()})
 ```
 
-    CartesianPoint(x=1, y=2, z=3)
-    True
-    True
-    False
-    True
-    {'CartesianPoint(x=1, y=2, z=3)': 3.7416573867739413}
-
-
+```
+CartesianPoint(x=1, y=2, z=3)
+True
+True
+False
+True
+{'CartesianPoint(x=1, y=2, z=3)': 3.7416573867739413}
+```
+    
 ## References
 
 * [Python Dataclasses: Official Doc](https://docs.python.org/3/library/dataclasses.html)
