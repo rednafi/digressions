@@ -24,7 +24,7 @@ class CartesianPoint:
 print(CartesianPoint(1, 2, 3))
 ```
 
-```python
+```
 >> CartesianPoint(x = 1, y = 2, z = 3)
 ```
 
@@ -51,7 +51,7 @@ point = CartesianPoint(1, 2, 3)
 print(point)
 ```
 
-```python
+```
 >> CartesianPoint(x=1, y=2, z=3)
 ```
 
@@ -151,7 +151,7 @@ point_2 = CartesianPoint(1, 2, 5)
 print(point_1 == point_2)
 ```
 
-```python
+```
 >> False
 ```
 
@@ -176,7 +176,7 @@ point_2 = CartesianPoint(1, 2, 5)
 print(point_1 > point_2)
 ```
 
-```python
+```
 >> True
 ```
 
@@ -205,7 +205,7 @@ print(point_1 == point_2)
 print(point_1 < point_2)
 ```
 
-```python
+```
 >> True
 >> False
 ```
@@ -239,7 +239,7 @@ norm = point.abs_val()
 print(norm)
 ```
 
-```python
+```
 >> 10.488088481701515
 ```
 
@@ -267,7 +267,7 @@ point = CartesianPoint(2, 4, 6)
 point.x = 23
 ```
 
-```python
+```
 ---------------------------------------------------------------------------
 
 FrozenInstanceError                       Traceback (most recent call last)
@@ -321,7 +321,7 @@ point = CartesianPoint(1, 5, 6)
 print(asdict(point))
 ```
 
-```python
+```
 >> {'x': 1, 'y': 5, 'z': 6}
 ```
 
@@ -348,7 +348,7 @@ point = CartesianPoint(4, 5, 6)
 print(point.tup)
 ```
 
-```python
+```
 >> (4, 5, 6)
 ```
 
