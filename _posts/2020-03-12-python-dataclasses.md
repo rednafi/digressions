@@ -424,8 +424,8 @@ Let's see the class in action:
 ```python
 # create multiple instances of the class
 a = CartesianPoint(1, 2, 3)
-b = CartesianPoint(1,3,3)
-c = CartesianPoint(0 ,3, 5)
+b = CartesianPoint(1, 3, 3)
+c = CartesianPoint(0, 3, 5)
 d = CartesianPoint(5, 6, 7)
 
 # checking the __repr__ method
@@ -444,7 +444,7 @@ print(b >= d)
 print(c < a)
 
 # checking __hash__ and __dist__ method
-print({f'{a}': a.dist()})
+print({f"{a}": a.dist()})
 ```
 
 ```
@@ -487,8 +487,8 @@ Use this class like before.
 ```python
 # create multiple instances of the class
 a = CartesianPoint(1, 2, 3)
-b = CartesianPoint(1,3,3)
-c = CartesianPoint(0 ,3, 5)
+b = CartesianPoint(1, 3, 3)
+c = CartesianPoint(0, 3, 5)
 d = CartesianPoint(5, 6, 7)
 
 # checking the __repr__ method
@@ -507,7 +507,7 @@ print(b >= d)
 print(c < a)
 
 # checking __hash__ and __dist__ method
-print({f'{a}': a.dist()})
+print({f"{a}": a.dist()})
 ```
 
 ```
