@@ -7,7 +7,7 @@ description: Python dataclasses to auto generate code
 categories: [python]
 ---
 
-Recently, my work needed me to create lots of custom data types and compare between them. So my code had many classes that somewhat looked like this:
+Recently, my work needed me to create lots of custom data types and draw comparison among them. So, my code was littered with many classes that somewhat looked like this:
 
 
 ```python
@@ -28,7 +28,7 @@ print(CartesianPoint(1, 2, 3))
 >> CartesianPoint(x = 1, y = 2, z = 3)
 ```
 
-Our class only creates a `CartesianPoint` type and shows a pretty output of the instances created from it. However, the class already has an `__init__` and a `__repr__` method in it.
+This class only creates a `CartesianPoint` type and shows a pretty output of the instances created from it. However, it already has two methods inside, `__init__` and `__repr__` that do not do much.
 
 ## Dataclasses
 
@@ -55,7 +55,7 @@ print(point)
 >> CartesianPoint(x=1, y=2, z=3)
 ```
 
-In the above code, the magic is done by the `dataclass` decorator. Dataclasses require you to use [type annotation](https://docs.python.org/3/library/typing.html) and it automatically implements methods like `__init__`, `__repr__`, `__eq__` etc beforehand. You can inspect the methods that `dataclass` auto defines via python's help.
+In the above code, the magic is done by the `dataclass` decorator. Dataclasses require you to use explicit [type annotation](https://docs.python.org/3/library/typing.html) and it automatically implements methods like `__init__`, `__repr__`, `__eq__` etc beforehand. You can inspect the methods that `dataclass` auto defines via python's help.
 
 
 ```python
@@ -155,7 +155,7 @@ print(point_1 == point_2)
 >> False
 ```
 
-However, if you want to compare multiple instances of dataclasses, add `greater than` or `less than` methods to your instances, you have to turn on the `order` flag manually.
+However, if you want to compare multiple instances of dataclasses, aka add `__gt__` or `__lt__` methods to your instances, you have to turn on the `order` flag manually.
 
 
 ```python
