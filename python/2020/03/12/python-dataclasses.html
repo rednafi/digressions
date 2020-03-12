@@ -474,12 +474,17 @@ class CartesianPoint(builtins.object)
 <h2 id="refactoring-the-entire-cartesian-point-class">
 <a class="anchor" href="#refactoring-the-entire-cartesian-point-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Refactoring the Entire Cartesian Point Class</h2>
 
+<p>The feature rich original <code class="highlighter-rouge">CartesianPoint</code> looks something like this:</p>
+
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">math</span>
 
 
 <span class="k">class</span> <span class="nc">CartesianPoint</span><span class="p">:</span>
     <span class="s">"""Immutable Cartesian point class.
-       All the comparisons are done based on the first field only."""</span>
+       Although mathematically incorrect,
+       for demonstration purpose, all the 
+       comparisons are done based on 
+       the first field only."""</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
@@ -574,7 +579,10 @@ True
 <span class="o">@</span><span class="n">dataclass</span><span class="p">(</span><span class="n">unsafe_hash</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">CartesianPoint</span><span class="p">:</span>
     <span class="s">"""Immutable Cartesian point class.
-       All the comparisons are done based on the first field only."""</span>
+       Although mathematically incorrect,
+       for demonstration purpose, all the 
+       comparisons are done based on 
+       the first field only."""</span>
 
     <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
