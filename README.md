@@ -6,21 +6,21 @@
 
 https://rednafi.github.io/digressions/
 
-# My Blog
+# Redowan's Digressions
 
 
 _powered by [fastpages](https://github.com/fastai/fastpages)_
 
 
-## What To Do Next?
+## Writing Blogs in Different Formats
 
-Great!  You have setup your repo.  Now its time to start writing content.  Some helpful links:
+Writing blogs with...
 
-- [Writing Blogs With Jupyter](https://github.com/fastai/fastpages#writing-blog-posts-with-jupyter)
+- [Jupyter](https://github.com/fastai/fastpages#writing-blog-posts-with-jupyter)
 
-- [Writing Blogs With Markdown](https://github.com/fastai/fastpages#writing-blog-posts-with-markdown)
+- [Markdown](https://github.com/fastai/fastpages#writing-blog-posts-with-markdown)
 
-- [Writing Blog Posts With Word](https://github.com/fastai/fastpages#writing-blog-posts-with-microsoft-word)
+- [Word](https://github.com/fastai/fastpages#writing-blog-posts-with-microsoft-word)
 
 - [(Optional) Preview Your Blog Locally](_fastpages_docs/DEVELOPMENT.md)
 
