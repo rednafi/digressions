@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T05:18:33-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL on Linux</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL on Linux" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T05:44:21-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL on Linux</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL on Linux" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;setting-up&quot;&gt;Setting Up&lt;/h2&gt;
 
@@ -1869,18 +1869,47 @@ you should run:&lt;/p&gt;
 
 &lt;p&gt;Instead of adding the plugins individually, you can just install the plugins and then add this barebone config to your &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.zshrc&lt;/code&gt; . Don’t forget to replace &lt;code class=&quot;highlighter-rouge&quot;&gt;YourUserName&lt;/code&gt; with your username. Source your zshrc once you are done.&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ZSH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/home/&amp;lt;YourUserName&amp;gt;/.oh-my-zsh&quot;&lt;/span&gt;
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# =====================&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# MINIMALIST ZSHRC&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# AUTHOR: REDNAFI&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# =====================&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# omz path&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ZSH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/.oh-my-zsh&quot;&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# theme settings&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;ZSH_THEME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;agnoster&quot;&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DEFAULT_USER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;YourUserName&quot;&lt;/span&gt;
-prompt_context&lt;span class=&quot;o&quot;&gt;(){}&lt;/span&gt;
+setopt PROMPT_PERCENT
+setopt PROMPT_SUBST
+&lt;span class=&quot;nv&quot;&gt;PROMPT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'[%n:%F{yellow}%25&amp;lt;..&amp;lt;%~%f%&amp;lt;&amp;lt;]$ '&lt;/span&gt;
+precmd&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    precmd&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;#echo&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# pluging settings&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;git zsh-syntax-highlighting zsh-autosuggestions&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 
+&lt;span class=&quot;c&quot;&gt;# autosuggestion highlight&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;fg=4&quot;&lt;/span&gt;
+
 &lt;span class=&quot;c&quot;&gt;# source omz&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ZSH&lt;/span&gt;/oh-my-zsh.sh
+
+&lt;span class=&quot;c&quot;&gt;#History setup&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;HISTFILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;/.zsh_history
+&lt;span class=&quot;nv&quot;&gt;HISTSIZE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;100000
+&lt;span class=&quot;nv&quot;&gt;SAVEHIST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HISTSIZ&lt;/span&gt;
+
+zstyle &lt;span class=&quot;s1&quot;&gt;':completion:*'&lt;/span&gt; menu &lt;span class=&quot;k&quot;&gt;select
+&lt;/span&gt;zstyle &lt;span class=&quot;s1&quot;&gt;':completion:*'&lt;/span&gt; group-name &lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt;                                        &lt;span class=&quot;c&quot;&gt;# group results by category&lt;/span&gt;
+zstyle &lt;span class=&quot;s1&quot;&gt;':completion:::::'&lt;/span&gt; completer _expand _complete _ignored _approximate &lt;span class=&quot;c&quot;&gt;#enable approximate matches for completion&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#disable auto correct&lt;/span&gt;
+unsetopt correct_all
+
+&lt;span class=&quot;c&quot;&gt;# add snap path&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;:/snap/bin
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;set-terminal-color-optional&quot;&gt;&lt;strong&gt;Set Terminal Color (Optional)&lt;/strong&gt;&lt;/h2&gt;

@@ -305,18 +305,47 @@ window.onload = wrap_img;
 
 <p>Instead of adding the plugins individually, you can just install the plugins and then add this barebone config to your <code class="highlighter-rouge">~/.zshrc</code> . Don’t forget to replace <code class="highlighter-rouge">YourUserName</code> with your username. Source your zshrc once you are done.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">ZSH</span><span class="o">=</span><span class="s2">"/home/&lt;YourUserName&gt;/.oh-my-zsh"</span>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># =====================</span>
+<span class="c"># MINIMALIST ZSHRC</span>
+<span class="c"># AUTHOR: REDNAFI</span>
+<span class="c"># =====================</span>
+
+<span class="c"># omz path</span>
+<span class="nb">export </span><span class="nv">ZSH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.oh-my-zsh"</span>
 
 <span class="c"># theme settings</span>
-<span class="nv">ZSH_THEME</span><span class="o">=</span><span class="s2">"agnoster"</span>
-<span class="nv">DEFAULT_USER</span><span class="o">=</span><span class="s2">"YourUserName"</span>
-prompt_context<span class="o">(){}</span>
+setopt PROMPT_PERCENT
+setopt PROMPT_SUBST
+<span class="nv">PROMPT</span><span class="o">=</span><span class="s1">'[%n:%F{yellow}%25&lt;..&lt;%~%f%&lt;&lt;]$ '</span>
+precmd<span class="o">()</span> <span class="o">{</span>
+    precmd<span class="o">()</span> <span class="o">{</span>
+        <span class="c">#echo</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
 <span class="c"># pluging settings</span>
 <span class="nv">plugins</span><span class="o">=(</span>git zsh-syntax-highlighting zsh-autosuggestions<span class="o">)</span>
 
+<span class="c"># autosuggestion highlight</span>
+<span class="nv">ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE</span><span class="o">=</span><span class="s2">"fg=4"</span>
+
 <span class="c"># source omz</span>
 <span class="nb">source</span> <span class="nv">$ZSH</span>/oh-my-zsh.sh
+
+<span class="c">#History setup</span>
+<span class="nv">HISTFILE</span><span class="o">=</span><span class="nv">$HOME</span>/.zsh_history
+<span class="nv">HISTSIZE</span><span class="o">=</span>100000
+<span class="nv">SAVEHIST</span><span class="o">=</span><span class="nv">$HISTSIZ</span>
+
+zstyle <span class="s1">':completion:*'</span> menu <span class="k">select
+</span>zstyle <span class="s1">':completion:*'</span> group-name <span class="s1">''</span>                                        <span class="c"># group results by category</span>
+zstyle <span class="s1">':completion:::::'</span> completer _expand _complete _ignored _approximate <span class="c">#enable approximate matches for completion</span>
+
+<span class="c">#disable auto correct</span>
+unsetopt correct_all
+
+<span class="c"># add snap path</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/snap/bin
 </code></pre></div></div>
 
 <h2 id="set-terminal-color-optional">
