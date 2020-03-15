@@ -153,7 +153,6 @@ window.onload = wrap_img;
 </li>
 <li class="toc-entry toc-h2"><a href="#make-zsh-as-your-default-shell">Make Zsh as Your Default Shell</a></li>
 <li class="toc-entry toc-h2"><a href="#install-oh-my-zsh-framework">Install Oh-My-Zsh Framework</a></li>
-<li class="toc-entry toc-h2"><a href="#set-agnoster-theme">Set Agnoster Theme</a></li>
 <li class="toc-entry toc-h2"><a href="#set-firacode-as-the-default-terminal-font">Set Firacode As the Default Terminal Font</a></li>
 <li class="toc-entry toc-h2"><a href="#set-syntax-highlighting">Set Syntax Highlighting</a></li>
 <li class="toc-entry toc-h2"><a href="#set-suggestions">Set Suggestions</a></li>
@@ -165,7 +164,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#uninstall-omz">Uninstall OMZ</a></li>
 <li class="toc-entry toc-h2"><a href="#switch-back-to-bash">Switch Back to Bash</a></li>
 <li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
-</ul><p><img src="https://imgur.com/OOe4F0e.png" alt="Imgur"></p>
+</ul><p><img src="https://i.imgur.com/89vnPcb.png" alt="img"></p>
 
 <p>Although I’m on Debian Linux, Apple’s recent announcement about replacing Bash with Zsh on MacOS made me take a look at Z-shell aka zsh. It’s a <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> compliant Bash alternative that has been around for quite a long time. While Bash shell’s efficiency and ubiquity make it hard to think about changing the default shell of your primary development machine, I find its features as an interactive shell to be somewhat limited. So I did some digging around and soon found out that zsh’s lackluster default configurations and bloated ecosystem make it difficult for someone who just want to switch without any extra overhead. So, let’s make the process quicker. Here is what we are aiming for:</p>
 
@@ -179,20 +178,17 @@ window.onload = wrap_img;
 <p>Instructions were applied and tested on debian based linux (Ubuntu)</p>
 
 <h2 id="install-z-shell">
-<a class="anchor" href="#install-z-shell" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Install Z Shell</strong>
-</h2>
+<a class="anchor" href="#install-z-shell" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install Z Shell</h2>
 
 <h3 id="gnulinux">
-<a class="anchor" href="#gnulinux" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>GNU/Linux</strong>
-</h3>
+<a class="anchor" href="#gnulinux" aria-hidden="true"><span class="octicon octicon-link"></span></a>GNU/Linux</h3>
 <p>To install on a debian based linux, type:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>apt <span class="nb">install </span>zsh
 </code></pre></div></div>
 
 <h3 id="macos">
-<a class="anchor" href="#macos" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>MacOS</strong>
-</h3>
+<a class="anchor" href="#macos" aria-hidden="true"><span class="octicon octicon-link"></span></a>MacOS</h3>
 
 <p>Use homebrew to install zsh on MacOs. Run:</p>
 
@@ -200,8 +196,7 @@ window.onload = wrap_img;
 </code></pre></div></div>
 
 <h2 id="make-zsh-as-your-default-shell">
-<a class="anchor" href="#make-zsh-as-your-default-shell" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Make Zsh as Your Default Shell</strong>
-</h2>
+<a class="anchor" href="#make-zsh-as-your-default-shell" aria-hidden="true"><span class="octicon octicon-link"></span></a>Make Zsh as Your Default Shell</h2>
 
 <p>Run:</p>
 
@@ -209,99 +204,81 @@ window.onload = wrap_img;
 </code></pre></div></div>
 
 <h2 id="install-oh-my-zsh-framework">
-<a class="anchor" href="#install-oh-my-zsh-framework" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Install Oh-My-Zsh Framework</strong>
-</h2>
+<a class="anchor" href="#install-oh-my-zsh-framework" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install Oh-My-Zsh Framework</h2>
 
 <p><a href="https://github.com/robbyrussell/oh-my-zsh">Oh-My-Zsh</a> is the tool that makes zsh so much fun and overly configurable at the same time. So we’ll tread here carefully. To install <code class="highlighter-rouge">oh-my-zsh</code> , type:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh<span class="si">)</span><span class="s2">"</span>
 </code></pre></div></div>
 
-<h2 id="set-agnoster-theme">
-<a class="anchor" href="#set-agnoster-theme" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Set Agnoster Theme</strong>
-</h2>
-
-<p>Agnoster is a fast and feature rich theme that ships with oh-my-zsh. To install agnoster:</p>
-
-<ul>
-  <li>Run <code class="highlighter-rouge">nano ~/.zshrc</code>
-</li>
-  <li>Set <code class="highlighter-rouge">ZSH_THEME="agnoster"</code>
-</li>
-</ul>
-
 <h2 id="set-firacode-as-the-default-terminal-font">
-<a class="anchor" href="#set-firacode-as-the-default-terminal-font" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Set Firacode As the Default Terminal Font</strong>
-</h2>
+<a class="anchor" href="#set-firacode-as-the-default-terminal-font" aria-hidden="true"><span class="octicon octicon-link"></span></a>Set Firacode As the Default Terminal Font</h2>
 
 <p>Your selected theme may not display all the glyphs if the default terminal font doesn’t support them. Installing a font with glyphs and ligature support can solve this. I recommend installing <code class="highlighter-rouge">firacode</code> and setting that as your default terminal font. Install Fira Code From <a href="https://github.com/tonsky/FiraCode">here.</a></p>
 
 <h2 id="set-syntax-highlighting">
-<a class="anchor" href="#set-syntax-highlighting" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Set Syntax Highlighting</strong>
-</h2>
+<a class="anchor" href="#set-syntax-highlighting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Set Syntax Highlighting</h2>
 
 <p>Using <a href="https://github.com/zsh-users/zsh-syntax-highlighting">zsh-syntax-highlighting</a> to achieve this.</p>
 
 <ul>
-  <li>Clone this repository in oh-my-zsh’s plugins directory</li>
-</ul>
+  <li>
+    <p>Clone this repository in oh-my-zsh’s plugins directory</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="k">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="p">~/.oh-my-zsh/custom</span><span class="k">}</span>/plugins/zsh-syntax-highlighting
-</code></pre></div></div>
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="k">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="p">~/.oh-my-zsh/custom</span><span class="k">}</span>/plugins/zsh-syntax-highlighting
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Activate the plugin in <code class="highlighter-rouge">~/.zshrc</code></p>
 
-<ul>
-  <li>Activate the plugin in <code class="highlighter-rouge">~/.zshrc</code>
-</li>
-</ul>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">plugins</span><span class="o">=(</span> <span class="o">[</span>plugins...] zsh-syntax-highlighting<span class="o">)</span>
-</code></pre></div></div>
-
-<ul>
-  <li>Source <code class="highlighter-rouge">~/.zshrc</code>
-</li>
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">plugins</span><span class="o">=(</span> <span class="o">[</span>plugins...] zsh-syntax-highlighting<span class="o">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Source <code class="highlighter-rouge">~/.zshrc</code></p>
+  </li>
 </ul>
 
 <h2 id="set-suggestions">
-<a class="anchor" href="#set-suggestions" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Set Suggestions</strong>
-</h2>
+<a class="anchor" href="#set-suggestions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Set Suggestions</h2>
 
 <p>Using <a href="https://github.com/zsh-users/zsh-autosuggestions">zsh-autosuggestions</a> to achieve this.</p>
 
 <ul>
-  <li>Clone this repository into $ZSH_CUSTOM/plugins (by default ~/.oh-my-zsh/custom/plugins)</li>
-</ul>
+  <li>
+    <p>Clone this repository into $ZSH_CUSTOM/plugins (by default ~/.oh-my-zsh/custom/plugins)</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git clone https://github.com/zsh-users/zsh-autosuggestions <span class="k">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="p">~/.oh-my-zsh/custom</span><span class="k">}</span>/plugins/zsh-autosuggestions
-</code></pre></div></div>
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git clone https://github.com/zsh-users/zsh-autosuggestions <span class="k">${</span><span class="nv">ZSH_CUSTOM</span><span class="k">:-</span><span class="p">~/.oh-my-zsh/custom</span><span class="k">}</span>/plugins/zsh-autosuggestions
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add the plugin to the list of plugins for Oh My Zsh to load (inside <code class="highlighter-rouge">~/.zshrc</code> )</p>
 
-<ul>
-  <li>Add the plugin to the list of plugins for Oh My Zsh to load (inside <code class="highlighter-rouge">~/.zshrc</code> )</li>
-</ul>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">plugins</span><span class="o">=(</span>zsh-autosuggestions<span class="o">)</span>
-</code></pre></div></div>
-
-<ul>
-  <li>Source <code class="highlighter-rouge">~/.zshrc</code>
-</li>
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="nv">plugins</span><span class="o">=(</span>zsh-autosuggestions<span class="o">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Source <code class="highlighter-rouge">~/.zshrc</code></p>
+  </li>
 </ul>
 
 <p>Start a new terminal session to see the effects!!! You might need to log out and log in again for the changes to be effective.</p>
 
 <h2 id="load-profile-from-zprofile">
-<a class="anchor" href="#load-profile-from-zprofile" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Load .profile from .zprofile</strong>
-</h2>
+<a class="anchor" href="#load-profile-from-zprofile" aria-hidden="true"><span class="octicon octicon-link"></span></a>Load .profile from .zprofile</h2>
 
 <p>Add the following lines to <code class="highlighter-rouge">~/.zprofile</code> and source via the command:
 <code class="highlighter-rouge">source ~/.zprofile</code>. Make sure you are on zsh before running the source command.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[[</span> <span class="nt">-e</span> ~/.profile <span class="o">]]</span> <span class="o">&amp;&amp;</span> emulate sh <span class="nt">-c</span> <span class="s1">'source ~/.profile'</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="o">[[</span> <span class="nt">-e</span> ~/.profile <span class="o">]]</span> <span class="o">&amp;&amp;</span> emulate sh <span class="nt">-c</span> <span class="s1">'source ~/.profile'</span>
 </code></pre></div></div>
 
 <h2 id="a-barebone-zshrc">
-<a class="anchor" href="#a-barebone-zshrc" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>A Barebone ~/.zshrc</strong>
-</h2>
+<a class="anchor" href="#a-barebone-zshrc" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Barebone ~/.zshrc</h2>
 
 <p>Instead of adding the plugins individually, you can just install the plugins and then add this barebone config to your <code class="highlighter-rouge">~/.zshrc</code> . Don’t forget to replace <code class="highlighter-rouge">YourUserName</code> with your username. Source your zshrc once you are done.</p>
 
@@ -349,21 +326,24 @@ unsetopt correct_all
 </code></pre></div></div>
 
 <h2 id="set-terminal-color-optional">
-<a class="anchor" href="#set-terminal-color-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Set Terminal Color (Optional)</strong>
-</h2>
+<a class="anchor" href="#set-terminal-color-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Set Terminal Color (Optional)</h2>
 <p>Optionally you customize your terminal color and in this case I’ve used <a href="http://mayccoll.github.io/Gogh">Gogh</a> to achieve this.</p>
 
 <ul>
-  <li>Pre Install
-    <div class="language-bash highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">sudo </span>apt-get <span class="nb">install </span>dconf-cli uuid-runtime
-</code></pre></div>    </div>
-  </li>
-  <li>Install on Linux
-    <div class="language-bash highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>   <span class="nv">$ </span>bash <span class="nt">-c</span>  <span class="s2">"</span><span class="si">$(</span>wget <span class="nt">-qO-</span> https://git.io/vQgMr<span class="si">)</span><span class="s2">"</span>
-</code></pre></div>    </div>
-  </li>
+  <li>Pre Install</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">sudo </span>apt-get <span class="nb">install </span>dconf-cli uuid-runtime
+</code></pre></div></div>
+
+<ul>
+  <li>Install on Linux</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="nv">$ </span>bash <span class="nt">-c</span>  <span class="s2">"</span><span class="si">$(</span>wget <span class="nt">-qO-</span> https://git.io/vQgMr<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<ul>
   <li>Install on MacOS
     <div class="language-bash highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span> bash <span class="nt">-c</span>  <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-sLo-</span> https://git.io/vQgMr<span class="si">)</span><span class="s2">"</span>
@@ -375,36 +355,31 @@ unsetopt correct_all
 </ul>
 
 <h2 id="updating-omz">
-<a class="anchor" href="#updating-omz" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Updating OMZ</strong>
-</h2>
+<a class="anchor" href="#updating-omz" aria-hidden="true"><span class="octicon octicon-link"></span></a>Updating OMZ</h2>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>upgrade_oh_my_zsh
 </code></pre></div></div>
 
 <h2 id="uninstall-zsh">
-<a class="anchor" href="#uninstall-zsh" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Uninstall Zsh</strong>
-</h2>
+<a class="anchor" href="#uninstall-zsh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uninstall Zsh</h2>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>apt-get <span class="nt">--purge</span> remove zsh
 </code></pre></div></div>
 
 <h2 id="uninstall-omz">
-<a class="anchor" href="#uninstall-omz" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Uninstall OMZ</strong>
-</h2>
+<a class="anchor" href="#uninstall-omz" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uninstall OMZ</h2>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>uninstall_oh_my_zsh
 </code></pre></div></div>
 
 <h2 id="switch-back-to-bash">
-<a class="anchor" href="#switch-back-to-bash" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Switch Back to Bash</strong>
-</h2>
+<a class="anchor" href="#switch-back-to-bash" aria-hidden="true"><span class="octicon octicon-link"></span></a>Switch Back to Bash</h2>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>chsh <span class="nt">-s</span> <span class="si">$(</span>which bash<span class="si">)</span>
 </code></pre></div></div>
 
 <h2 id="reference">
-<a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Reference</strong>
-</h2>
+<a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
 <ol>
   <li><a href="https://ohmyz.sh/">Oh-My-Zsh</a></li>
   <li><a href="https://github.com/tonsky/FiraCode">FiraCode</a></li>
