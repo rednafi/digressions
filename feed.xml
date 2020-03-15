@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T05:10:44-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL on Linux</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL on Linux" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T05:16:14-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL on Linux</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL on Linux" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;setting-up&quot;&gt;&lt;strong&gt;Setting Up&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;setting-up&quot;&gt;Setting Up&lt;/h2&gt;
 
-&lt;h3 id=&quot;installation&quot;&gt;&lt;strong&gt;Installation&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;installation&quot;&gt;Installation&lt;/h3&gt;
 
 &lt;p&gt;This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Install docker on your Linux machine. See the instruction &lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/ubuntu/&quot;&gt;here&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Detailed MySQL installation instruction using docker can be found &lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html&quot;&gt;here&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Install docker on your Linux machine. See the instruction &lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/ubuntu/&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;Detailed MySQL installation instruction using docker can be found &lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Run the following command:&lt;/p&gt;
@@ -35,7 +35,7 @@ docker logs mysql 2&amp;gt;&amp;amp;1 | &lt;span class=&quot;nb&quot;&gt;grep &l
 docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; mysql mysql &lt;span class=&quot;nt&quot;&gt;-uroot&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;alter-root-password&quot;&gt;&lt;strong&gt;Alter Root Password&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;alter-root-password&quot;&gt;Alter Root Password&lt;/h3&gt;
 
 &lt;p&gt;Enter the following command in the MySQL shell, replacing password with your new password:&lt;/p&gt;
 
@@ -52,7 +52,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;FLUSH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIVILEGES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;view-users&quot;&gt;&lt;strong&gt;View Users&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;view-users&quot;&gt;View Users&lt;/h3&gt;
 
 &lt;p&gt;MySQL stores the user information in its own database. The name of the database is &lt;code class=&quot;highlighter-rouge&quot;&gt;mysql&lt;/code&gt;. If you want to see what users are set up in the MySQL user table, run the following command:&lt;/p&gt;
 
@@ -72,7 +72,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 4 rows in set (0.00 sec)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;create-a-database&quot;&gt;&lt;strong&gt;Create a Database&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;create-a-database&quot;&gt;Create a Database&lt;/h3&gt;
 
 &lt;p&gt;You can create a database named &lt;code class=&quot;highlighter-rouge&quot;&gt;test_db&lt;/code&gt; via the following command:&lt;/p&gt;
 
@@ -103,7 +103,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;FLUSH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIVILEGES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;creating-dummy-table-in-the-database&quot;&gt;&lt;strong&gt;Creating Dummy Table in the Database&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;creating-dummy-table-in-the-database&quot;&gt;Creating Dummy Table in the Database&lt;/h3&gt;
 
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- create dummy table&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`student`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
@@ -152,13 +152,14 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;34&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Gain Toe'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Seven'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;69&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'male'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;35&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Rows Noump'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Six'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;88&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'female'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;show-tables&quot;&gt;&lt;strong&gt;Show Tables&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;h3 id=&quot;show-tables&quot;&gt;Show Tables&lt;/h3&gt;
 
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;USE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;SHOW&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tables&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;delete-a-database&quot;&gt;&lt;strong&gt;Delete a Database&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;delete-a-database&quot;&gt;Delete a Database&lt;/h3&gt;
 
 &lt;p&gt;To delete a database &lt;code class=&quot;highlighter-rouge&quot;&gt;test_db&lt;/code&gt; run the following command:&lt;/p&gt;
 
@@ -167,7 +168,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 &lt;span class=&quot;n&quot;&gt;FLUSH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIVILEGES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;add-a-database-user&quot;&gt;&lt;strong&gt;Add a Database User&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;add-a-database-user&quot;&gt;Add a Database User&lt;/h3&gt;
 
 &lt;p&gt;To create a new user (here, we created a new user named &lt;code class=&quot;highlighter-rouge&quot;&gt;redowan&lt;/code&gt; with the password &lt;code class=&quot;highlighter-rouge&quot;&gt;password&lt;/code&gt;), run the following command in the MySQL shell:&lt;/p&gt;
 
@@ -194,7 +195,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 +------------------+-----------+-------------------------------------------+
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;delete-a-database-user&quot;&gt;&lt;strong&gt;Delete a Database User&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;delete-a-database-user&quot;&gt;Delete a Database User&lt;/h3&gt;
 
 &lt;p&gt;To delete a database user (here, I’m deleting the user-&lt;code class=&quot;highlighter-rouge&quot;&gt;redowan&lt;/code&gt;) run:&lt;/p&gt;
 
@@ -205,7 +206,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 &lt;span class=&quot;n&quot;&gt;FlUSH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIVILEGES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;grant-database-user-permissions&quot;&gt;&lt;strong&gt;Grant Database User Permissions&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;grant-database-user-permissions&quot;&gt;Grant Database User Permissions&lt;/h3&gt;
 
 &lt;p&gt;Give the user full permissions for your new database by running the following command (Here, I provided full permission of &lt;code class=&quot;highlighter-rouge&quot;&gt;test_db&lt;/code&gt; to the user &lt;code class=&quot;highlighter-rouge&quot;&gt;redowan&lt;/code&gt;:&lt;/p&gt;
 
@@ -219,7 +220,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 &lt;span class=&quot;n&quot;&gt;FlUSH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIVILEGES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;loading-sample-database-to-your-own-mysql-server&quot;&gt;&lt;strong&gt;Loading Sample Database to Your Own Mysql Server&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;loading-sample-database-to-your-own-mysql-server&quot;&gt;Loading Sample Database to Your Own Mysql Server&lt;/h3&gt;
 
 &lt;p&gt;To load &lt;code class=&quot;highlighter-rouge&quot;&gt;mysqlsampledatabase.sql&lt;/code&gt; to your own server (In this case the user is &lt;code class=&quot;highlighter-rouge&quot;&gt;redowan&lt;/code&gt;. Provide database &lt;code class=&quot;highlighter-rouge&quot;&gt;password&lt;/code&gt; in the prompt), first fireup the server and type the following commands:&lt;/p&gt;
 
@@ -247,15 +248,15 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 
 &lt;p&gt;Notice that a new database named &lt;code class=&quot;highlighter-rouge&quot;&gt;classicmodels&lt;/code&gt; has been added to the list.&lt;/p&gt;
 
-&lt;h2 id=&quot;connecting-to-a-third-party-client&quot;&gt;&lt;strong&gt;Connecting to a Third Party Client&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;connecting-to-a-third-party-client&quot;&gt;Connecting to a Third Party Client&lt;/h2&gt;
 
 &lt;p&gt;We will be using &lt;a href=&quot;https://github.com/dbeaver/dbeaver&quot;&gt;DBeaver&lt;/a&gt; as a third party client. While you can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;mysql&lt;/code&gt; shell to work on your data, a third partly client that make the experience much better with auto formatting, earsier import features, syntax highlighting etc.&lt;/p&gt;
 
-&lt;h3 id=&quot;installing-dbeaver&quot;&gt;&lt;strong&gt;Installing DBeaver&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;installing-dbeaver&quot;&gt;Installing DBeaver&lt;/h3&gt;
 
 &lt;p&gt;You can install DBeaver installer from &lt;a href=&quot;https://dbeaver.io/download/&quot;&gt;here&lt;/a&gt;. Installation is pretty straight forward.&lt;/p&gt;
 
-&lt;h3 id=&quot;connecting-mysql-database-to-dbeaver&quot;&gt;&lt;strong&gt;Connecting MySQL Database to DBeaver&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;connecting-mysql-database-to-dbeaver&quot;&gt;Connecting MySQL Database to DBeaver&lt;/h3&gt;
 
 &lt;p&gt;Fire up DBeaver and you should be presented with this screen. Select &lt;code class=&quot;highlighter-rouge&quot;&gt;MySQL 8+&lt;/code&gt; and go &lt;code class=&quot;highlighter-rouge&quot;&gt;next&lt;/code&gt;.&lt;/p&gt;
 
@@ -267,7 +268,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 
 &lt;p&gt;If everything is okay, you should see a success message. You can select the &lt;code class=&quot;highlighter-rouge&quot;&gt;SQL Editor&lt;/code&gt; and start writing your MySQL scripts right away.&lt;/p&gt;
 
-&lt;h2 id=&quot;connecting-to-mysql-server-via-python&quot;&gt;&lt;strong&gt;Connecting to MySQL Server via Python&lt;/strong&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;connecting-to-mysql-server-via-python&quot;&gt;Connecting to MySQL Server via Python&lt;/h2&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PyMySQL&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;DBUtils&lt;/code&gt; can be used to connect to MySQL Server.&lt;/p&gt;
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pymysql&lt;/span&gt;

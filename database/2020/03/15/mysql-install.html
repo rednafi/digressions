@@ -173,20 +173,16 @@ window.onload = wrap_img;
 </ul><p><img src="https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1921&amp;q=80" alt="Example image"></p>
 
 <h2 id="setting-up">
-<a class="anchor" href="#setting-up" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Setting Up</strong>
-</h2>
+<a class="anchor" href="#setting-up" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting Up</h2>
 
 <h3 id="installation">
-<a class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Installation</strong>
-</h3>
+<a class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
 
 <p>This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.</p>
 
 <ul>
-  <li>Install docker on your Linux machine. See the instruction <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">here</a>
-</li>
-  <li>Detailed MySQL installation instruction using docker can be found <a href="https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html">here</a>
-</li>
+  <li>Install docker on your Linux machine. See the instruction <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">here</a>.</li>
+  <li>Detailed MySQL installation instruction using docker can be found <a href="https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html">here</a>.</li>
 </ul>
 
 <p>Run the following command:</p>
@@ -217,8 +213,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 </code></pre></div></div>
 
 <h3 id="alter-root-password">
-<a class="anchor" href="#alter-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Alter Root Password</strong>
-</h3>
+<a class="anchor" href="#alter-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a>Alter Root Password</h3>
 
 <p>Enter the following command in the MySQL shell, replacing password with your new password:</p>
 
@@ -236,8 +231,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 </code></pre></div></div>
 
 <h3 id="view-users">
-<a class="anchor" href="#view-users" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>View Users</strong>
-</h3>
+<a class="anchor" href="#view-users" aria-hidden="true"><span class="octicon octicon-link"></span></a>View Users</h3>
 
 <p>MySQL stores the user information in its own database. The name of the database is <code class="highlighter-rouge">mysql</code>. If you want to see what users are set up in the MySQL user table, run the following command:</p>
 
@@ -258,8 +252,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 </code></pre></div></div>
 
 <h3 id="create-a-database">
-<a class="anchor" href="#create-a-database" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Create a Database</strong>
-</h3>
+<a class="anchor" href="#create-a-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a Database</h3>
 
 <p>You can create a database named <code class="highlighter-rouge">test_db</code> via the following command:</p>
 
@@ -291,8 +284,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 </code></pre></div></div>
 
 <h3 id="creating-dummy-table-in-the-database">
-<a class="anchor" href="#creating-dummy-table-in-the-database" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Creating Dummy Table in the Database</strong>
-</h3>
+<a class="anchor" href="#creating-dummy-table-in-the-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating Dummy Table in the Database</h3>
 
 <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- create dummy table</span>
 <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="nv">`student`</span> <span class="p">(</span>
@@ -341,17 +333,16 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 <span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="s1">'Gain Toe'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
 <span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="s1">'Rows Noump'</span><span class="p">,</span> <span class="s1">'Six'</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">);</span>
 </code></pre></div></div>
+
 <h3 id="show-tables">
-<a class="anchor" href="#show-tables" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Show Tables</strong>
-</h3>
+<a class="anchor" href="#show-tables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Show Tables</h3>
 
 <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">USE</span> <span class="n">test_db</span><span class="p">;</span>
 <span class="k">SHOW</span> <span class="n">tables</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="delete-a-database">
-<a class="anchor" href="#delete-a-database" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Delete a Database</strong>
-</h3>
+<a class="anchor" href="#delete-a-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete a Database</h3>
 
 <p>To delete a database <code class="highlighter-rouge">test_db</code> run the following command:</p>
 
@@ -361,8 +352,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 </code></pre></div></div>
 
 <h3 id="add-a-database-user">
-<a class="anchor" href="#add-a-database-user" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Add a Database User</strong>
-</h3>
+<a class="anchor" href="#add-a-database-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add a Database User</h3>
 
 <p>To create a new user (here, we created a new user named <code class="highlighter-rouge">redowan</code> with the password <code class="highlighter-rouge">password</code>), run the following command in the MySQL shell:</p>
 
@@ -390,8 +380,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 </code></pre></div></div>
 
 <h3 id="delete-a-database-user">
-<a class="anchor" href="#delete-a-database-user" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Delete a Database User</strong>
-</h3>
+<a class="anchor" href="#delete-a-database-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Delete a Database User</h3>
 
 <p>To delete a database user (here, I’m deleting the user-<code class="highlighter-rouge">redowan</code>) run:</p>
 
@@ -403,8 +392,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 </code></pre></div></div>
 
 <h3 id="grant-database-user-permissions">
-<a class="anchor" href="#grant-database-user-permissions" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Grant Database User Permissions</strong>
-</h3>
+<a class="anchor" href="#grant-database-user-permissions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Grant Database User Permissions</h3>
 
 <p>Give the user full permissions for your new database by running the following command (Here, I provided full permission of <code class="highlighter-rouge">test_db</code> to the user <code class="highlighter-rouge">redowan</code>:</p>
 
@@ -419,8 +407,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 </code></pre></div></div>
 
 <h3 id="loading-sample-database-to-your-own-mysql-server">
-<a class="anchor" href="#loading-sample-database-to-your-own-mysql-server" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Loading Sample Database to Your Own Mysql Server</strong>
-</h3>
+<a class="anchor" href="#loading-sample-database-to-your-own-mysql-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Loading Sample Database to Your Own Mysql Server</h3>
 
 <p>To load <code class="highlighter-rouge">mysqlsampledatabase.sql</code> to your own server (In this case the user is <code class="highlighter-rouge">redowan</code>. Provide database <code class="highlighter-rouge">password</code> in the prompt), first fireup the server and type the following commands:</p>
 
@@ -449,20 +436,17 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 <p>Notice that a new database named <code class="highlighter-rouge">classicmodels</code> has been added to the list.</p>
 
 <h2 id="connecting-to-a-third-party-client">
-<a class="anchor" href="#connecting-to-a-third-party-client" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Connecting to a Third Party Client</strong>
-</h2>
+<a class="anchor" href="#connecting-to-a-third-party-client" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connecting to a Third Party Client</h2>
 
 <p>We will be using <a href="https://github.com/dbeaver/dbeaver">DBeaver</a> as a third party client. While you can use the <code class="highlighter-rouge">mysql</code> shell to work on your data, a third partly client that make the experience much better with auto formatting, earsier import features, syntax highlighting etc.</p>
 
 <h3 id="installing-dbeaver">
-<a class="anchor" href="#installing-dbeaver" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Installing DBeaver</strong>
-</h3>
+<a class="anchor" href="#installing-dbeaver" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing DBeaver</h3>
 
 <p>You can install DBeaver installer from <a href="https://dbeaver.io/download/">here</a>. Installation is pretty straight forward.</p>
 
 <h3 id="connecting-mysql-database-to-dbeaver">
-<a class="anchor" href="#connecting-mysql-database-to-dbeaver" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Connecting MySQL Database to DBeaver</strong>
-</h3>
+<a class="anchor" href="#connecting-mysql-database-to-dbeaver" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connecting MySQL Database to DBeaver</h3>
 
 <p>Fire up DBeaver and you should be presented with this screen. Select <code class="highlighter-rouge">MySQL 8+</code> and go <code class="highlighter-rouge">next</code>.</p>
 
@@ -475,8 +459,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 <p>If everything is okay, you should see a success message. You can select the <code class="highlighter-rouge">SQL Editor</code> and start writing your MySQL scripts right away.</p>
 
 <h2 id="connecting-to-mysql-server-via-python">
-<a class="anchor" href="#connecting-to-mysql-server-via-python" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Connecting to MySQL Server via Python</strong>
-</h2>
+<a class="anchor" href="#connecting-to-mysql-server-via-python" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connecting to MySQL Server via Python</h2>
 
 <p><code class="highlighter-rouge">PyMySQL</code> and <code class="highlighter-rouge">DBUtils</code> can be used to connect to MySQL Server.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pymysql</span>
