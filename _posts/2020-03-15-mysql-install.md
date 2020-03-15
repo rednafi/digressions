@@ -21,94 +21,113 @@ This part describes the basic installation steps of setting up MySQL 8.0 databas
 
 Run the following command:
 
-    ```bash
-    # install mysql server
-     sudo docker pull mysql/mysql-server:8.0
-    ```
+```bash
+# install mysql server
+sudo docker pull mysql/mysql-server:8.0
+```
 
 ### Run MySQL Server
-    ```bash
-    # run mysql server
-    docker run --name=mysql -d mysql-server:8.0
-    ```
+
+```bash
+# run mysql server
+docker run --name=mysql -d mysql-server:8.0
+```
 
 ### Get Default Root Password
-    ```bash
-    # get root password
-    docker logs mysql 2>&1 | grep GENERATED
-    ```
+
+```bash
+# get root password
+docker logs mysql 2>&1 | grep GENERATED
+```
 
 ### Connect Shell to Server
-    ```bash
-    # connect shell to server
-    docker exec -it mysql mysql -uroot -p
-    ```
+
+```bash
+# connect shell to server
+docker exec -it mysql mysql -uroot -p
+```
 
 
-### **Set a New Root Password**
+### **Alter Root Password**
 
 Enter the following command in the MySQL shell, replacing password with your new password:
 
-    UPDATE mysql.user SET authentication_string = PASSWORD('password')
-    WHERE User = 'root';
+```sql
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass';
+```
 
 You should see something like this in the command prompt:
 
-    Query OK, 1 row affected, 1 warning (0.00 sec)
-    Rows matched: 1  Changed: 1  Warnings: 1
+```
+Query OK, 0 rows affected (0.02 sec)
+```
 
 To make the change take effect, type the following command:
 
-    FLUSH PRIVILEGES;
+```sql
+FLUSH PRIVILEGES;
+```
 
 ### **View Users**
 
 MySQL stores the user information in its own database. The name of the database is `mysql`. If you want to see what users are set up in the MySQL user table, run the following command:
 
-    SELECT User, Host, authentication_string FROM mysql.user;
+```sql
+SELECT User, Host, authentication_string FROM mysql.user;
+```
 
 You should see something like this:
 
-    +------------------+-----------+-------------------------------------------+
-    | User             | Host      | authentication_string                     |
-    +------------------+-----------+-------------------------------------------+
-    | root             | localhost | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |
-    | mysql.session    | localhost | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
-    | mysql.sys        | localhost | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
-    | debian-sys-maint | localhost | *8282611144B9D51437F4A2285E00A86701BF9737 |
-    +------------------+-----------+-------------------------------------------+
-    4 rows in set (0.00 sec)
+```
++------------------+-----------+-------------------------------------------+
+| User             | Host      | authentication_string                     |
++------------------+-----------+-------------------------------------------+
+| root             | localhost | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |
+| mysql.session    | localhost | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
+| mysql.sys        | localhost | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
+| debian-sys-maint | localhost | *8282611144B9D51437F4A2285E00A86701BF9737 |
++------------------+-----------+-------------------------------------------+
+4 rows in set (0.00 sec)
+```
 
 ### **Create a Database**
 
 You can create a database named `test_db` via the following command:
 
-    CREATE DATABASE test_db;
+```sql
+CREATE DATABASE test_db;
+```
 
 List your databases via the following command:
 
-    SHOW DATABASES;
+```sql
+SHOW DATABASES;
+```
 
 You should see something like this:
 
-    +--------------------+
-    | Database           |
-    +--------------------+
-    | information_schema |
-    | mysql              |
-    | performance_schema |
-    | sys                |
-    | test_db            |
-    +--------------------+
-    5 rows in set (0.00 sec)
+```
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| test_db            |
++--------------------+
+5 rows in set (0.00 sec)
+```
 
 To ensure the changes:
 
-    FLUSH PRIVILEGES;
-
+```sql
+FLUSH PRIVILEGES;
+```
 
 ### **Creating Dummy Table in the Database**
-```
+
+```sql
 -- create dummy table
 CREATE TABLE IF NOT EXISTS `student` (
   `id` int(2) NOT NULL DEFAULT '0',
@@ -157,7 +176,8 @@ INSERT INTO `student` (`id`, `name`, `class`, `mark`, `sex`) VALUES
 (35, 'Rows Noump', 'Six', 88, 'female');
 ```
 ### **Show Tables**
-```
+
+```sql
 USE test_db;
 SHOW tables;
 ```
@@ -166,79 +186,98 @@ SHOW tables;
 
 To delete a database `test_db` run the following command:
 
-    DROP DATABASE test_db,
+```sql
+DROP DATABASE test_db,
 
-    FLUSH PRIVILEGES;
+FLUSH PRIVILEGES;
+```
 
 ### **Add a Database User**
 
 To create a new user (here, we created a new user named `redowan` with the password `password`), run the following command in the MySQL shell:
 
-    CREATE USER 'redowan'@'localhost' IDENTIFIED BY 'password';
+```sql
+CREATE USER 'redowan'@'localhost' IDENTIFIED BY 'password';
 
-    FlUSH PRIVILEGES;
+FlUSH PRIVILEGES;
+```
 
 Ensure that the changes has been saved via running `FLUSH PRIVILEGES;`. Verify that a user has been successfully created via running the previous command:
 
-    SELECT User, Host, authentication_string FROM mysql.user;
+```sql
+SELECT User, Host, authentication_string FROM mysql.user;
+```
 
 You should see something like below. Notice that a new user named `redowan` has been created:
 
-    +------------------+-----------+-------------------------------------------+
-    | User             | Host      | authentication_string                     |
-    +------------------+-----------+-------------------------------------------+
-    | root             | localhost | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |
-    | mysql.session    | localhost | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
-    | mysql.sys        | localhost | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
-    | debian-sys-maint | localhost | *8282611144B9D51437F4A2285E00A86701BF9737 |
-    | redowan          | localhost | *0756A562377EDF6ED3AC45A00B356AAE6D3C6BB6 |
-    +------------------+-----------+-------------------------------------------+
+```
++------------------+-----------+-------------------------------------------+
+| User             | Host      | authentication_string                     |
++------------------+-----------+-------------------------------------------+
+| root             | localhost | *2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19 |
+| mysql.session    | localhost | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
+| mysql.sys        | localhost | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
+| debian-sys-maint | localhost | *8282611144B9D51437F4A2285E00A86701BF9737 |
+| redowan          | localhost | *0756A562377EDF6ED3AC45A00B356AAE6D3C6BB6 |
++------------------+-----------+-------------------------------------------+
+```
 
 ### **Delete a Database User**
 
 To delete a database user (here, I'm deleting the user-`redowan`) run:
 
-    DELETE FROM mysql.user
-    WHERE user='<redowan>'
-    AND host = 'localhost'
+```sql
+DELETE FROM mysql.user
+WHERE user='<redowan>'
+AND host = 'localhost'
 
-    FlUSH PRIVILEGES;
+FlUSH PRIVILEGES;
+```
 
 ### **Grant Database User Permissions**
 
 Give the user full permissions for your new database by running the following command (Here, I provided full permission of `test_db` to the user `redowan`:
 
-    GRANT ALL PRIVILEGES ON test_db.table TO 'redowan'@'localhost';
+```sql
+GRANT ALL PRIVILEGES ON test_db.table TO 'redowan'@'localhost';
+```
 
 If you want to give permission to all the databases, type:
 
-    GRANT ALL PRIVILEGES ON *.* TO 'redowan'@'localhost';
+```sql
+GRANT ALL PRIVILEGES ON *.* TO 'redowan'@'localhost';
 
-    FlUSH PRIVILEGES;
+FlUSH PRIVILEGES;
+```
 
 ### **Loading Sample Database to Your Own Mysql Server**
 
 To load `mysqlsampledatabase.sql` to your own server (In this case the user is `redowan`. Provide database `password` in the prompt), first fireup the server and type the following commands:
 
-    mysql -u redowan -p test_db < mysqlsampledatabase.sql;
+```sql
+mysql -u redowan -p test_db < mysqlsampledatabase.sql;
+```
 
 Now run:
 
-    SHOW DATABASES;
-
+```sql
+SHOW DATABASES;
+```
 You should see something like this:
 
-    +--------------------+
-    | Database           |
-    +--------------------+
-    | information_schema |
-    | classicmodels      |
-    | mysql              |
-    | performance_schema |
-    | sys                |
-    | test_db            |
-    +--------------------+
-    6 rows in set (0.00 sec)
+```
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| classicmodels      |
+| mysql              |
+| performance_schema |
+| sys                |
+| test_db            |
++--------------------+
+6 rows in set (0.00 sec)
+```
 
 Notice that a new database named `classicmodels` has been added to the list.
 
