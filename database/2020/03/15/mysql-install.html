@@ -128,7 +128,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      6 min read
+      7 min read
     
 </span></p>
 
@@ -160,6 +160,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#delete-a-database-user">Delete a Database User</a></li>
 <li class="toc-entry toc-h3"><a href="#grant-database-user-permissions">Grant Database User Permissions</a></li>
 <li class="toc-entry toc-h3"><a href="#loading-sample-database-to-your-own-mysql-server">Loading Sample Database to Your Own MySQL Server</a></li>
+<li class="toc-entry toc-h3"><a href="#stop-the-server">Stop the Server</a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#connecting-to-a-third-party-client">Connecting to a Third Party Client</a>
@@ -456,6 +457,14 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql_dumps_mysq
 | test_db            |
 +--------------------+
 6 rows in set (0.00 sec)
+</code></pre></div></div>
+
+<h3 id="stop-the-server">
+<a class="anchor" href="#stop-the-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stop the Server</h3>
+
+<p>The following command stops the server.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker-compose down
 </code></pre></div></div>
 
 <p>Notice that a new database named <code class="highlighter-rouge">classicmodels</code> has been added to the list.</p>
