@@ -24,7 +24,7 @@ class CartesianPoint:
 print(CartesianPoint(1, 2, 3))
 ```
 
-```python
+```
 >> CartesianPoint(x = 1, y = 2, z = 3)
 ```
 
@@ -51,7 +51,7 @@ point = CartesianPoint(1, 2, 3)
 print(point)
 ```
 
-```python
+```
 >> CartesianPoint(x=1, y=2, z=3)
 ```
 
@@ -151,7 +151,7 @@ point_2 = CartesianPoint(1, 2, 5)
 print(point_1 == point_2)
 ```
 
-```python
+```
 >> False
 ```
 
@@ -176,7 +176,7 @@ point_2 = CartesianPoint(1, 2, 5)
 print(point_1 > point_2)
 ```
 
-```python
+```
 >> True
 ```
 
@@ -205,7 +205,7 @@ print(point_1 == point_2)
 print(point_1 < point_2)
 ```
 
-```python
+```
 >> True
 >> False
 ```
@@ -239,7 +239,7 @@ norm = point.abs_val()
 print(norm)
 ```
 
-```python
+```
 >> 10.488088481701515
 ```
 
@@ -267,7 +267,7 @@ point = CartesianPoint(2, 4, 6)
 point.x = 23
 ```
 
-```python
+```
 ---------------------------------------------------------------------------
 
 FrozenInstanceError                       Traceback (most recent call last)
@@ -307,8 +307,9 @@ point = CartesianPoint(0, 0, 0)
 print({f"{point}": "origin"})
 ```
 
-    {'CartesianPoint(x=0, y=0, z=0)': 'origin'}
-
+```
+>> {'CartesianPoint(x=0, y=0, z=0)': 'origin'}
+```
 
 ## Converting Instances to Dicts
 
@@ -321,7 +322,9 @@ point = CartesianPoint(1, 5, 6)
 print(asdict(point))
 ```
 
-    {'x': 1, 'y': 5, 'z': 6}
+```
+>> {'x': 1, 'y': 5, 'z': 6}
+```
 
 
 ## Post-init Processing
@@ -346,11 +349,14 @@ point = CartesianPoint(4, 5, 6)
 print(point.tup)
 ```
 
-    (4, 5, 6)
+```
+>> (4, 5, 6)
+```
 
 
 ## Refactoring the Entire Cartesian Point Class
 
+The feature rich original `CartesianPoint` looks something like this:
 
 ```python
 import math
@@ -358,7 +364,10 @@ import math
 
 class CartesianPoint:
     """Immutable Cartesian point class.
-       All the comparisons are done based on the first field only."""
+       Although mathematically incorrect,
+       for demonstration purpose, all the 
+       comparisons are done based on 
+       the first field only."""
 
     def __init__(self, x, y, z):
         self.x = x
@@ -416,8 +425,8 @@ Let's see the class in action:
 ```python
 # create multiple instances of the class
 a = CartesianPoint(1, 2, 3)
-b = CartesianPoint(1,3,3)
-c = CartesianPoint(0 ,3, 5)
+b = CartesianPoint(1, 3, 3)
+c = CartesianPoint(0, 3, 5)
 d = CartesianPoint(5, 6, 7)
 
 # checking the __repr__ method
@@ -436,18 +445,19 @@ print(b >= d)
 print(c < a)
 
 # checking __hash__ and __dist__ method
-print({f'{a}': a.dist()})
+print({f"{a}": a.dist()})
 ```
 
-    CartesianPoint(x = 1, y = 2, z = 3)
-    True
-    True
-    False
-    True
-    {'CartesianPoint(x = 1, y = 2, z = 3)': 3.7416573867739413}
+```
+CartesianPoint(x = 1, y = 2, z = 3)
+True
+True
+False
+True
+{'CartesianPoint(x = 1, y = 2, z = 3)': 3.7416573867739413}
+```
 
-
- This is the same class refactored using dataclass
+Below is the same class refactored using dataclass.
 
 
 ```python
@@ -457,7 +467,10 @@ from dataclasses import dataclass, field
 @dataclass(unsafe_hash=True, order=True)
 class CartesianPoint:
     """Immutable Cartesian point class.
-       All the comparisons are done based on the first field only."""
+       Although mathematically incorrect,
+       for demonstration purpose, all the 
+       comparisons are done based on 
+       the first field only."""
 
     x: float
     y: float = field(compare=False)
@@ -475,8 +488,8 @@ Use this class like before.
 ```python
 # create multiple instances of the class
 a = CartesianPoint(1, 2, 3)
-b = CartesianPoint(1,3,3)
-c = CartesianPoint(0 ,3, 5)
+b = CartesianPoint(1, 3, 3)
+c = CartesianPoint(0, 3, 5)
 d = CartesianPoint(5, 6, 7)
 
 # checking the __repr__ method
@@ -495,17 +508,18 @@ print(b >= d)
 print(c < a)
 
 # checking __hash__ and __dist__ method
-print({f'{a}': a.dist()})
+print({f"{a}": a.dist()})
 ```
 
-    CartesianPoint(x=1, y=2, z=3)
-    True
-    True
-    False
-    True
-    {'CartesianPoint(x=1, y=2, z=3)': 3.7416573867739413}
-
-
+```
+CartesianPoint(x=1, y=2, z=3)
+True
+True
+False
+True
+{'CartesianPoint(x=1, y=2, z=3)': 3.7416573867739413}
+```
+    
 ## References
 
 * [Python Dataclasses: Official Doc](https://docs.python.org/3/library/dataclasses.html)
