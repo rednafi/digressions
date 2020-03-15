@@ -1,53 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T03:46:09-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL on Linux</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL on Linux" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T04:53:50-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL on Linux</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL on Linux" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;setting-up&quot;&gt;&lt;strong&gt;Setting Up&lt;/strong&gt;&lt;/h2&gt;
 
 &lt;h3 id=&quot;installation&quot;&gt;&lt;strong&gt;Installation&lt;/strong&gt;&lt;/h3&gt;
 
-&lt;p&gt;This part describes a basic installation of a MySQL 5.7 database server on Ubuntu Linux, 18.04 to be specific.&lt;/p&gt;
+&lt;p&gt;This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo apt-get update
-sudo apt-get install mysql-server
+&lt;ul&gt;
+  &lt;li&gt;Install docker on your Linux machine. See the instruction &lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/ubuntu/&quot;&gt;here&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Detailed MySQL installation instruction using docker can be found &lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html&quot;&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Run the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```bash
+# install mysql server
+ sudo docker pull mysql/mysql-server:8.0
+```
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;allow-remote-access&quot;&gt;&lt;strong&gt;Allow Remote Access&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;If you want to connect to the MySQL database from another machine, you must open a port in your server’s firewall (the default port is 3306). This is not necessary if you intend to run the application that uses MySQL on the same server.&lt;/p&gt;
-
-&lt;p&gt;Run the following command to allow remote access to the MySQL server:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ufw allow mysql
+&lt;h3 id=&quot;run-mysql-server&quot;&gt;Run MySQL Server&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```bash
+# run mysql server
+docker run --name=mysql -d mysql-server:8.0
+```
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;start-mysql-service&quot;&gt;&lt;strong&gt;Start MySQL service&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;After the installation, the database service can be started via the following command:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;systemctl start mysql
+&lt;h3 id=&quot;get-default-root-password&quot;&gt;Get Default Root Password&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```bash
+# get root password
+docker logs mysql 2&amp;gt;&amp;amp;1 | grep GENERATED
+```
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;launch-at-reboot&quot;&gt;&lt;strong&gt;Launch at Reboot&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;To launch the database server automatically after a reboot, run:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;systemctl enable mysql
+&lt;h3 id=&quot;connect-shell-to-server&quot;&gt;Connect Shell to Server&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;```bash
+# connect shell to server
+docker exec -it mysql mysql -uroot -p
+```
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;start-the-mysql-shell&quot;&gt;&lt;strong&gt;Start the MySQL Shell&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;In the beginning, to start the MySQL shell, run:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo mysql -u root -p
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Writing this command will bring up a password prompt. Put your system password and press return. The following MySQL shell prompt should appear:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mysql&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Press &lt;code class=&quot;highlighter-rouge&quot;&gt;ctrl + D&lt;/code&gt; to stop the server.&lt;/p&gt;
-
-&lt;h3 id=&quot;set-the-root-password&quot;&gt;&lt;strong&gt;Set the Root Password&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;set-a-new-root-password&quot;&gt;&lt;strong&gt;Set a New Root Password&lt;/strong&gt;&lt;/h3&gt;
 
 &lt;p&gt;Enter the following command in the MySQL shell, replacing password with your new password:&lt;/p&gt;
 

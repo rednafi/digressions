@@ -148,11 +148,10 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#setting-up">Setting Up</a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#installation">Installation</a></li>
-<li class="toc-entry toc-h3"><a href="#allow-remote-access">Allow Remote Access</a></li>
-<li class="toc-entry toc-h3"><a href="#start-mysql-service">Start MySQL service</a></li>
-<li class="toc-entry toc-h3"><a href="#launch-at-reboot">Launch at Reboot</a></li>
-<li class="toc-entry toc-h3"><a href="#start-the-mysql-shell">Start the MySQL Shell</a></li>
-<li class="toc-entry toc-h3"><a href="#set-the-root-password">Set the Root Password</a></li>
+<li class="toc-entry toc-h3"><a href="#run-mysql-server">Run MySQL Server</a></li>
+<li class="toc-entry toc-h3"><a href="#get-default-root-password">Get Default Root Password</a></li>
+<li class="toc-entry toc-h3"><a href="#connect-shell-to-server">Connect Shell to Server</a></li>
+<li class="toc-entry toc-h3"><a href="#set-a-new-root-password">Set a New Root Password</a></li>
 <li class="toc-entry toc-h3"><a href="#view-users">View Users</a></li>
 <li class="toc-entry toc-h3"><a href="#create-a-database">Create a Database</a></li>
 <li class="toc-entry toc-h3"><a href="#creating-dummy-table-in-the-database">Creating Dummy Table in the Database</a></li>
@@ -181,59 +180,49 @@ window.onload = wrap_img;
 <a class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Installation</strong>
 </h3>
 
-<p>This part describes a basic installation of a MySQL 5.7 database server on Ubuntu Linux, 18.04 to be specific.</p>
+<p>This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get update
-sudo apt-get install mysql-server
+<ul>
+  <li>Install docker on your Linux machine. See the instruction <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">here</a>
+</li>
+  <li>Detailed MySQL installation instruction using docker can be found <a href="https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html">here</a>
+</li>
+</ul>
+
+<p>Run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
+# install mysql server
+ sudo docker pull mysql/mysql-server:8.0
+```
 </code></pre></div></div>
 
-<h3 id="allow-remote-access">
-<a class="anchor" href="#allow-remote-access" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Allow Remote Access</strong>
-</h3>
-
-<p>If you want to connect to the MySQL database from another machine, you must open a port in your server’s firewall (the default port is 3306). This is not necessary if you intend to run the application that uses MySQL on the same server.</p>
-
-<p>Run the following command to allow remote access to the MySQL server:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo ufw allow mysql
+<h3 id="run-mysql-server">
+<a class="anchor" href="#run-mysql-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run MySQL Server</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
+# run mysql server
+docker run --name=mysql -d mysql-server:8.0
+```
 </code></pre></div></div>
 
-<h3 id="start-mysql-service">
-<a class="anchor" href="#start-mysql-service" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Start MySQL service</strong>
-</h3>
-
-<p>After the installation, the database service can be started via the following command:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl start mysql
+<h3 id="get-default-root-password">
+<a class="anchor" href="#get-default-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Default Root Password</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
+# get root password
+docker logs mysql 2&gt;&amp;1 | grep GENERATED
+```
 </code></pre></div></div>
 
-<h3 id="launch-at-reboot">
-<a class="anchor" href="#launch-at-reboot" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Launch at Reboot</strong>
-</h3>
-
-<p>To launch the database server automatically after a reboot, run:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl enable mysql
+<h3 id="connect-shell-to-server">
+<a class="anchor" href="#connect-shell-to-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connect Shell to Server</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
+# connect shell to server
+docker exec -it mysql mysql -uroot -p
+```
 </code></pre></div></div>
 
-<h3 id="start-the-mysql-shell">
-<a class="anchor" href="#start-the-mysql-shell" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Start the MySQL Shell</strong>
-</h3>
-
-<p>In the beginning, to start the MySQL shell, run:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo mysql -u root -p
-</code></pre></div></div>
-
-<p>Writing this command will bring up a password prompt. Put your system password and press return. The following MySQL shell prompt should appear:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql&gt;
-</code></pre></div></div>
-
-<p>Press <code class="highlighter-rouge">ctrl + D</code> to stop the server.</p>
-
-<h3 id="set-the-root-password">
-<a class="anchor" href="#set-the-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Set the Root Password</strong>
+<h3 id="set-a-new-root-password">
+<a class="anchor" href="#set-a-new-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Set a New Root Password</strong>
 </h3>
 
 <p>Enter the following command in the MySQL shell, replacing password with your new password:</p>
