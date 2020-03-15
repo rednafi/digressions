@@ -20,7 +20,7 @@ This part describes the basic installation steps of setting up MySQL 5.7 server 
 
 * Install docker compose via following the instructions [here](https://docs.docker.com/compose/install/).
 
-* Create another folder on your project folder and make a `docker-compose.yml` file
+* Create another folder on your project folder and make a `docker-compose.yml` file. Run the following instructions one by one:
 
     ```bash
     mkdir mysql_dump
