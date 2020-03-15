@@ -14,44 +14,38 @@ categories: [database]
 
 ### **Installation**
 
-This part describes a basic installation of a MySQL 5.7 database server on Ubuntu Linux, 18.04 to be specific.
+This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.
 
-    sudo apt-get update
-    sudo apt-get install mysql-server
+* Install docker on your Linux machine. See the instruction [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+* Detailed MySQL installation instruction using docker can be found [here](https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html)
 
-### **Allow Remote Access**
+Run the following command:
 
-If you want to connect to the MySQL database from another machine, you must open a port in your server’s firewall (the default port is 3306). This is not necessary if you intend to run the application that uses MySQL on the same server.
+    ```bash
+    # install mysql server
+     sudo docker pull mysql/mysql-server:8.0
+    ```
 
-Run the following command to allow remote access to the MySQL server:
+### Run MySQL Server
+    ```bash
+    # run mysql server
+    docker run --name=mysql -d mysql-server:8.0
+    ```
 
-    sudo ufw allow mysql
+### Get Default Root Password
+    ```bash
+    # get root password
+    docker logs mysql 2>&1 | grep GENERATED
+    ```
 
-### **Start MySQL service**
+### Connect Shell to Server
+    ```bash
+    # connect shell to server
+    docker exec -it mysql mysql -uroot -p
+    ```
 
-After the installation, the database service can be started via the following command:
 
-    systemctl start mysql
-
-### **Launch at Reboot**
-
-To launch the database server automatically after a reboot, run:
-
-    systemctl enable mysql
-
-### **Start the MySQL Shell**
-
-In the beginning, to start the MySQL shell, run:
-
-    sudo mysql -u root -p
-
-Writing this command will bring up a password prompt. Put your system password and press return. The following MySQL shell prompt should appear:
-
-    mysql>
-
-Press `ctrl + D` to stop the server.
-
-### **Set the Root Password**
+### **Set a New Root Password**
 
 Enter the following command in the MySQL shell, replacing password with your new password:
 
