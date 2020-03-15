@@ -1,43 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T06:16:46-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL on Linux</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL on Linux" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T14:35:46-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL with Docker</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL with Docker" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;setting-up&quot;&gt;Setting Up&lt;/h2&gt;
 
 &lt;h3 id=&quot;installation&quot;&gt;Installation&lt;/h3&gt;
 
-&lt;p&gt;This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.&lt;/p&gt;
+&lt;p&gt;This part describes the basic installation steps of setting up MySQL 5.7 server on Ubuntu Linux using docker.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Install docker on your Linux machine. See the instruction &lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/ubuntu/&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;Detailed MySQL installation instruction using docker can be found &lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Install docker on your Linux machine. See the instruction &lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/ubuntu/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Install docker compose via following the instructions &lt;a href=&quot;https://docs.docker.com/compose/install/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create another folder on your project folder and make a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; file&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;mysql_dump
+  &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;mysql_dump
+  &lt;span class=&quot;nb&quot;&gt;touch &lt;/span&gt;docker-compose.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Open the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; file and copy the following lines into it.&lt;/p&gt;
+
+    &lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;c1&quot;&gt;# docker-compose version&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.3&quot;&lt;/span&gt;
+
+  &lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+   &lt;span class=&quot;c1&quot;&gt;# images&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;mysql-dev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mysql:5.7&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;MYSQL_ROOT_PASSWORD&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;password&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;MYSQL_DATABASE&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;test_db&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3306:3306&quot;&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;# making data persistent&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;db-data:/var/lib/mysql&lt;/span&gt;
+
+  &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;db-data&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;Run the following command:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# install mysql server&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;docker pull mysql/mysql-server:8.0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;run-mysql-server&quot;&gt;Run MySQL Server&lt;/h3&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# run mysql server&lt;/span&gt;
-docker run &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;mysql &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; mysql-server:8.0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;get-default-root-password&quot;&gt;Get Default Root Password&lt;/h3&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# get root password&lt;/span&gt;
-docker logs mysql 2&amp;gt;&amp;amp;1 | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;GENERATED
+&lt;p&gt;Run the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; command. This will build and run the server in detached mode.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker compose up &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;connect-shell-to-server&quot;&gt;Connect Shell to Server&lt;/h3&gt;
+&lt;p&gt;Check the name of the running container with &lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps&lt;/code&gt; command. In this case, the running container is called &lt;code class=&quot;highlighter-rouge&quot;&gt;mysql_dumps_mysql-dev_1&lt;/code&gt;. Then run the following command to connect your shell to the running server.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# connect shell to server&lt;/span&gt;
-docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; mysql mysql &lt;span class=&quot;nt&quot;&gt;-uroot&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;
+docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; mysql_dumps_mysql-dev_1 mysql &lt;span class=&quot;nt&quot;&gt;-uroot&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;alter-root-password&quot;&gt;Alter Root Password&lt;/h3&gt;
 
-&lt;p&gt;Enter the following command in the MySQL shell, replacing password with your new password:&lt;/p&gt;
+&lt;p&gt;If you want to change the root password, enter the following command in the MySQL shell. Replace &lt;code class=&quot;highlighter-rouge&quot;&gt;MyNewPass&lt;/code&gt; with your new root password:&lt;/p&gt;
 
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'root'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'localhost'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IDENTIFIED&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'MyNewPass'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -74,9 +98,9 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 
 &lt;h3 id=&quot;create-a-database&quot;&gt;Create a Database&lt;/h3&gt;
 
-&lt;p&gt;You can create a database named &lt;code class=&quot;highlighter-rouge&quot;&gt;test_db&lt;/code&gt; via the following command:&lt;/p&gt;
+&lt;p&gt;According to the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; file, you already have created a database named &lt;code class=&quot;highlighter-rouge&quot;&gt;test_db&lt;/code&gt;. You can create anotehr database named &lt;code class=&quot;highlighter-rouge&quot;&gt;test_db_2&lt;/code&gt; via the following command:&lt;/p&gt;
 
-&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_db_2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;List your databases via the following command:&lt;/p&gt;
@@ -94,8 +118,9 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 | performance_schema |
 | sys                |
 | test_db            |
+| test_db_2          |
 +--------------------+
-5 rows in set (0.00 sec)
+6 rows in set (0.01 sec)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;To ensure the changes:&lt;/p&gt;

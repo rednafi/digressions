@@ -3,19 +3,19 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Up and Running with MySQL on Linux | Redowan’s Digressions</title>
+<title>Up and Running with MySQL with Docker | Redowan’s Digressions</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Up and Running with MySQL on Linux" />
+<meta property="og:title" content="Up and Running with MySQL with Docker" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Setting up MySQL on Linux" />
-<meta property="og:description" content="Setting up MySQL on Linux" />
+<meta name="description" content="Setting up MySQL on Linux in No Time" />
+<meta property="og:description" content="Setting up MySQL on Linux in No Time" />
 <link rel="canonical" href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" />
 <meta property="og:url" content="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" />
 <meta property="og:site_name" content="Redowan’s Digressions" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-03-15T00:00:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2020-03-15T00:00:00-05:00","description":"Setting up MySQL on Linux","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html"},"url":"https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html","headline":"Up and Running with MySQL on Linux","datePublished":"2020-03-15T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"dateModified":"2020-03-15T00:00:00-05:00","description":"Setting up MySQL on Linux in No Time","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html"},"url":"https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html","headline":"Up and Running with MySQL with Docker","datePublished":"2020-03-15T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Redowan's Digressions" /><script async src="https://www.googletagmanager.com/gtag/js?id=UA-160409032-1"></script>
 <script>
@@ -27,19 +27,19 @@
   gtag('config', 'UA-160409032-1');
 </script>
 <link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Up and Running with MySQL on Linux | Redowan’s Digressions</title>
+<title>Up and Running with MySQL with Docker | Redowan’s Digressions</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Up and Running with MySQL on Linux" />
+<meta property="og:title" content="Up and Running with MySQL with Docker" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Setting up MySQL on Linux" />
-<meta property="og:description" content="Setting up MySQL on Linux" />
+<meta name="description" content="Setting up MySQL on Linux in No Time" />
+<meta property="og:description" content="Setting up MySQL on Linux in No Time" />
 <link rel="canonical" href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" />
 <meta property="og:url" content="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" />
 <meta property="og:site_name" content="Redowan’s Digressions" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-03-15T00:00:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2020-03-15T00:00:00-05:00","description":"Setting up MySQL on Linux","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html"},"url":"https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html","headline":"Up and Running with MySQL on Linux","datePublished":"2020-03-15T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"dateModified":"2020-03-15T00:00:00-05:00","description":"Setting up MySQL on Linux in No Time","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html"},"url":"https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html","headline":"Up and Running with MySQL with Docker","datePublished":"2020-03-15T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -122,7 +122,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Up and Running with MySQL on Linux</h1><p class="page-description">Setting up MySQL on Linux</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-03-15T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Up and Running with MySQL with Docker</h1><p class="page-description">Setting up MySQL on Linux in No Time</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-03-15T00:00:00-05:00" itemprop="datePublished">
         Mar 15, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
@@ -149,7 +149,6 @@ window.onload = wrap_img;
 <ul>
 <li class="toc-entry toc-h3"><a href="#installation">Installation</a></li>
 <li class="toc-entry toc-h3"><a href="#run-mysql-server">Run MySQL Server</a></li>
-<li class="toc-entry toc-h3"><a href="#get-default-root-password">Get Default Root Password</a></li>
 <li class="toc-entry toc-h3"><a href="#connect-shell-to-server">Connect Shell to Server</a></li>
 <li class="toc-entry toc-h3"><a href="#alter-root-password">Alter Root Password</a></li>
 <li class="toc-entry toc-h3"><a href="#view-users">View Users</a></li>
@@ -178,44 +177,69 @@ window.onload = wrap_img;
 <h3 id="installation">
 <a class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
 
-<p>This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.</p>
+<p>This part describes the basic installation steps of setting up MySQL 5.7 server on Ubuntu Linux using docker.</p>
 
 <ul>
-  <li>Install docker on your Linux machine. See the instruction <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">here</a>.</li>
-  <li>Detailed MySQL installation instruction using docker can be found <a href="https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html">here</a>.</li>
+  <li>
+    <p>Install docker on your Linux machine. See the instruction <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">here</a>.</p>
+  </li>
+  <li>
+    <p>Install docker compose via following the instructions <a href="https://docs.docker.com/compose/install/">here</a>.</p>
+  </li>
+  <li>
+    <p>Create another folder on your project folder and make a <code class="highlighter-rouge">docker-compose.yml</code> file</p>
+
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="nb">mkdir </span>mysql_dump
+  <span class="nb">cd </span>mysql_dump
+  <span class="nb">touch </span>docker-compose.yml
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Open the <code class="highlighter-rouge">docker-compose.yml</code> file and copy the following lines into it.</p>
+
+    <div class="language-yml highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>   <span class="c1"># docker-compose version</span>
+  <span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.3"</span>
+
+  <span class="na">services</span><span class="pi">:</span>
+   <span class="c1"># images</span>
+  <span class="na">mysql-dev</span><span class="pi">:</span>
+      <span class="na">image</span><span class="pi">:</span> <span class="s">mysql:5.7</span>
+      <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">MYSQL_ROOT_PASSWORD</span><span class="pi">:</span> <span class="s">password</span>
+      <span class="na">MYSQL_DATABASE</span><span class="pi">:</span> <span class="s">test_db</span>
+      <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">3306:3306"</span>
+      <span class="c1"># making data persistent</span>
+      <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">db-data:/var/lib/mysql</span>
+
+  <span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">db-data</span><span class="pi">:</span>
+</code></pre></div>    </div>
+  </li>
 </ul>
-
-<p>Run the following command:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># install mysql server</span>
-<span class="nb">sudo </span>docker pull mysql/mysql-server:8.0
-</code></pre></div></div>
 
 <h3 id="run-mysql-server">
 <a class="anchor" href="#run-mysql-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run MySQL Server</h3>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># run mysql server</span>
-docker run <span class="nt">--name</span><span class="o">=</span>mysql <span class="nt">-d</span> mysql-server:8.0
-</code></pre></div></div>
-
-<h3 id="get-default-root-password">
-<a class="anchor" href="#get-default-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Default Root Password</h3>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># get root password</span>
-docker logs mysql 2&gt;&amp;1 | <span class="nb">grep </span>GENERATED
+<p>Run the <code class="highlighter-rouge">docker-compose</code> command. This will build and run the server in detached mode.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker compose up <span class="nt">-d</span>
 </code></pre></div></div>
 
 <h3 id="connect-shell-to-server">
 <a class="anchor" href="#connect-shell-to-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connect Shell to Server</h3>
+<p>Check the name of the running container with <code class="highlighter-rouge">docker ps</code> command. In this case, the running container is called <code class="highlighter-rouge">mysql_dumps_mysql-dev_1</code>. Then run the following command to connect your shell to the running server.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># connect shell to server</span>
-docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <span class="nt">-uroot</span> <span class="nt">-p</span>
+docker <span class="nb">exec</span> <span class="nt">-it</span> mysql_dumps_mysql-dev_1 mysql <span class="nt">-uroot</span> <span class="nt">-p</span>
 </code></pre></div></div>
 
 <h3 id="alter-root-password">
 <a class="anchor" href="#alter-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a>Alter Root Password</h3>
 
-<p>Enter the following command in the MySQL shell, replacing password with your new password:</p>
+<p>If you want to change the root password, enter the following command in the MySQL shell. Replace <code class="highlighter-rouge">MyNewPass</code> with your new root password:</p>
 
 <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">USER</span> <span class="s1">'root'</span><span class="o">@</span><span class="s1">'localhost'</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">'MyNewPass'</span><span class="p">;</span>
 </code></pre></div></div>
@@ -254,9 +278,9 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 <h3 id="create-a-database">
 <a class="anchor" href="#create-a-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a Database</h3>
 
-<p>You can create a database named <code class="highlighter-rouge">test_db</code> via the following command:</p>
+<p>According to the <code class="highlighter-rouge">docker-compose.yml</code> file, you already have created a database named <code class="highlighter-rouge">test_db</code>. You can create anotehr database named <code class="highlighter-rouge">test_db_2</code> via the following command:</p>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">test_db</span><span class="p">;</span>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">test_db_2</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>List your databases via the following command:</p>
@@ -274,8 +298,9 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <spa
 | performance_schema |
 | sys                |
 | test_db            |
+| test_db_2          |
 +--------------------+
-5 rows in set (0.00 sec)
+6 rows in set (0.01 sec)
 </code></pre></div></div>
 
 <p>To ensure the changes:</p>
