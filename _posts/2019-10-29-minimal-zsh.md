@@ -113,19 +113,48 @@ Add the following lines to `~/.zprofile` and source via the command:
 
 Instead of adding the plugins individually, you can just install the plugins and then add this barebone config to your `~/.zshrc` . Don't forget to replace `YourUserName` with your username. Source your zshrc once you are done.
 
-``` bash
-export ZSH="/home/<YourUserName>/.oh-my-zsh"
+```zsh
+# =====================
+# MINIMALIST ZSHRC
+# AUTHOR: REDNAFI
+# =====================
+
+# omz path
+export ZSH="$HOME/.oh-my-zsh"
 
 # theme settings
-ZSH_THEME="agnoster"
-DEFAULT_USER="YourUserName"
-prompt_context(){}
+setopt PROMPT_PERCENT
+setopt PROMPT_SUBST
+PROMPT='[%n:%F{yellow}%25<..<%~%f%<<]$ '
+precmd() {
+    precmd() {
+        #echo
+    }
+}
 
 # pluging settings
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 
+# autosuggestion highlight
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
+
 # source omz
 source $ZSH/oh-my-zsh.sh
+
+#History setup
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=100000
+SAVEHIST=$HISTSIZ
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' group-name ''                                        # group results by category
+zstyle ':completion:::::' completer _expand _complete _ignored _approximate #enable approximate matches for completion
+
+#disable auto correct
+unsetopt correct_all
+
+# add snap path
+export PATH=$PATH:/snap/bin
 ```
 
 ## **Set Terminal Color (Optional)**
