@@ -10,14 +10,14 @@ categories: [database]
 ![Example image](https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1921&q=80)
 
 
-## **Setting Up**
+## Setting Up
 
-### **Installation**
+### Installation
 
 This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.
 
-* Install docker on your Linux machine. See the instruction [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-* Detailed MySQL installation instruction using docker can be found [here](https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html)
+* Install docker on your Linux machine. See the instruction [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/).
+* Detailed MySQL installation instruction using docker can be found [here](https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html).
 
 Run the following command:
 
@@ -48,7 +48,7 @@ docker exec -it mysql mysql -uroot -p
 ```
 
 
-### **Alter Root Password**
+### Alter Root Password
 
 Enter the following command in the MySQL shell, replacing password with your new password:
 
@@ -68,7 +68,7 @@ To make the change take effect, type the following command:
 FLUSH PRIVILEGES;
 ```
 
-### **View Users**
+### View Users
 
 MySQL stores the user information in its own database. The name of the database is `mysql`. If you want to see what users are set up in the MySQL user table, run the following command:
 
@@ -90,7 +90,7 @@ You should see something like this:
 4 rows in set (0.00 sec)
 ```
 
-### **Create a Database**
+### Create a Database
 
 You can create a database named `test_db` via the following command:
 
@@ -125,7 +125,7 @@ To ensure the changes:
 FLUSH PRIVILEGES;
 ```
 
-### **Creating Dummy Table in the Database**
+### Creating Dummy Table in the Database
 
 ```sql
 -- create dummy table
@@ -175,14 +175,15 @@ INSERT INTO `student` (`id`, `name`, `class`, `mark`, `sex`) VALUES
 (34, 'Gain Toe', 'Seven', 69, 'male'),
 (35, 'Rows Noump', 'Six', 88, 'female');
 ```
-### **Show Tables**
+
+### Show Tables
 
 ```sql
 USE test_db;
 SHOW tables;
 ```
 
-### **Delete a Database**
+### Delete a Database
 
 To delete a database `test_db` run the following command:
 
@@ -192,7 +193,7 @@ DROP DATABASE test_db,
 FLUSH PRIVILEGES;
 ```
 
-### **Add a Database User**
+### Add a Database User
 
 To create a new user (here, we created a new user named `redowan` with the password `password`), run the following command in the MySQL shell:
 
@@ -222,7 +223,7 @@ You should see something like below. Notice that a new user named `redowan` has 
 +------------------+-----------+-------------------------------------------+
 ```
 
-### **Delete a Database User**
+### Delete a Database User
 
 To delete a database user (here, I'm deleting the user-`redowan`) run:
 
@@ -234,7 +235,7 @@ AND host = 'localhost'
 FlUSH PRIVILEGES;
 ```
 
-### **Grant Database User Permissions**
+### Grant Database User Permissions
 
 Give the user full permissions for your new database by running the following command (Here, I provided full permission of `test_db` to the user `redowan`:
 
@@ -250,7 +251,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'redowan'@'localhost';
 FlUSH PRIVILEGES;
 ```
 
-### **Loading Sample Database to Your Own Mysql Server**
+### Loading Sample Database to Your Own Mysql Server
 
 To load `mysqlsampledatabase.sql` to your own server (In this case the user is `redowan`. Provide database `password` in the prompt), first fireup the server and type the following commands:
 
@@ -282,15 +283,15 @@ You should see something like this:
 Notice that a new database named `classicmodels` has been added to the list.
 
 
-## **Connecting to a Third Party Client**
+## Connecting to a Third Party Client
 
 We will be using [DBeaver](https://github.com/dbeaver/dbeaver) as a third party client. While you can use the `mysql` shell to work on your data, a third partly client that make the experience much better with auto formatting, earsier import features, syntax highlighting etc.
 
-### **Installing DBeaver**
+### Installing DBeaver
 
 You can install DBeaver installer from [here](https://dbeaver.io/download/). Installation is pretty straight forward.
 
-### **Connecting MySQL Database to DBeaver**
+### Connecting MySQL Database to DBeaver
 
 Fire up DBeaver and you should be presented with this screen. Select `MySQL 8+` and go `next`.
 
@@ -302,7 +303,7 @@ The dialogue box will ask for credentials to connect to a database. In this case
 
 If everything is okay, you should see a success message. You can select the `SQL Editor` and start writing your MySQL scripts right away.
 
-## **Connecting to MySQL Server via Python**
+## Connecting to MySQL Server via Python
 
 `PyMySQL` and `DBUtils` can be used to connect to MySQL Server.
 ```python
