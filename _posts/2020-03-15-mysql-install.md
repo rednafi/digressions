@@ -1,9 +1,9 @@
 ---
-title: Up and Running with MySQL on Linux
+title: Up and Running with MySQL with Docker
 toc: true
 comments: true
 layout: post
-description: Setting up MySQL on Linux
+description: Setting up MySQL on Linux in No Time
 categories: [database]
 ---
 
@@ -14,43 +14,62 @@ categories: [database]
 
 ### Installation
 
-This part describes the basic installation steps of setting up MySQL 8.0 database server on Ubuntu Linux using docker, 18.04 to be specific.
+This part describes the basic installation steps of setting up MySQL 5.7 server on Ubuntu Linux using docker.
 
 * Install docker on your Linux machine. See the instruction [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/).
-* Detailed MySQL installation instruction using docker can be found [here](https://dev.mysql.com/doc/refman/8.0/en/docker-mysql-getting-started.html).
 
-Run the following command:
+* Install docker compose via following the instructions [here](https://docs.docker.com/compose/install/).
 
-```bash
-# install mysql server
-sudo docker pull mysql/mysql-server:8.0
-```
+* Create another folder on your project folder and make a `docker-compose.yml` file
+
+    ```bash
+    mkdir mysql_dump
+    cd mysql_dump
+    touch docker-compose.yml
+    ```
+
+* Open the `docker-compose.yml` file and copy the following lines into it.
+
+    ```yml
+     # docker-compose version
+    version: "3.3"
+
+    services:
+     # images
+    mysql-dev:
+        image: mysql:5.7
+        environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: test_db
+        ports:
+        - "3306:3306"
+        # making data persistent
+        volumes:
+        - db-data:/var/lib/mysql
+
+    volumes:
+    db-data:
+    ```
 
 ### Run MySQL Server
 
+Run the `docker-compose` command. This will build and run the server in detached mode.
 ```bash
-# run mysql server
-docker run --name=mysql -d mysql-server:8.0
-```
-
-### Get Default Root Password
-
-```bash
-# get root password
-docker logs mysql 2>&1 | grep GENERATED
+docker compose up -d
 ```
 
 ### Connect Shell to Server
+Check the name of the running container with `docker ps` command. In this case, the running container is called `mysql_dumps_mysql-dev_1`. Then run the following command to connect your shell to the running server.
 
 ```bash
 # connect shell to server
-docker exec -it mysql mysql -uroot -p
+docker exec -it mysql_dumps_mysql-dev_1 mysql -uroot -p
 ```
 
 
 ### Alter Root Password
 
-Enter the following command in the MySQL shell, replacing password with your new password:
+If you want to change the root password, enter the following command in the MySQL shell. Replace `MyNewPass` with your new root password:
 
 ```sql
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass';
@@ -92,10 +111,10 @@ You should see something like this:
 
 ### Create a Database
 
-You can create a database named `test_db` via the following command:
+According to the `docker-compose.yml` file, you already have created a database named `test_db`. You can create anotehr database named `test_db_2` via the following command:
 
 ```sql
-CREATE DATABASE test_db;
+CREATE DATABASE test_db_2;
 ```
 
 List your databases via the following command:
@@ -115,8 +134,9 @@ You should see something like this:
 | performance_schema |
 | sys                |
 | test_db            |
+| test_db_2          |
 +--------------------+
-5 rows in set (0.00 sec)
+6 rows in set (0.01 sec)
 ```
 
 To ensure the changes:
