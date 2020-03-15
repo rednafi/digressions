@@ -300,6 +300,14 @@ You should see something like this:
 6 rows in set (0.00 sec)
 ```
 
+### Stop the Server
+
+The following command stops the server.
+
+```bash
+docker-compose down
+```
+
 Notice that a new database named `classicmodels` has been added to the list.
 
 
