@@ -151,7 +151,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#run-mysql-server">Run MySQL Server</a></li>
 <li class="toc-entry toc-h3"><a href="#get-default-root-password">Get Default Root Password</a></li>
 <li class="toc-entry toc-h3"><a href="#connect-shell-to-server">Connect Shell to Server</a></li>
-<li class="toc-entry toc-h3"><a href="#set-a-new-root-password">Set a New Root Password</a></li>
+<li class="toc-entry toc-h3"><a href="#alter-root-password">Alter Root Password</a></li>
 <li class="toc-entry toc-h3"><a href="#view-users">View Users</a></li>
 <li class="toc-entry toc-h3"><a href="#create-a-database">Create a Database</a></li>
 <li class="toc-entry toc-h3"><a href="#creating-dummy-table-in-the-database">Creating Dummy Table in the Database</a></li>
@@ -191,55 +191,48 @@ window.onload = wrap_img;
 
 <p>Run the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
-# install mysql server
- sudo docker pull mysql/mysql-server:8.0
-```
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># install mysql server</span>
+<span class="nb">sudo </span>docker pull mysql/mysql-server:8.0
 </code></pre></div></div>
 
 <h3 id="run-mysql-server">
 <a class="anchor" href="#run-mysql-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run MySQL Server</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
-# run mysql server
-docker run --name=mysql -d mysql-server:8.0
-```
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># run mysql server</span>
+docker run <span class="nt">--name</span><span class="o">=</span>mysql <span class="nt">-d</span> mysql-server:8.0
 </code></pre></div></div>
 
 <h3 id="get-default-root-password">
 <a class="anchor" href="#get-default-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Default Root Password</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
-# get root password
-docker logs mysql 2&gt;&amp;1 | grep GENERATED
-```
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># get root password</span>
+docker logs mysql 2&gt;&amp;1 | <span class="nb">grep </span>GENERATED
 </code></pre></div></div>
 
 <h3 id="connect-shell-to-server">
 <a class="anchor" href="#connect-shell-to-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connect Shell to Server</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```bash
-# connect shell to server
-docker exec -it mysql mysql -uroot -p
-```
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># connect shell to server</span>
+docker <span class="nb">exec</span> <span class="nt">-it</span> mysql mysql <span class="nt">-uroot</span> <span class="nt">-p</span>
 </code></pre></div></div>
 
-<h3 id="set-a-new-root-password">
-<a class="anchor" href="#set-a-new-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Set a New Root Password</strong>
+<h3 id="alter-root-password">
+<a class="anchor" href="#alter-root-password" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Alter Root Password</strong>
 </h3>
 
 <p>Enter the following command in the MySQL shell, replacing password with your new password:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>UPDATE mysql.user SET authentication_string = PASSWORD('password')
-WHERE User = 'root';
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">USER</span> <span class="s1">'root'</span><span class="o">@</span><span class="s1">'localhost'</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">'MyNewPass'</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>You should see something like this in the command prompt:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Query OK, 1 row affected, 1 warning (0.00 sec)
-Rows matched: 1  Changed: 1  Warnings: 1
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Query OK, 0 rows affected (0.02 sec)
 </code></pre></div></div>
 
 <p>To make the change take effect, type the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FLUSH PRIVILEGES;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="view-users">
@@ -248,7 +241,7 @@ Rows matched: 1  Changed: 1  Warnings: 1
 
 <p>MySQL stores the user information in its own database. The name of the database is <code class="highlighter-rouge">mysql</code>. If you want to see what users are set up in the MySQL user table, run the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT User, Host, authentication_string FROM mysql.user;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">User</span><span class="p">,</span> <span class="k">Host</span><span class="p">,</span> <span class="n">authentication_string</span> <span class="k">FROM</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>You should see something like this:</p>
@@ -270,12 +263,12 @@ Rows matched: 1  Changed: 1  Warnings: 1
 
 <p>You can create a database named <code class="highlighter-rouge">test_db</code> via the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE DATABASE test_db;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">test_db</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>List your databases via the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SHOW DATABASES;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SHOW</span> <span class="n">DATABASES</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>You should see something like this:</p>
@@ -294,64 +287,66 @@ Rows matched: 1  Changed: 1  Warnings: 1
 
 <p>To ensure the changes:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FLUSH PRIVILEGES;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="creating-dummy-table-in-the-database">
 <a class="anchor" href="#creating-dummy-table-in-the-database" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Creating Dummy Table in the Database</strong>
 </h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-- create dummy table
-CREATE TABLE IF NOT EXISTS `student` (
-  `id` int(2) NOT NULL DEFAULT '0',
-  `name` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `class` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `mark` int(3) NOT NULL DEFAULT '0',
-  `sex` varchar(6) CHARACTER SET utf8 NOT NULL DEFAULT 'male'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- insert data into the dummy table
-INSERT INTO `student` (`id`, `name`, `class`, `mark`, `sex`) VALUES
-(1, 'John Deo', 'Four', 75, 'female'),
-(2, 'Max Ruin', 'Three', 85, 'male'),
-(3, 'Arnold', 'Three', 55, 'male'),
-(4, 'Krish Star', 'Four', 60, 'female'),
-(5, 'John Mike', 'Four', 60, 'female'),
-(6, 'Alex John', 'Four', 55, 'male'),
-(7, 'My John Rob', 'Fifth', 78, 'male'),
-(8, 'Asruid', 'Five', 85, 'male'),
-(9, 'Tes Qry', 'Six', 78, 'male'),
-(10, 'Big John', 'Four', 55, 'female'),
-(11, 'Ronald', 'Six', 89, 'female'),
-(12, 'Recky', 'Six', 94, 'female'),
-(13, 'Kty', 'Seven', 88, 'female'),
-(14, 'Bigy', 'Seven', 88, 'female'),
-(15, 'Tade Row', 'Four', 88, 'male'),
-(16, 'Gimmy', 'Four', 88, 'male'),
-(17, 'Tumyu', 'Six', 54, 'male'),
-(18, 'Honny', 'Five', 75, 'male'),
-(19, 'Tinny', 'Nine', 18, 'male'),
-(20, 'Jackly', 'Nine', 65, 'female'),
-(21, 'Babby John', 'Four', 69, 'female'),
-(22, 'Reggid', 'Seven', 55, 'female'),
-(23, 'Herod', 'Eight', 79, 'male'),
-(24, 'Tiddy Now', 'Seven', 78, 'male'),
-(25, 'Giff Tow', 'Seven', 88, 'male'),
-(26, 'Crelea', 'Seven', 79, 'male'),
-(27, 'Big Nose', 'Three', 81, 'female'),
-(28, 'Rojj Base', 'Seven', 86, 'female'),
-(29, 'Tess Played', 'Seven', 55, 'male'),
-(30, 'Reppy Red', 'Six', 79, 'female'),
-(31, 'Marry Toeey', 'Four', 88, 'male'),
-(32, 'Binn Rott', 'Seven', 90, 'female'),
-(33, 'Kenn Rein', 'Six', 96, 'female'),
-(34, 'Gain Toe', 'Seven', 69, 'male'),
-(35, 'Rows Noump', 'Six', 88, 'female');
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- create dummy table</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="nv">`student`</span> <span class="p">(</span>
+  <span class="nv">`id`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">'0'</span><span class="p">,</span>
+  <span class="nv">`name`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="nb">CHARACTER</span> <span class="k">SET</span> <span class="n">utf8</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nv">`class`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="nb">CHARACTER</span> <span class="k">SET</span> <span class="n">utf8</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nv">`mark`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">'0'</span><span class="p">,</span>
+  <span class="nv">`sex`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="nb">CHARACTER</span> <span class="k">SET</span> <span class="n">utf8</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">'male'</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">latin1</span><span class="p">;</span>
+
+<span class="c1">-- insert data into the dummy table</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="nv">`student`</span> <span class="p">(</span><span class="nv">`id`</span><span class="p">,</span> <span class="nv">`name`</span><span class="p">,</span> <span class="nv">`class`</span><span class="p">,</span> <span class="nv">`mark`</span><span class="p">,</span> <span class="nv">`sex`</span><span class="p">)</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'John Deo'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'Max Ruin'</span><span class="p">,</span> <span class="s1">'Three'</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">'Arnold'</span><span class="p">,</span> <span class="s1">'Three'</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Krish Star'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">'John Mike'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">'Alex John'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="s1">'My John Rob'</span><span class="p">,</span> <span class="s1">'Fifth'</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s1">'Asruid'</span><span class="p">,</span> <span class="s1">'Five'</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="s1">'Tes Qry'</span><span class="p">,</span> <span class="s1">'Six'</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">'Big John'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="s1">'Ronald'</span><span class="p">,</span> <span class="s1">'Six'</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s1">'Recky'</span><span class="p">,</span> <span class="s1">'Six'</span><span class="p">,</span> <span class="mi">94</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="s1">'Kty'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="s1">'Bigy'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="s1">'Tade Row'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s1">'Gimmy'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="s1">'Tumyu'</span><span class="p">,</span> <span class="s1">'Six'</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="s1">'Honny'</span><span class="p">,</span> <span class="s1">'Five'</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">19</span><span class="p">,</span> <span class="s1">'Tinny'</span><span class="p">,</span> <span class="s1">'Nine'</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="s1">'Jackly'</span><span class="p">,</span> <span class="s1">'Nine'</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="s1">'Babby John'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="s1">'Reggid'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="s1">'Herod'</span><span class="p">,</span> <span class="s1">'Eight'</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="s1">'Tiddy Now'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="s1">'Giff Tow'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">'Crelea'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">27</span><span class="p">,</span> <span class="s1">'Big Nose'</span><span class="p">,</span> <span class="s1">'Three'</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="s1">'Rojj Base'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="s1">'Tess Played'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="s1">'Reppy Red'</span><span class="p">,</span> <span class="s1">'Six'</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">31</span><span class="p">,</span> <span class="s1">'Marry Toeey'</span><span class="p">,</span> <span class="s1">'Four'</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="s1">'Binn Rott'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="s1">'Kenn Rein'</span><span class="p">,</span> <span class="s1">'Six'</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="s1">'Gain Toe'</span><span class="p">,</span> <span class="s1">'Seven'</span><span class="p">,</span> <span class="mi">69</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="s1">'Rows Noump'</span><span class="p">,</span> <span class="s1">'Six'</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">);</span>
 </code></pre></div></div>
 <h3 id="show-tables">
 <a class="anchor" href="#show-tables" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Show Tables</strong>
 </h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>USE test_db;
-SHOW tables;
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">USE</span> <span class="n">test_db</span><span class="p">;</span>
+<span class="k">SHOW</span> <span class="n">tables</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="delete-a-database">
@@ -360,9 +355,9 @@ SHOW tables;
 
 <p>To delete a database <code class="highlighter-rouge">test_db</code> run the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DROP DATABASE test_db,
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">DROP</span> <span class="k">DATABASE</span> <span class="n">test_db</span><span class="p">,</span>
 
-FLUSH PRIVILEGES;
+<span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="add-a-database-user">
@@ -371,14 +366,14 @@ FLUSH PRIVILEGES;
 
 <p>To create a new user (here, we created a new user named <code class="highlighter-rouge">redowan</code> with the password <code class="highlighter-rouge">password</code>), run the following command in the MySQL shell:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE USER 'redowan'@'localhost' IDENTIFIED BY 'password';
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">USER</span> <span class="s1">'redowan'</span><span class="o">@</span><span class="s1">'localhost'</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">'password'</span><span class="p">;</span>
 
-FlUSH PRIVILEGES;
+<span class="n">FlUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>Ensure that the changes has been saved via running <code class="highlighter-rouge">FLUSH PRIVILEGES;</code>. Verify that a user has been successfully created via running the previous command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT User, Host, authentication_string FROM mysql.user;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">User</span><span class="p">,</span> <span class="k">Host</span><span class="p">,</span> <span class="n">authentication_string</span> <span class="k">FROM</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>You should see something like below. Notice that a new user named <code class="highlighter-rouge">redowan</code> has been created:</p>
@@ -400,11 +395,11 @@ FlUSH PRIVILEGES;
 
 <p>To delete a database user (here, I’m deleting the user-<code class="highlighter-rouge">redowan</code>) run:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DELETE FROM mysql.user
-WHERE user='&lt;redowan&gt;'
-AND host = 'localhost'
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span>
+<span class="k">WHERE</span> <span class="k">user</span><span class="o">=</span><span class="s1">'&lt;redowan&gt;'</span>
+<span class="k">AND</span> <span class="k">host</span> <span class="o">=</span> <span class="s1">'localhost'</span>
 
-FlUSH PRIVILEGES;
+<span class="n">FlUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="grant-database-user-permissions">
@@ -413,14 +408,14 @@ FlUSH PRIVILEGES;
 
 <p>Give the user full permissions for your new database by running the following command (Here, I provided full permission of <code class="highlighter-rouge">test_db</code> to the user <code class="highlighter-rouge">redowan</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GRANT ALL PRIVILEGES ON test_db.table TO 'redowan'@'localhost';
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="n">test_db</span><span class="p">.</span><span class="k">table</span> <span class="k">TO</span> <span class="s1">'redowan'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>If you want to give permission to all the databases, type:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GRANT ALL PRIVILEGES ON *.* TO 'redowan'@'localhost';
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">'redowan'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 
-FlUSH PRIVILEGES;
+<span class="n">FlUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
 </code></pre></div></div>
 
 <h3 id="loading-sample-database-to-your-own-mysql-server">
@@ -429,14 +424,13 @@ FlUSH PRIVILEGES;
 
 <p>To load <code class="highlighter-rouge">mysqlsampledatabase.sql</code> to your own server (In this case the user is <code class="highlighter-rouge">redowan</code>. Provide database <code class="highlighter-rouge">password</code> in the prompt), first fireup the server and type the following commands:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql -u redowan -p test_db &lt; mysqlsampledatabase.sql;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span> <span class="o">-</span><span class="n">u</span> <span class="n">redowan</span> <span class="o">-</span><span class="n">p</span> <span class="n">test_db</span> <span class="o">&lt;</span> <span class="n">mysqlsampledatabase</span><span class="p">.</span><span class="k">sql</span><span class="p">;</span>
 </code></pre></div></div>
 
 <p>Now run:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SHOW DATABASES;
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SHOW</span> <span class="n">DATABASES</span><span class="p">;</span>
 </code></pre></div></div>
-
 <p>You should see something like this:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+--------------------+
