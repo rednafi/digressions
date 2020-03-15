@@ -251,7 +251,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'redowan'@'localhost';
 FlUSH PRIVILEGES;
 ```
 
-### Loading Sample Database to Your Own Mysql Server
+### Loading Sample Database to Your Own MySQL Server
 
 To load `mysqlsampledatabase.sql` to your own server (In this case the user is `redowan`. Provide database `password` in the prompt), first fireup the server and type the following commands:
 
