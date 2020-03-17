@@ -7,7 +7,7 @@ description: Up and running with z-shell in no time
 categories: [linux]
 ---
 
-![img](https://i.imgur.com/89vnPcb.png)
+![img](https://i.imgur.com/jUvHrOa.png)
 
 Although I'm on Debian Linux, Apple's recent announcement about replacing Bash with Zsh on MacOS made me take a look at Z-shell aka zsh. It's a [POSIX](https://en.wikipedia.org/wiki/POSIX) compliant Bash alternative that has been around for quite a long time. While Bash shell's efficiency and ubiquity make it hard to think about changing the default shell of your primary development machine, I find its features as an interactive shell to be somewhat limited. So I did some digging around and soon found out that zsh's lackluster default configurations and bloated ecosystem make it difficult for someone who just want to switch without any extra overhead. So, let's make the process quicker. Here is what we are aiming for:
 
@@ -116,14 +116,7 @@ Instead of adding the plugins individually, you can just install the plugins and
 export ZSH="$HOME/.oh-my-zsh"
 
 # theme settings
-setopt PROMPT_PERCENT
-setopt PROMPT_SUBST
-PROMPT='[%n:%F{yellow}%25<..<%~%f%<<]$ '
-precmd() {
-    precmd() {
-        #echo
-    }
-}
+ZSH_THEME="juanghurtado"
 
 # pluging settings
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
@@ -145,9 +138,6 @@ zstyle ':completion:::::' completer _expand _complete _ignored _approximate #ena
 
 #disable auto correct
 unsetopt correct_all
-
-# add snap path
-export PATH=$PATH:/snap/bin
 ```
 
 ## Set Terminal Color (Optional)
