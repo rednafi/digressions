@@ -164,7 +164,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#uninstall-omz">Uninstall OMZ</a></li>
 <li class="toc-entry toc-h2"><a href="#switch-back-to-bash">Switch Back to Bash</a></li>
 <li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
-</ul><p><img src="https://i.imgur.com/89vnPcb.png" alt="img"></p>
+</ul><p><img src="https://i.imgur.com/jUvHrOa.png" alt="img"></p>
 
 <p>Although I’m on Debian Linux, Apple’s recent announcement about replacing Bash with Zsh on MacOS made me take a look at Z-shell aka zsh. It’s a <a href="https://en.wikipedia.org/wiki/POSIX">POSIX</a> compliant Bash alternative that has been around for quite a long time. While Bash shell’s efficiency and ubiquity make it hard to think about changing the default shell of your primary development machine, I find its features as an interactive shell to be somewhat limited. So I did some digging around and soon found out that zsh’s lackluster default configurations and bloated ecosystem make it difficult for someone who just want to switch without any extra overhead. So, let’s make the process quicker. Here is what we are aiming for:</p>
 
@@ -292,14 +292,7 @@ window.onload = wrap_img;
 <span class="nb">export </span><span class="nv">ZSH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.oh-my-zsh"</span>
 
 <span class="c"># theme settings</span>
-setopt PROMPT_PERCENT
-setopt PROMPT_SUBST
-<span class="nv">PROMPT</span><span class="o">=</span><span class="s1">'[%n:%F{yellow}%25&lt;..&lt;%~%f%&lt;&lt;]$ '</span>
-precmd<span class="o">()</span> <span class="o">{</span>
-    precmd<span class="o">()</span> <span class="o">{</span>
-        <span class="c">#echo</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<span class="nv">ZSH_THEME</span><span class="o">=</span><span class="s2">"juanghurtado"</span>
 
 <span class="c"># pluging settings</span>
 <span class="nv">plugins</span><span class="o">=(</span>git zsh-syntax-highlighting zsh-autosuggestions<span class="o">)</span>
@@ -321,9 +314,6 @@ zstyle <span class="s1">':completion:::::'</span> completer _expand _complete _i
 
 <span class="c">#disable auto correct</span>
 unsetopt correct_all
-
-<span class="c"># add snap path</span>
-<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/snap/bin
 </code></pre></div></div>
 
 <h2 id="set-terminal-color-optional">

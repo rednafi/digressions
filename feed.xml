@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-15T14:51:29-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL with Docker</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL with Docker" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-17T13:27:04-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL with Docker</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL with Docker" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;setting-up&quot;&gt;Setting Up&lt;/h2&gt;
 
@@ -1788,7 +1788,7 @@ you should run:&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://rednafi.github.io/digressions/images/chart-preview.png" /><media:content medium="image" url="https://rednafi.github.io/digressions/images/chart-preview.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">A Minimalistic Approach to ZSH</title><link href="https://rednafi.github.io/digressions/linux/2019/10/29/minimal-zsh.html" rel="alternate" type="text/html" title="A Minimalistic Approach to ZSH" /><published>2019-10-29T00:00:00-05:00</published><updated>2019-10-29T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/linux/2019/10/29/minimal-zsh</id><content type="html" xml:base="https://rednafi.github.io/digressions/linux/2019/10/29/minimal-zsh.html">&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/89vnPcb.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+&lt;/div&gt;</content><author><name></name></author><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://rednafi.github.io/digressions/images/chart-preview.png" /><media:content medium="image" url="https://rednafi.github.io/digressions/images/chart-preview.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">A Minimalistic Approach to ZSH</title><link href="https://rednafi.github.io/digressions/linux/2019/10/29/minimal-zsh.html" rel="alternate" type="text/html" title="A Minimalistic Approach to ZSH" /><published>2019-10-29T00:00:00-05:00</published><updated>2019-10-29T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/linux/2019/10/29/minimal-zsh</id><content type="html" xml:base="https://rednafi.github.io/digressions/linux/2019/10/29/minimal-zsh.html">&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/jUvHrOa.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Although I’m on Debian Linux, Apple’s recent announcement about replacing Bash with Zsh on MacOS made me take a look at Z-shell aka zsh. It’s a &lt;a href=&quot;https://en.wikipedia.org/wiki/POSIX&quot;&gt;POSIX&lt;/a&gt; compliant Bash alternative that has been around for quite a long time. While Bash shell’s efficiency and ubiquity make it hard to think about changing the default shell of your primary development machine, I find its features as an interactive shell to be somewhat limited. So I did some digging around and soon found out that zsh’s lackluster default configurations and bloated ecosystem make it difficult for someone who just want to switch without any extra overhead. So, let’s make the process quicker. Here is what we are aiming for:&lt;/p&gt;
 
@@ -1901,14 +1901,7 @@ you should run:&lt;/p&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ZSH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/.oh-my-zsh&quot;&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# theme settings&lt;/span&gt;
-setopt PROMPT_PERCENT
-setopt PROMPT_SUBST
-&lt;span class=&quot;nv&quot;&gt;PROMPT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'[%n:%F{yellow}%25&amp;lt;..&amp;lt;%~%f%&amp;lt;&amp;lt;]$ '&lt;/span&gt;
-precmd&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    precmd&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;#echo&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;ZSH_THEME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;juanghurtado&quot;&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# pluging settings&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;git zsh-syntax-highlighting zsh-autosuggestions&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
@@ -1930,9 +1923,6 @@ zstyle &lt;span class=&quot;s1&quot;&gt;':completion:::::'&lt;/span&gt; complete
 
 &lt;span class=&quot;c&quot;&gt;#disable auto correct&lt;/span&gt;
 unsetopt correct_all
-
-&lt;span class=&quot;c&quot;&gt;# add snap path&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;:/snap/bin
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;set-terminal-color-optional&quot;&gt;Set Terminal Color (Optional)&lt;/h2&gt;
