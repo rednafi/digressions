@@ -13,7 +13,7 @@ Although I'm on Debian Linux, Apple's recent announcement about replacing Bash w
 
 * A working shell that can (almost always) take bash commands without complaining (looking at you fish)
 * History based autocomplete
-* Syntax highlighting[img](https://images.unsplash.com/photo-1537498425277-c283d32ef9db?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1957&q=80)
+* Syntax highlighting
 * Git branch annotations
 
 Instructions were applied and tested on debian based linux (Ubuntu)
