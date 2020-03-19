@@ -224,8 +224,7 @@ window.onload = wrap_img;
 
 <span class="o">@</span><span class="n">singledispatch</span>
 <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="nb">NotImplementedError</span><span class="p">(</span><span class="s">"Implement process function."</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="nb">NotImplementedError</span><span class="p">(</span><span class="s">"Implement process function."</span><span class="p">)</span>
 
 
 <span class="o">@</span><span class="n">process</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
@@ -244,6 +243,7 @@ window.onload = wrap_img;
 </span><span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="mf">12.0</span><span class="p">))</span>
 <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 </code></pre></div></div>
+
 <p>Running this will return the same result as before.</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Float</span> <span class="mf">12.0</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
 <span class="o">&gt;&gt;</span> <span class="n">Integer</span> <span class="mi">1</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
@@ -308,8 +308,7 @@ window.onload = wrap_img;
 
 <span class="o">@</span><span class="n">singledispatch</span>
 <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="nb">NotImplementedError</span><span class="p">(</span><span class="s">"Implement process for bucket"</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="nb">NotImplementedError</span><span class="p">(</span><span class="s">"Implement process for bucket"</span><span class="p">)</span>
 
 
 <span class="o">@</span><span class="n">process</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Cat</span><span class="p">)</span>
@@ -333,6 +332,7 @@ window.onload = wrap_img;
     <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="n">cat_obj</span><span class="p">))</span>
     <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="n">dog_obj</span><span class="p">))</span>
 </code></pre></div></div>
+
 <p>Running this will print out the same output as before:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Cat</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
