@@ -90,8 +90,7 @@ from functools import singledispatch
 
 @singledispatch
 def process(num=None):
-    if num is None:
-        raise NotImplementedError("Implement process function.")
+    raise NotImplementedError("Implement process function.")
 
 
 @process.register(int)
@@ -110,6 +109,7 @@ def sub_process(num):
 print(process(12.0))
 print(process(1))
 ```
+
 Running this will return the same result as before.
 ```python
 >> Float 12.0 has been processed successfully!
@@ -178,8 +178,7 @@ def class_factory(data):
 
 @singledispatch
 def process(obj=None):
-    if obj is None:
-        raise NotImplementedError("Implement process for bucket")
+    raise NotImplementedError("Implement process for bucket")
 
 
 @process.register(Cat)
@@ -203,6 +202,7 @@ if __name__ == "__main__":
     print(process(cat_obj))
     print(process(dog_obj))
 ```
+
 Running this will print out the same output as before:
 
 ```python
