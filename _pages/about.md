@@ -4,10 +4,14 @@ title: About Me
 permalink: /about/
 ---
 
-This is where you put the contents of your *About* page. Like all your pages, it's in [Markdown](https://guides.github.com/features/mastering-markdown/) format.
+Redowan Delowar is currently working as a junior Data Scientist for ShopUp (~2 years).
 
-This website is powered by **[fastpages](https://github.com/fastai/fastpages)** [^1].
+Redowan primarily focuses on computational statistics, representation learning and software development. He is an avid machine learning evangelist, researcher, practitioner and open source developer. He is also available for on-site teaching, presentations and certain types of short term contract works. 
 
+Contact
+--------
 
-
-[^1]:a blogging platform that natively supports Jupyter notebooks in addition to other formats.
+* Gmail: redowan.nafi@gmail.com
+* Github: [rednafi](https://github.com/rednafi)
+* Twitter: [rednafi](https://twitter.com/rednafi)
+* LinkedIn: [Redowan Delowar](https://www.linkedin.com/in/redowan/)
