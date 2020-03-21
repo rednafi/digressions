@@ -3,7 +3,7 @@ title: Up and Running with MySQL with Docker
 toc: true
 comments: true
 layout: post
-description: Setting up MySQL on Linux in No Time
+description: Setting up MySQL on Linux in no time
 categories: [database]
 ---
 
