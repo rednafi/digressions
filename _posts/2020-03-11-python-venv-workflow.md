@@ -22,25 +22,25 @@ sudo apt install software-properties-common
 sudo add-apt-repository ppa:deadsnakes/ppa
 
 # install python3.7
-sudo apt install python3.7
+sudo apt install python3.8
 
 # verify python installation
-python3.7 --version
+python3.8 --version
 ```
 
 ## Creating Virtual Environment
 
-There are multiple ways creating and switching between different environments can be done. I use `venv` for creating virtual environments. For demonstration, here I'm creating a virtual environment that uses python3.7.
+There are multiple ways creating and switching between different environments can be done. I use `venv` for creating virtual environments. For demonstration, here I'm creating a virtual environment that uses python3.8.
 
 * Install `python3-venv` for creating virtual environment
   ```bash
-  sudo apt install python3.7-venv
+  sudo apt install python3.8-venv
   ```
 
 * Create virtual environment named `venv` in the project folder
 
    ```bash
-   python3.7 -m venv venv
+   python3.8 -m venv venv
    ```
 * Activate `venv`
 
@@ -58,11 +58,11 @@ There are multiple ways creating and switching between different environments ca
 To create another environment with a different python version, you have to:
 
 * Install the desired version of python following the procedures stated [above](#installing-python).
-* Install `python3-venv` specific for your python version, like if you are using python3.8,
+* Install `python3.7-venv` specific for your python version, like if you are using python3.7,
   you should run:
 
   ```bash
-  sudo apt install python3.8-venv
+  sudo apt install python3.7-venv
   ```
 * Create multiple environments with multiple versions and name them distinctively. i.e. `venv3.7`, `venv3.8` etc. Follow the instructions [above](#creating-virtual-environment).
 * Activate and deactivate the desired virtual environment.
