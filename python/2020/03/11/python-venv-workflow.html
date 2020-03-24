@@ -158,25 +158,25 @@ window.onload = wrap_img;
 <span class="nb">sudo </span>add-apt-repository ppa:deadsnakes/ppa
 
 <span class="c"># install python3.7</span>
-<span class="nb">sudo </span>apt <span class="nb">install </span>python3.7
+<span class="nb">sudo </span>apt <span class="nb">install </span>python3.8
 
 <span class="c"># verify python installation</span>
-python3.7 <span class="nt">--version</span>
+python3.8 <span class="nt">--version</span>
 </code></pre></div></div>
 
 <h2 id="creating-virtual-environment">Creating Virtual Environment</h2>
 
-<p>There are multiple ways creating and switching between different environments can be done. I use <code class="highlighter-rouge">venv</code> for creating virtual environments. For demonstration, here I’m creating a virtual environment that uses python3.7.</p>
+<p>There are multiple ways creating and switching between different environments can be done. I use <code class="highlighter-rouge">venv</code> for creating virtual environments. For demonstration, here I’m creating a virtual environment that uses python3.8.</p>
 
 <ul>
   <li>Install <code class="highlighter-rouge">python3-venv</code> for creating virtual environment
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>python3.7-venv
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>python3.8-venv
 </code></pre></div>    </div>
   </li>
   <li>
     <p>Create virtual environment named <code class="highlighter-rouge">venv</code> in the project folder</p>
 
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> python3.7 <span class="nt">-m</span> venv venv
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> python3.8 <span class="nt">-m</span> venv venv
 </code></pre></div>    </div>
   </li>
   <li>
@@ -198,10 +198,10 @@ python3.7 <span class="nt">--version</span>
 <ul>
   <li>Install the desired version of python following the procedures stated <a href="#installing-python">above</a>.</li>
   <li>
-    <p>Install <code class="highlighter-rouge">python3-venv</code> specific for your python version, like if you are using python3.8,
+    <p>Install <code class="highlighter-rouge">python3.7-venv</code> specific for your python version, like if you are using python3.7,
 you should run:</p>
 
-    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>python3.8-venv
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>python3.7-venv
 </code></pre></div>    </div>
   </li>
   <li>Create multiple environments with multiple versions and name them distinctively. i.e. <code class="highlighter-rouge">venv3.7</code>, <code class="highlighter-rouge">venv3.8</code> etc. Follow the instructions <a href="#creating-virtual-environment">above</a>.</li>

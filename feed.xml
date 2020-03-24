@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-21T14:49:08-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic cogitations on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL with Docker</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL with Docker" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-03-24T03:56:41-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic cogitations on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Up and Running with MySQL with Docker</title><link href="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html" rel="alternate" type="text/html" title="Up and Running with MySQL with Docker" /><published>2020-03-15T00:00:00-05:00</published><updated>2020-03-15T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/database/2020/03/15/mysql-install</id><content type="html" xml:base="https://rednafi.github.io/digressions/database/2020/03/15/mysql-install.html">&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-1.2.1&amp;amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1921&amp;amp;q=80&quot; alt=&quot;Example image&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;setting-up&quot;&gt;Setting Up&lt;/h2&gt;
 
@@ -826,25 +826,25 @@ True
 &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;add-apt-repository ppa:deadsnakes/ppa
 
 &lt;span class=&quot;c&quot;&gt;# install python3.7&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python3.7
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python3.8
 
 &lt;span class=&quot;c&quot;&gt;# verify python installation&lt;/span&gt;
-python3.7 &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
+python3.8 &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;creating-virtual-environment&quot;&gt;Creating Virtual Environment&lt;/h2&gt;
 
-&lt;p&gt;There are multiple ways creating and switching between different environments can be done. I use &lt;code class=&quot;highlighter-rouge&quot;&gt;venv&lt;/code&gt; for creating virtual environments. For demonstration, here I’m creating a virtual environment that uses python3.7.&lt;/p&gt;
+&lt;p&gt;There are multiple ways creating and switching between different environments can be done. I use &lt;code class=&quot;highlighter-rouge&quot;&gt;venv&lt;/code&gt; for creating virtual environments. For demonstration, here I’m creating a virtual environment that uses python3.8.&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;python3-venv&lt;/code&gt; for creating virtual environment
-    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python3.7-venv
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python3.8-venv
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Create virtual environment named &lt;code class=&quot;highlighter-rouge&quot;&gt;venv&lt;/code&gt; in the project folder&lt;/p&gt;
 
-    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; python3.7 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; venv venv
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; python3.8 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; venv venv
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;
@@ -866,10 +866,10 @@ python3.7 &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
 &lt;ul&gt;
   &lt;li&gt;Install the desired version of python following the procedures stated &lt;a href=&quot;#installing-python&quot;&gt;above&lt;/a&gt;.&lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;python3-venv&lt;/code&gt; specific for your python version, like if you are using python3.8,
+    &lt;p&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;python3.7-venv&lt;/code&gt; specific for your python version, like if you are using python3.7,
 you should run:&lt;/p&gt;
 
-    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python3.8-venv
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;python3.7-venv
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;Create multiple environments with multiple versions and name them distinctively. i.e. &lt;code class=&quot;highlighter-rouge&quot;&gt;venv3.7&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;venv3.8&lt;/code&gt; etc. Follow the instructions &lt;a href=&quot;#creating-virtual-environment&quot;&gt;above&lt;/a&gt;.&lt;/li&gt;
