@@ -238,8 +238,8 @@ window.onload = wrap_img;
 <p>You can use context managers as decorators also. To do so, while defining the class, you have to inherit from <code class="highlighter-rouge">contextlib.ContextDecorator</code> class. Let’s make a <code class="highlighter-rouge">RunTime</code> decorator that will be applied on a file-opening function. The decorator will:</p>
 
 <ul>
-  <li>print a user provided description of the function</li>
-  <li>print the time it takes to run the function</li>
+  <li>Print a user provided description of the function</li>
+  <li>Print the time it takes to run the function</li>
 </ul>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ContextDecorator</span>
@@ -317,6 +317,7 @@ None
 </span><span class="k">with</span> <span class="n">get_state</span><span class="p">(</span><span class="s">"A"</span><span class="p">)</span> <span class="k">as</span> <span class="n">A</span><span class="p">,</span> <span class="n">get_state</span><span class="p">(</span><span class="s">"B"</span><span class="p">)</span> <span class="k">as</span> <span class="n">B</span><span class="p">,</span> <span class="n">get_state</span><span class="p">(</span><span class="s">"C"</span><span class="p">)</span> <span class="k">as</span> <span class="n">C</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="s">"inside with statement:"</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
 </code></pre></div></div>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>entering: A
 entering: B
 entering: C
@@ -459,6 +460,7 @@ exiting a: A
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">div</span><span class="p">(</span><span class="s">"b"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </code></pre></div></div>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>This is a custom TypeError message.
 ---------------------------------------------------------------------------
 
@@ -545,6 +547,7 @@ ZeroDivisionError: division by zero
 Custom handling of Zero Division Error! Printing only 2 levels of traceback..
 None
 </code></pre></div></div>
+
 <h2 id="remarks">
 <a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
 <p>All the code snippets are updated for python <code class="highlighter-rouge">3.8</code>. To avoid redundencies, I have purposefully excluded examples of nested with statements and now deprecated <code class="highlighter-rouge">contextlib.nested</code> function to create nested context managers.</p>
