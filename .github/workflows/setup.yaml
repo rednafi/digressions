@@ -14,7 +14,7 @@ jobs:
 
     - name: Copy Repository Contents
       uses: actions/checkout@v2
-        
+
     - name: modify files
       run: |
         import re, os
@@ -35,7 +35,7 @@ jobs:
         assert config_path.exists(), 'Did not find _config.yml in the current directory!'
         assert pr_msg_path.exists(), 'Did not find _fastpages_docs/_setup_pr_template.md in the current directory!'
         assert settings.exists(), 'Did not find _action_files/settings.ini in the current directory!'
-        
+
         # edit settings.ini file to inject baseurl
         config.read(settings)
         config['DEFAULT']['baseurl'] = f'/{repo_name}'
@@ -45,13 +45,14 @@ jobs:
         # replace content of README with template
         readme = readme_template_path.read_text().replace('{_username_}', username).replace('{_repo_name_}', repo_name)
         readme_path.write_text(readme)
-        
+
         # update _config.yml
         cfg = config_path.read_text()
         cfg = re.sub(r'^(github_username: )(fastai)', r'\1{}'.format(username), cfg, flags=re.MULTILINE)
         cfg = re.sub(r'^(baseurl: )("")', r'\1"/{}"'.format(repo_name), cfg, flags=re.MULTILINE)
         cfg = re.sub(r'^(github_repo: ")(fastpages)', r'\1{}'.format(repo_name), cfg, flags=re.MULTILINE)
         cfg = re.sub(r'^(url: "https://)(fastpages.fast.ai)(")', r'\1{}.github.io\3'.format(username), cfg, flags=re.MULTILINE)
+        cfg = re.sub('UA-57531313-5', '', cfg, flags=re.MULTILINE)
         config_path.write_text(cfg)
 
         # prepare the pr message
@@ -73,10 +74,11 @@ jobs:
         git rm .github/workflows/docker-nbdev.yaml
         git rm .github/ISSUE_TEMPLATE/bug.md
         git rm .github/ISSUE_TEMPLATE/feature_request.md
+        git rm _word/*.docx
         git add _config.yml README.md _fastpages_docs/ _action_files/settings.ini
         git commit -m'setup repo'
         git push -f --set-upstream origin fastpages-automated-setup
-      env: 
+      env:
         GH_EMAIL: ${{ github.event.commits[0].author.email }}
         GH_USERNAME: ${{ github.event.commits[0].author.username }}
 

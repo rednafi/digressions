@@ -66,6 +66,12 @@ exclude:
 include:
   - _pages
 
+# This specifies what badges are turned on by default for notebook posts.
+default_badges:
+  github: true
+  binder: true
+  colab: true
+
 # Everything below here should be left alone. Modifications may break fastpages
 future: true
 theme: minima
@@ -78,6 +84,12 @@ plugins:
   - jekyll-relative-links
   - jekyll-seo-tag
   - jekyll-remote-theme
+  - jekyll-paginate
+
+# See https://jekyllrb.com/docs/pagination/
+# For pagination to work, you cannot have index.md at the root of your repo, instead you must rename this file to index.html
+paginate: 10
+paginate_path: /page:num/
 
 remote_theme: jekyll/minima
 
