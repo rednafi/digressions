@@ -452,5 +452,5 @@ All the code snippets are updated for python `3.8`. To avoid redundencies, I hav
 1. [Python Contextlib Documentation](https://docs.python.org/3/library/contextlib.html)
 2. [Python with Context Manager - Jeff Knupp](https://jeffknupp.com/blog/2016/03/07/python-with-context-managers/)
 2. [SQLALchemy Session Creation](https://docs.sqlalchemy.org/en/13/core/engines.html)
-3. [Sci-py Lectures: Context Managers](https://scipy-lectures.org/advanced/advanced_python/index.html#context-managers)
+3. [Scipy Lectures: Context Managers](https://scipy-lectures.org/advanced/advanced_python/index.html#context-managers)
 4. [Merging Context Managers](https://stackoverflow.com/a/45681273/8963300)
