@@ -1,5 +1,5 @@
 ---
-title: Up and Running with MySQL with Docker
+title: Up and Running with MySQL in Docker
 toc: true
 comments: true
 layout: post

@@ -1,4 +1,13 @@
-# The Curious Case of Python's Context Manager
+---
+title: The Curious Case of Python's Context Manager
+toc: true
+comments: true
+layout: post
+description: Discovering the quirks of Python's context manager
+categories: [python]
+---
+
+#
 
 Python's context managers are great for resource management and stopping the propagation of leaked abstractions. You've probably used it while opening a file or a database connection. Usually it starts with a `with` statement like this:
 
