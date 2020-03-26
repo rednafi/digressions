@@ -104,8 +104,8 @@ with CustomFileOpen("file.txt", "wt") as f:
 
 You can use context managers as decorators also. To do so, while defining the class, you have to inherit from `contextlib.ContextDecorator` class. Let's make a `RunTime` decorator that will be applied on a file-opening function. The decorator will:
 
-* print a user provided description of the function
-* print the time it takes to run the function
+* Print a user provided description of the function
+* Print the time it takes to run the function
 
 
 
@@ -193,6 +193,7 @@ def get_state(name):
 with get_state("A") as A, get_state("B") as B, get_state("C") as C:
     print("inside with statement:", A, B, C)
 ```
+
 ```
 entering: A
 entering: B
@@ -355,6 +356,7 @@ def div(a, b):
 ```python
 div("b", 0)
 ```
+
 ```
 This is a custom TypeError message.
 ---------------------------------------------------------------------------
@@ -445,6 +447,7 @@ ZeroDivisionError: division by zero
 Custom handling of Zero Division Error! Printing only 2 levels of traceback..
 None
 ```
+
 ## Remarks
 All the code snippets are updated for python `3.8`. To avoid redundencies, I have purposefully excluded examples of nested with statements and now deprecated `contextlib.nested` function to create nested context managers.
 
