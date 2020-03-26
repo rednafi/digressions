@@ -1,0 +1,397 @@
+<h1 id="the-curious-case-of-pythons-context-manager">The Curious Case of Python’s Context Manager</h1>
+
+<p>Python’s context managers are great for resource management and stopping the propagation of leaked abstractions. You’ve probably used it while opening a file or a database connection. Usually it starts with a <code class="highlighter-rouge">with</code> statement like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"file.txt"</span><span class="p">,</span> <span class="s">"wt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"contents go here"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>In the above case, <code class="highlighter-rouge">file.txt</code> gets automatically closed when the execution flow goes out of the scope. This is equivalent to writing:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span><span class="p">:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"file.txt"</span><span class="p">,</span> <span class="s">"wt"</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"contents go here"</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="writing-custom-context-managers">Writing Custom Context Managers</h2>
+
+<p>To write a custom context manager, you need to create a class that includes the  <code class="highlighter-rouge">__enter__</code> and <code class="highlighter-rouge">__exit__</code> methods. Let’s recreate a custom context manager that will execute the same workflow as above.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CustomFileOpen</span><span class="p">:</span>
+    <span class="s">"""Custom context manager for opening files."""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>You can use the above class just like a regular context manager.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">CustomFileOpen</span><span class="p">(</span><span class="s">"file.txt"</span><span class="p">,</span> <span class="s">"wt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"contents go here"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="from-generators-to-context-managers">From Generators to Context Managers</h2>
+
+<p>Creating context managers by writing a class with <code class="highlighter-rouge">__enter__</code> and <code class="highlighter-rouge">__exit__</code> methods, is not difficult. However, you can achieve better brevity by defining them using <code class="highlighter-rouge">contextlib.contextmanager</code> decorator. This decorator converts a generator function into a context manager. The blueprint for creating context manager decorators goes something like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">generator_func</span><span class="p">(</span><span class="o">&lt;</span><span class="n">arguments</span><span class="o">&gt;</span><span class="p">):</span>
+    <span class="o">&lt;</span><span class="n">setup</span><span class="o">&gt;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="o">&lt;</span><span class="n">cleanup</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>Let’s implement the same <code class="highlighter-rouge">CustomFileOpen</code> context manager with <code class="highlighter-rouge">contextmanager</code> decorator.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+
+<span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">CustomFileOpen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+    <span class="s">"""Custom context manager for opening a file."""</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">f</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Now use it just like before:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">CustomFileOpen</span><span class="p">(</span><span class="s">"file.txt"</span><span class="p">,</span> <span class="s">"wt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"contents go here"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="writing-context-managers-as-decorators">Writing Context Managers as Decorators</h2>
+
+<p>You can use context managers as decorators also. To do so, while defining the class, you have to inherit from <code class="highlighter-rouge">contextlib.ContextDecorator</code> class. Let’s make a <code class="highlighter-rouge">RunTime</code> decorator that will be applied on a file-opening function. The decorator will:</p>
+
+<ul>
+  <li>print a user provided description of the function</li>
+  <li>print the time it takes to run the function</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ContextDecorator</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+
+
+<span class="k">class</span> <span class="nc">RunTime</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
+    <span class="s">"""Timing decorator."""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="n">run_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"The function took {run_time} seconds to run."</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>You can use the decorator like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">RunTime</span><span class="p">(</span><span class="s">"This function opens a file"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">custom_file_write</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Using the function like this should return:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">custom_file_write</span><span class="p">(</span><span class="s">"file.txt"</span><span class="p">,</span> <span class="s">"wt"</span><span class="p">,</span> <span class="s">"jello"</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>This function opens a file
+The function took 0.0005390644073486328 seconds to run.
+None
+</code></pre></div></div>
+
+<p>You can also create the same decorator via <code class="highlighter-rouge">contextlib.contextmanager</code> decorator.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+
+<span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">runtime</span><span class="p">(</span><span class="n">description</span><span class="p">):</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="n">run_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"The function took {run_time} seconds to run."</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="nesting-contexts">Nesting Contexts</h2>
+
+<p>You can nest multiple context managers to manage resources simultaneously. Consider the following dummy manager:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+
+<span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">get_state</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"entering:"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">name</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"exiting :"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+
+<span class="c1"># multiple get_state can be nested like this
+</span><span class="k">with</span> <span class="n">get_state</span><span class="p">(</span><span class="s">"A"</span><span class="p">)</span> <span class="k">as</span> <span class="n">A</span><span class="p">,</span> <span class="n">get_state</span><span class="p">(</span><span class="s">"B"</span><span class="p">)</span> <span class="k">as</span> <span class="n">B</span><span class="p">,</span> <span class="n">get_state</span><span class="p">(</span><span class="s">"C"</span><span class="p">)</span> <span class="k">as</span> <span class="n">C</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"inside with statement:"</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>entering: A
+entering: B
+entering: C
+inside with statement: A B C
+exiting : C
+exiting : B
+exiting : A
+</code></pre></div></div>
+
+<p>Notice the order they were closed. Context managers are treated as a stack, and should be exited in reverse order in which they were entered. If an exception occurs, this order matters, as any context manager could suppress the exception, at which point the remaining managers will not even get notified of this. The <code class="highlighter-rouge">__exit__</code> method is also permitted to raise a different exception, and other context managers then should be able to handle that new exception.</p>
+
+<h2 id="combining-multiple-context-managers">Combining Multiple Context Managers</h2>
+
+<p>You can combine multiple context managers too. Let’s consider these two managers.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+
+<span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"entering a:"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">name</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"exiting a:"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"entering b:"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">name</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"exiting b:"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now combine these two using the decorator syntax. The following function takes the above define managers <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> and returns a combined context manager <code class="highlighter-rouge">ab</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">ab</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">a</span><span class="p">(</span><span class="s">"A"</span><span class="p">)</span> <span class="k">as</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">(</span><span class="s">"B"</span><span class="p">)</span> <span class="k">as</span> <span class="n">B</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This can be used as:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">ab</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">as</span> <span class="n">AB</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Inside the composite context manager:"</span><span class="p">,</span> <span class="n">AB</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>entering a: A
+entering b: B
+Inside the composite context manager: ('A', 'B')
+exiting b: B
+exiting a: A
+</code></pre></div></div>
+
+<p>If you have variable numbers of context managers and you want to combine them gracefully, <code class="highlighter-rouge">contextlib.ExitStack</code> is here to help. Let’s rewrite context manager <code class="highlighter-rouge">ab</code> using <code class="highlighter-rouge">ExitStack</code>. This function takes the individual context managers and their arguments as tuples and returns the combined manager.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span><span class="p">,</span> <span class="n">ExitStack</span>
+
+
+<span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">ab</span><span class="p">(</span><span class="n">cms</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="p">[</span><span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">cm</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span> <span class="k">for</span> <span class="n">cm</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cms</span><span class="p">,</span> <span class="n">args</span><span class="p">)]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">ab</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="p">(</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">))</span> <span class="k">as</span> <span class="n">AB</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Inside the composite context manager:"</span><span class="p">,</span> <span class="n">AB</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>entering a: A
+entering b: B
+Inside the composite context manager: ['A', 'B']
+exiting b: B
+exiting a: A
+</code></pre></div></div>
+
+<h2 id="example-1-using-context-managers-to-create-sqlalchemy-session">Example-1: Using Context Managers to Create SQLAlchemy Session</h2>
+
+<p>If you are familiar with SQLALchemy, Python’s SQL toolkit and Object Relational Mapper, then you probably know the usage of <code class="highlighter-rouge">Session</code> to run a query. A <code class="highlighter-rouge">Session</code> basically turns any query into a transaction and make it atomic. Context managers can help you write a transaction session in a very elegant way. A basic querying workflow in SQLAlchemy may look like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="c1"># an Engine, which the Session will use for connection resources
+</span><span class="n">some_engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s">"sqlite://"</span><span class="p">)</span>
+
+<span class="c1"># create a configured "Session" class
+</span><span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">some_engine</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">session_scope</span><span class="p">():</span>
+    <span class="s">"""Provide a transactional scope around a series of operations."""</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">session</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The excerpt above creates an in memory <code class="highlighter-rouge">SQLite</code> connection and a <code class="highlighter-rouge">session_scope</code> function with context manager. The session_scope function takes care of commiting and rolling back in case of exception automatically. The <code class="highlighter-rouge">session_scope</code> function can be used to run queries in the following way:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">myobject</span> <span class="o">=</span> <span class="n">MyObject</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span> <span class="s">"bar"</span><span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">myobject</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="example-2-abstract-away-exception-handling-monstrosity-with-context-managers">Example-2: Abstract Away Exception Handling Monstrosity with Context Managers</h2>
+
+<p>This is my absolute favorite use case of context managers. Suppose you want to write a function but want the exception handling logic out of the way. Exception handling logics with sophisticated logging can often obfuscate the core logic of your function. You can write a decorator type context manager that will handle the exceptions for you and decouple these additional code from your main logic. Let’s write a decorator that will handle <code class="highlighter-rouge">ZeroDivisionError</code> and <code class="highlighter-rouge">TypeError</code> simultaneously.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+
+<span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">errhandler</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span>
+    <span class="k">except</span> <span class="nb">ZeroDivisionError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"This is a custom ZeroDivisionError message."</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="nb">TypeError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"This is a custom TypeError message."</span><span class="p">)</span>
+        <span class="k">raise</span>
+</code></pre></div></div>
+
+<p>Now use this in a function where these exceptions occur.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">errhandler</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">div</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">//</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">div</span><span class="p">(</span><span class="s">"b"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>This is a custom TypeError message.
+---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-43-65497ed57253&gt; in &lt;module&gt;
+----&gt; 1 div('b',0)
+
+/usr/lib/python3.8/contextlib.py in inner(*args, **kwds)
+        73         def inner(*args, **kwds):
+        74             with self._recreate_cm():
+---&gt; 75                 return func(*args, **kwds)
+        76         return inner
+        77
+
+
+&lt;ipython-input-42-b7041bcaa9e6&gt; in div(a, b)
+        1 @errhandler()
+        2 def div(a, b):
+----&gt; 3     return a // b
+
+
+TypeError: unsupported operand type(s) for //: 'str' and 'int'
+</code></pre></div></div>
+
+<p>You can see that the <code class="highlighter-rouge">errhandler</code> decorator is doing the heavylifting for you. Pretty neat, huh?</p>
+
+<p>The following one is a more sophisticated example of using context manager to decouple your error handling monstrosity from the main logic. It also hides the elaborate logging logics from the main method.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s">"</span><span class="se">\n</span><span class="s">(asctime)s [</span><span class="si">%(levelname)</span><span class="s">s] </span><span class="si">%(message)</span><span class="s">s"</span><span class="p">,</span>
+    <span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s">"./debug.log"</span><span class="p">),</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()],</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Calculation</span><span class="p">:</span>
+    <span class="s">"""Dummy class for demonstrating exception decoupling with contextmanager."""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+
+    <span class="o">@</span><span class="n">contextmanager</span>
+    <span class="k">def</span> <span class="nf">errorhandler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span>
+        <span class="k">except</span> <span class="nb">ZeroDivisionError</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span>
+                <span class="n">f</span><span class="s">"Custom handling of Zero Division Error! Printing "</span>
+                <span class="s">"only 2 levels of traceback.."</span>
+            <span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">"ZeroDivisionError"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">main_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""Function that we want to save from nasty error handling logic."""</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">errorhandler</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">Calculation</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">main_func</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>This will return</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(asctime)s [ERROR] ZeroDivisionError
+Traceback (most recent call last):
+    File "&lt;ipython-input-44-ff609edb5d6e&gt;", line 25, in errorhandler
+    yield
+    File "&lt;ipython-input-44-ff609edb5d6e&gt;", line 37, in main_func
+    return self.a / self.b
+ZeroDivisionError: division by zero
+
+
+Custom handling of Zero Division Error! Printing only 2 levels of traceback..
+None
+</code></pre></div></div>
+<h2 id="remarks">Remarks</h2>
+<p>All the code snippets are updated for python <code class="highlighter-rouge">3.8</code>. To avoid redundencies, I have purposefully excluded examples of nested with statements and now deprecated <code class="highlighter-rouge">contextlib.nested</code> function to create nested context managers.</p>
+
+<h2 id="resources">Resources</h2>
+<ol>
+  <li><a href="https://docs.python.org/3/library/contextlib.html">Python Contextlib Documentation</a></li>
+  <li><a href="https://jeffknupp.com/blog/2016/03/07/python-with-context-managers/">Python with Context Manager - Jeff Knupp</a></li>
+  <li><a href="https://docs.sqlalchemy.org/en/13/core/engines.html">SQLALchemy Session Creation</a></li>
+  <li><a href="https://scipy-lectures.org/advanced/advanced_python/index.html#context-managers">Sci-py Lectures: Context Managers</a></li>
+  <li><a href="https://stackoverflow.com/a/45681273/8963300">Merging Context Managers</a></li>
+</ol>
