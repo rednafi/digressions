@@ -448,7 +448,7 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 /* Dracula Theme v1.2.5 https://github.com/zenorocha/dracula-theme Copyright 2016, All rights reserved Code licensed under the MIT license */
 .highlight { background: #323443 !important; color: #f8f8f2 !important; }
 
-.highlight pre, .highlight code { background: #323443; color: #f8f8f2; }
+.highlight pre, .highlight code { background: #323443; color: #f8f8f2; font-size: 15px; }
 
 .highlight .hll, .highlight .s, .highlight .sa, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .s1, .highlight .ss { color: #e7997a; }
 
