@@ -4,7 +4,7 @@ toc: true
 comments: true
 layout: post
 description: Python dataclasses to auto generate code
-categories: [python]
+categories: [Python]
 ---
 
 Recently, my work needed me to create lots of custom data types and draw comparison among them. So, my code was littered with many classes that somewhat looked like this:
@@ -365,8 +365,8 @@ import math
 class CartesianPoint:
     """Immutable Cartesian point class.
        Although mathematically incorrect,
-       for demonstration purpose, all the 
-       comparisons are done based on 
+       for demonstration purpose, all the
+       comparisons are done based on
        the first field only."""
 
     def __init__(self, x, y, z):
@@ -468,8 +468,8 @@ from dataclasses import dataclass, field
 class CartesianPoint:
     """Immutable Cartesian point class.
        Although mathematically incorrect,
-       for demonstration purpose, all the 
-       comparisons are done based on 
+       for demonstration purpose, all the
+       comparisons are done based on
        the first field only."""
 
     x: float
@@ -519,7 +519,7 @@ False
 True
 {'CartesianPoint(x=1, y=2, z=3)': 3.7416573867739413}
 ```
-    
+
 ## References
 
 * [Python Dataclasses: Official Doc](https://docs.python.org/3/library/dataclasses.html)

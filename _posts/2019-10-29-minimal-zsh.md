@@ -4,7 +4,7 @@ toc: true
 comments: true
 layout: post
 description: Up and running with z-shell in no time
-categories: [linux]
+categories: [Linux]
 ---
 
 ![img](https://i.imgur.com/jUvHrOa.png)

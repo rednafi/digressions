@@ -4,7 +4,7 @@ toc: false
 comments: true
 layout: post
 description: A functional approach to polymorphism in python
-categories: [python]
+categories: [Python]
 ---
 
 Recently, I was refactoring a portion of a Python function that somewhat looked like this:

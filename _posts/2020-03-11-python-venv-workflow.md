@@ -4,7 +4,7 @@ toc: false
 comments: true
 layout: post
 description: Keeping python's virtual environment madness in check
-categories: [python]
+categories: [Python]
 ---
 
 There are multiple ways of installing Python, creating and switching between different virtual environments. Also, Python's package manager hyperspace is a mess. So, things can quickly get out of hands while dealing with projects that require quick environment switching across multiple versions of Python. I use Debian linux in my primary development environment and this is how I keep the option explosion in check:
