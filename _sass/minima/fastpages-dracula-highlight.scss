@@ -1,6 +1,6 @@
 // Override Syntax Highlighting In Minima With the Dracula Theme: https://draculatheme.com/
 // If you wish to override any of this CSS, do so in _sass/minima/custom-styles.css
- 
+
 $dt-gray-dark: #282a36;  // Background
 $dt-code-cell-background: #323443;
 $dt-gray: #44475a;       // Current Line & Selection
@@ -76,8 +76,9 @@ $dt-green-light: rgb(172, 229, 145);
     pre, code {
      background: $dt-code-cell-background;
      color: $dt-gray-light;
+     font-size: 15px;
     }
-   
+
     .hll,
     .s,
     .sa,
@@ -95,11 +96,11 @@ $dt-green-light: rgb(172, 229, 145);
     .ss {
          color:rgb(231, 153, 122);
     }
-  
+
     .go {
       color: $dt-gray;
     }
-  
+
     .err,
     .g,
     .l,
@@ -127,20 +128,20 @@ $dt-green-light: rgb(172, 229, 145);
       color: $dt-gray-light;
       background-color: $dt-code-cell-background !important;
     }
- 
+
     .p {
          font-weight: bold;
          color: rgb(102, 217, 239);
  }
-  
+
     .ge {
       text-decoration: underline;
     }
-  
+
     .bp {
       font-style: italic;
     }
-  
+
     .c,
     .ch,
     .cm,
@@ -149,7 +150,7 @@ $dt-green-light: rgb(172, 229, 145);
     .cs {
       color: $dt-blue;
     }
-  
+
     .kd,
     .kt,
     .nb,
@@ -161,7 +162,7 @@ $dt-green-light: rgb(172, 229, 145);
     .vm {
       color: $dt-cyan;
     }
-  
+
     .kd,
     .nb,
     .nl,
@@ -172,7 +173,7 @@ $dt-green-light: rgb(172, 229, 145);
     .vm {
       font-style: italic;
     }
-  
+
     .fm,
     .na,
     .nc,
@@ -180,7 +181,7 @@ $dt-green-light: rgb(172, 229, 145);
      {
       color: $dt-green-light;
     }
-  
+
     .k,
     .o,
     .cp,
@@ -192,11 +193,11 @@ $dt-green-light: rgb(172, 229, 145);
     .ow {
       color: $dt-pink;
     }
- 
+
     .kc {
-         color: $dt-green-light;   
+         color: $dt-green-light;
     }
-  
+
     .m,
     .mb,
     .mf,
@@ -206,7 +207,7 @@ $dt-green-light: rgb(172, 229, 145);
     .il {
       color: $dt-purple;
     }
-  
+
     .gd {
       color: $dt-red;
     }
