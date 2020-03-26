@@ -128,7 +128,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      8 min read
+      7 min read
     
 </span></p>
 
@@ -150,13 +150,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#writing-context-managers-as-decorators">Writing Context Managers as Decorators</a></li>
 <li class="toc-entry toc-h2"><a href="#nesting-contexts">Nesting Contexts</a></li>
 <li class="toc-entry toc-h2"><a href="#combining-multiple-context-managers">Combining Multiple Context Managers</a></li>
-<li class="toc-entry toc-h2"><a href="#example-1-using-context-managers-to-create-sqlalchemy-session">Example-1: Using Context Managers to Create SQLAlchemy Session</a></li>
-<li class="toc-entry toc-h2"><a href="#example-2-abstract-away-exception-handling-monstrosity-with-context-managers">Example-2: Abstract Away Exception Handling Monstrosity with Context Managers</a></li>
+<li class="toc-entry toc-h2"><a href="#using-context-managers-to-create-sqlalchemy-session">Using Context Managers to Create SQLAlchemy Session</a></li>
+<li class="toc-entry toc-h2"><a href="#abstract-away-exception-handling-monstrosity-with-context-managers">Abstract Away Exception Handling Monstrosity with Context Managers</a></li>
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
-</ul><p>#</p>
-
-<p>Python’s context managers are great for resource management and stopping the propagation of leaked abstractions. You’ve probably used it while opening a file or a database connection. Usually it starts with a <code class="highlighter-rouge">with</code> statement like this:</p>
+</ul><p>Python’s context managers are great for resource management and stopping the propagation of leaked abstractions. You’ve probably used it while opening a file or a database connection. Usually it starts with a <code class="highlighter-rouge">with</code> statement like this:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"file.txt"</span><span class="p">,</span> <span class="s">"wt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"contents go here"</span><span class="p">)</span>
@@ -395,8 +393,8 @@ exiting b: B
 exiting a: A
 </code></pre></div></div>
 
-<h2 id="example-1-using-context-managers-to-create-sqlalchemy-session">
-<a class="anchor" href="#example-1-using-context-managers-to-create-sqlalchemy-session" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example-1: Using Context Managers to Create SQLAlchemy Session</h2>
+<h2 id="using-context-managers-to-create-sqlalchemy-session">
+<a class="anchor" href="#using-context-managers-to-create-sqlalchemy-session" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Context Managers to Create SQLAlchemy Session</h2>
 
 <p>If you are familiar with SQLALchemy, Python’s SQL toolkit and Object Relational Mapper, then you probably know the usage of <code class="highlighter-rouge">Session</code> to run a query. A <code class="highlighter-rouge">Session</code> basically turns any query into a transaction and make it atomic. Context managers can help you write a transaction session in a very elegant way. A basic querying workflow in SQLAlchemy may look like this:</p>
 
@@ -432,8 +430,8 @@ exiting a: A
     <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">myobject</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h2 id="example-2-abstract-away-exception-handling-monstrosity-with-context-managers">
-<a class="anchor" href="#example-2-abstract-away-exception-handling-monstrosity-with-context-managers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example-2: Abstract Away Exception Handling Monstrosity with Context Managers</h2>
+<h2 id="abstract-away-exception-handling-monstrosity-with-context-managers">
+<a class="anchor" href="#abstract-away-exception-handling-monstrosity-with-context-managers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Abstract Away Exception Handling Monstrosity with Context Managers</h2>
 
 <p>This is my absolute favorite use case of context managers. Suppose you want to write a function but want the exception handling logic out of the way. Exception handling logics with sophisticated logging can often obfuscate the core logic of your function. You can write a decorator type context manager that will handle the exceptions for you and decouple these additional code from your main logic. Let’s write a decorator that will handle <code class="highlighter-rouge">ZeroDivisionError</code> and <code class="highlighter-rouge">TypeError</code> simultaneously.</p>
 
