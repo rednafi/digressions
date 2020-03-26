@@ -7,8 +7,6 @@ description: Discovering the quirks of Python's context manager
 categories: [python]
 ---
 
-#
-
 Python's context managers are great for resource management and stopping the propagation of leaked abstractions. You've probably used it while opening a file or a database connection. Usually it starts with a `with` statement like this:
 
 
@@ -149,10 +147,11 @@ Using the function like this should return:
 print(custom_file_write("file.txt", "wt", "jello"))
 ```
 
-    This function opens a file
-    The function took 0.0005390644073486328 seconds to run.
-    None
-
+```
+This function opens a file
+The function took 0.0005390644073486328 seconds to run.
+None
+```
 
 You can also create the same decorator via `contextlib.contextmanager` decorator.
 
@@ -282,7 +281,7 @@ exiting b: B
 exiting a: A
 ```
 
-## Example-1: Using Context Managers to Create SQLAlchemy Session
+## Using Context Managers to Create SQLAlchemy Session
 
 If you are familiar with SQLALchemy, Python's SQL toolkit and Object Relational Mapper, then you probably know the usage of `Session` to run a query. A `Session` basically turns any query into a transaction and make it atomic. Context managers can help you write a transaction session in a very elegant way. A basic querying workflow in SQLAlchemy may look like this:
 
@@ -322,7 +321,7 @@ with session_scope() as session:
     session.add(myobject)
 ```
 
-## Example-2: Abstract Away Exception Handling Monstrosity with Context Managers
+## Abstract Away Exception Handling Monstrosity with Context Managers
 
 This is my absolute favorite use case of context managers. Suppose you want to write a function but want the exception handling logic out of the way. Exception handling logics with sophisticated logging can often obfuscate the core logic of your function. You can write a decorator type context manager that will handle the exceptions for you and decouple these additional code from your main logic. Let's write a decorator that will handle `ZeroDivisionError` and `TypeError` simultaneously.
 
