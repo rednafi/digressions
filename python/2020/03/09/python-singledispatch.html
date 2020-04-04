@@ -3,9 +3,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Polymorphic Dispatching with Python’s Singledispatch | Redowan’s Digressions</title>
+<title>Generic Functions with Python’s Singledispatch | Redowan’s Digressions</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Polymorphic Dispatching with Python’s Singledispatch" />
+<meta property="og:title" content="Generic Functions with Python’s Singledispatch" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A functional approach to polymorphism in python" />
 <meta property="og:description" content="A functional approach to polymorphism in python" />
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-03-09T00:00:00-05:00" />
 <script type="application/ld+json">
-{"datePublished":"2020-03-09T00:00:00-05:00","headline":"Polymorphic Dispatching with Python’s Singledispatch","description":"A functional approach to polymorphism in python","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/03/09/python-singledispatch.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/03/09/python-singledispatch.html","dateModified":"2020-03-09T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"datePublished":"2020-03-09T00:00:00-05:00","headline":"Generic Functions with Python’s Singledispatch","description":"A functional approach to polymorphism in python","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/03/09/python-singledispatch.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/03/09/python-singledispatch.html","dateModified":"2020-03-09T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Redowan's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -24,9 +24,9 @@
 <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
 
 <link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Polymorphic Dispatching with Python’s Singledispatch | Redowan’s Digressions</title>
+<title>Generic Functions with Python’s Singledispatch | Redowan’s Digressions</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Polymorphic Dispatching with Python’s Singledispatch" />
+<meta property="og:title" content="Generic Functions with Python’s Singledispatch" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A functional approach to polymorphism in python" />
 <meta property="og:description" content="A functional approach to polymorphism in python" />
@@ -36,7 +36,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-03-09T00:00:00-05:00" />
 <script type="application/ld+json">
-{"datePublished":"2020-03-09T00:00:00-05:00","headline":"Polymorphic Dispatching with Python’s Singledispatch","description":"A functional approach to polymorphism in python","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/03/09/python-singledispatch.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/03/09/python-singledispatch.html","dateModified":"2020-03-09T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"datePublished":"2020-03-09T00:00:00-05:00","headline":"Generic Functions with Python’s Singledispatch","description":"A functional approach to polymorphism in python","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/03/09/python-singledispatch.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/03/09/python-singledispatch.html","dateModified":"2020-03-09T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -113,7 +113,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Polymorphic Dispatching with Python&#39;s Singledispatch
+    <h1 class="post-title p-name" itemprop="name headline">Generic Functions with Python&#39;s Singledispatch
     </h1><p class="page-description">A functional approach to polymorphism in python</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-03-09T00:00:00-05:00"
         itemprop="datePublished">
         Mar 9, 2020
@@ -163,11 +163,13 @@ window.onload = wrap_img;
 <span class="k">def</span> <span class="nf">func45</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></div>
-<p>This pattern gets tedious when the number of conditions and actionable functions starts to grow. I was looking for a functional approach to dynamically overload a function based on some specific conditions. Let’s see how Python’s <code class="highlighter-rouge">singledispatch</code> decorator can help to design a better solution.</p>
 
-<h2 id="function-overloading">Function Overloading</h2>
+<p>This pattern gets tedious when the number of conditions and actionable functions start to grow. I I was looking for a functional approach to avoid defining and calling three different functions that do very similar things. Situations like this is where <a href="https://en.wikipedia.org/wiki/Parametric_polymorphism">parametric polymorphism</a> comes into play. The idea is, you have to define a single function that will be dynamically overloaded with alternative implementations based on the type of the function arguments.</p>
 
-<p>Function overloading is a specific type of polymorphism where multiple functions can have the same name with different implementations. Calling an overloaded function will run a specific implementation of that function based on some prior conditions or appropriate context of the call.</p>
+<h2 id="function-overloading--generic-functions">Function Overloading &amp; Generic Functions</h2>
+
+<p>Function overloading is a specific type of polymorphism where multiple functions can have the same name with different implementations. Calling an overloaded function will run a specific implementation of that function based on some prior conditions or appropriate context of the call.
+When function overloading happens based on its argument types, the resulting function is known as <em>generic function</em>. Let’s see how Python’s <code class="highlighter-rouge">singledispatch</code> decorator can help to design generic functions and refactor the icky code above.</p>
 
 <h2 id="singledispatch">Singledispatch</h2>
 
@@ -182,6 +184,7 @@ window.onload = wrap_img;
 <h3 id="example-1-singledispatch-with-built-in-argument-type">Example-1: Singledispatch with built-in argument type</h3>
 
 <p>Let’s consider the following code:</p>
+
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># procedural.py
 </span>
 <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
@@ -207,9 +210,11 @@ window.onload = wrap_img;
 </code></pre></div></div>
 
 <p>Running this code will return</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Float</span> <span class="mf">12.0</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
-<span class="o">&gt;&gt;</span> <span class="n">Integer</span> <span class="mi">1</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Float</span> <span class="mf">12.0</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Integer</span> <span class="mi">1</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
 </code></pre></div></div>
+
 <p>The above code snippet applies <code class="highlighter-rouge">process_int</code> or <code class="highlighter-rouge">process_float</code> functions on the incoming number based on its type. Now let’s see how the same thing can be achieved with <code class="highlighter-rouge">singledispatch</code>.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># single_dispatch.py
@@ -239,8 +244,9 @@ window.onload = wrap_img;
 </code></pre></div></div>
 
 <p>Running this will return the same result as before.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Float</span> <span class="mf">12.0</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
-<span class="o">&gt;&gt;</span> <span class="n">Integer</span> <span class="mi">1</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Float</span> <span class="mf">12.0</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Integer</span> <span class="mi">1</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
 </code></pre></div></div>
 
 <h3 id="example-2-singledispatch-with-custom-argument-type">Example-2: Singledispatch with custom argument type</h3>
@@ -273,8 +279,9 @@ window.onload = wrap_img;
 </code></pre></div></div>
 
 <p>Running this snippet will print out:</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Cat</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
-<span class="o">&gt;&gt;</span> <span class="n">Dog</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Cat</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Dog</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
 </code></pre></div></div>
 
 <p>To refactor this with <code class="highlighter-rouge">singledispatch</code>, you can create two data types <code class="highlighter-rouge">Cat</code> and <code class="highlighter-rouge">Dog</code>. A <code class="highlighter-rouge">class_factory</code> function will determine data type based on condition and <code class="highlighter-rouge">singledispatch</code> will take care of dispatching the appropriate implementation of the <code class="highlighter-rouge">process</code> function.</p>
@@ -329,8 +336,8 @@ window.onload = wrap_img;
 
 <p>Running this will print out the same output as before:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">Cat</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
-<span class="o">&gt;&gt;</span> <span class="n">Dog</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">Cat</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Dog</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
 </code></pre></div></div>
 
   </div><!-- from https://github.com/utterance/utterances -->
