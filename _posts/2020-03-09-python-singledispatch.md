@@ -3,7 +3,7 @@ title: Generic Functions with Python's Singledispatch
 toc: false
 comments: true
 layout: post
-description: A functional approach to polymorphism in python
+description: A functional approach to parametric polymorphism in python
 categories: [Python]
 ---
 
