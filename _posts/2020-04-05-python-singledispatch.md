@@ -38,12 +38,12 @@ This pattern gets tedious when the number of conditions and actionable functions
 
 ## Function Overloading & Generic Functions
 
-Function overloading is a specific type of polymorphism where multiple functions can have the same name with different implementations. Calling an overloaded function will run a specific implementation of that function based on some prior conditions or appropriate context of the call.
-When function overloading happens based on its argument types, the resulting function is known as *generic function*. Let's see how Python's `singledispatch` decorator can help to design generic functions and refactor the icky code above.
+**Function overloading** is a specific type of polymorphism where multiple functions can have the same name with different implementations. Calling an overloaded function will run a specific implementation of that function based on some prior conditions or appropriate context of the call.
+When function overloading happens based on its argument types, the resulting function is known as **generic function**. Let's see how Python's `singledispatch` decorator can help to design generic functions and refactor the icky code above.
 
 ## Singledispatch
 
-Python fairly recently added partial support for **function overloading** in *Python 3.4*. They did this by adding a neat little decorator to the **functools** module called `singledispatch`.  In *python 3.8*, there is another decorator for methods called `singledispatchmethod`. This decorator will transform your regular function into a single dispatch generic function.
+Python fairly recently added partial support for function overloading in *Python 3.4*. They did this by adding a neat little decorator to the *functools* module called `singledispatch`.  In *python 3.8*, there is another decorator for methods called `singledispatchmethod`. This decorator will transform your regular function into a single dispatch generic function.
 
 > A generic function is composed of multiple functions implementing the same operation for different types. Which implementation should be used during a call is determined by the dispatch algorithm. When the implementation is chosen based on the type of a single argument, this is known as single dispatch.
 
