@@ -1,5 +1,5 @@
 ---
-title: Polymorphic Dispatching with Python's Singledispatch
+title: Generic Functions with Python's Singledispatch
 toc: false
 comments: true
 layout: post
@@ -33,12 +33,13 @@ def func23(data):
 def func45(data):
     ...
 ```
-This pattern gets tedious when the number of conditions and actionable functions starts to grow. I was looking for a functional approach to dynamically overload a function based on some specific conditions. Let's see how Python's `singledispatch` decorator can help to design a better solution.
 
-## Function Overloading
+This pattern gets tedious when the number of conditions and actionable functions start to grow. I I was looking for a functional approach to avoid defining and calling three different functions that do very similar things. Situations like this is where [parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism) comes into play. The idea is, you have to define a single function that will be dynamically overloaded with alternative implementations based on the type of the function arguments.
+
+## Function Overloading & Generic Functions
 
 Function overloading is a specific type of polymorphism where multiple functions can have the same name with different implementations. Calling an overloaded function will run a specific implementation of that function based on some prior conditions or appropriate context of the call.
-
+When function overloading happens based on its argument types, the resulting function is known as *generic function*. Let's see how Python's `singledispatch` decorator can help to design generic functions and refactor the icky code above.
 
 ## Singledispatch
 
@@ -51,6 +52,7 @@ As PEP-443 said, singledispatch only happens based on the first argument’s typ
 ### Example-1: Singledispatch with built-in argument type
 
 Let's consider the following code:
+
 ```python
 # procedural.py
 
@@ -77,10 +79,12 @@ print(process(1))
 ```
 
 Running this code will return
+
 ```python
->> Float 12.0 has been processed successfully!
->> Integer 1 has been processed successfully!
+>>> Float 12.0 has been processed successfully!
+>>> Integer 1 has been processed successfully!
 ```
+
 The above code snippet applies `process_int` or `process_float` functions on the incoming number based on its type. Now let's see how the same thing can be achieved with `singledispatch`.
 
 ```python
@@ -111,9 +115,10 @@ print(process(1))
 ```
 
 Running this will return the same result as before.
+
 ```python
->> Float 12.0 has been processed successfully!
->> Integer 1 has been processed successfully!
+>>> Float 12.0 has been processed successfully!
+>>> Integer 1 has been processed successfully!
 ```
 
 ### Example-2: Singledispatch with custom argument type
@@ -147,9 +152,10 @@ if __name__ == "__main__":
 ```
 
 Running this snippet will print out:
+
 ```python
->> Cat data has been processed successfully!
->> Dog data has been processed successfully!
+>>> Cat data has been processed successfully!
+>>> Dog data has been processed successfully!
 ```
 
 To refactor this with `singledispatch`, you can create two data types `Cat` and `Dog`. A `class_factory` function will determine data type based on condition and `singledispatch` will take care of dispatching the appropriate implementation of the `process` function.
@@ -206,6 +212,6 @@ if __name__ == "__main__":
 Running this will print out the same output as before:
 
 ```python
->> Cat data has been processed successfully!
->> Dog data has been processed successfully!
+>>> Cat data has been processed successfully!
+>>> Dog data has been processed successfully!
 ```
