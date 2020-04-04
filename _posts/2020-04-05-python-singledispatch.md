@@ -218,6 +218,6 @@ Running this will print out the same output as before:
 
 ## References
 
-1. Transform a function into a single dispatch generic function (https://docs.python.org/3/library/functools.html)
-2. Function overloading (https://en.wikipedia.org/wiki/Function_overloading)
-3. Parametric polymorphism (https://en.wikipedia.org/wiki/Parametric_polymorphism)
+1. [Transform a function into a single dispatch generic function](https://docs.python.org/3/library/functools.html)
+2. [Function overloading](https://en.wikipedia.org/wiki/Function_overloading)
+3. [Parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism)
