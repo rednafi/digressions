@@ -153,7 +153,7 @@ window.onload = wrap_img;
     <p><strong><a href="https://github.com/psf/black">Black</a></strong>: <code class="highlighter-rouge">Black</code> is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.</p>
   </li>
   <li>
-    <p><strong><a href="https://github.com/timothycrosley/isort">Isort</a></strong>: <code class="highlighter-rouge">Isort</code> is a Python utility to sort imports alphabetically, and automatically separated into sections and by type.</p>
+    <p><strong><a href="https://github.com/timothycrosley/isort">Isort</a></strong>: <code class="highlighter-rouge">Isort</code> is a Python utility to sort <em>imports</em> alphabetically, and automatically separated into sections and by type.</p>
 
     <p>Isort parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:</p>
 
@@ -170,7 +170,7 @@ window.onload = wrap_img;
     <p>Inside each section, the imports are sorted alphabetically. <code class="highlighter-rouge">Isort</code> automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).</p>
   </li>
   <li>
-    <p><strong><a href="https://github.com/PyCQA/flake8">Flake8</a></strong>: <code class="highlighter-rouge">Flake8</code> is a wrapper around <code class="highlighter-rouge">PyFlakes</code>, <code class="highlighter-rouge">pycodestyle</code>, Ned Batchelder’s <a href="https://github.com/PyCQA/mccabe">McCabe script</a>. The combination of these three linters makes sure that your code is compliant with <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> and avoids obvious code smells.</p>
+    <p><strong><a href="https://github.com/PyCQA/flake8">Flake8</a></strong>: <code class="highlighter-rouge">Flake8</code> is a wrapper around <code class="highlighter-rouge">PyFlakes</code>, <code class="highlighter-rouge">pycodestyle</code>, Ned Batchelder’s <a href="https://github.com/PyCQA/mccabe">McCabe script</a>. The combination of these three linters makes sure that your code is compliant with <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> and free from obvious code smells.</p>
   </li>
 </ul>
 
@@ -197,7 +197,7 @@ window.onload = wrap_img;
 <h2 id="defining-the-pre-commit-config-file">
 <a class="anchor" href="#defining-the-pre-commit-config-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining the Pre-commit Config File</h2>
 
-<p>Pre-commit configuration is a <code class="highlighter-rouge">.pre-commit-config.yaml</code> file where you define your tasks that you want to run before every commit. Once you have defined your configuration, it will run automatically every time you say <code class="highlighter-rouge">git commit -m "Commit message"</code>. The following example shows how black formatter can be added to the config file:</p>
+<p>Pre-commit configuration is a <code class="highlighter-rouge">.pre-commit-config.yaml</code> file where you define your hooks (tasks) that you want to run before every commit. Once you have defined your hooks in the config file, they will run automatically every time you say <code class="highlighter-rouge">git commit -m "Commit message"</code>. The following example shows how black formatter can be added to the config:</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .pre-commit-config.yaml</span>
 
@@ -244,21 +244,21 @@ window.onload = wrap_img;
 <h2 id="running-the-linters-as-pre-commit-hooks">
 <a class="anchor" href="#running-the-linters-as-pre-commit-hooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the Linters as Pre-commit Hooks</h2>
 
-<p>To run the above mentioned linters as pre-commit hooks, you need to add them to the configuation in the <code class="highlighter-rouge">.pre-commit-config.yaml</code> file. However, there are a few minor issues that need to be taken care of.</p>
+<p>To run the above mentioned linters as pre-commit hooks, you need to add their respective settings to the <code class="highlighter-rouge">.pre-commit-config.yaml</code> file. However, there are a few minor issues that need to be taken care of.</p>
 
 <ul>
   <li>
-    <p>The default line length of <code class="highlighter-rouge">black</code> formatter is 88 (you should embrace that) but both <code class="highlighter-rouge">flake8</code> and <code class="highlighter-rouge">isort</code> cap the line at 79 characters. This conflict causes the hooks to fail.</p>
+    <p>The default line length of <code class="highlighter-rouge">black</code> formatter is 88 (you should embrace that) but both <code class="highlighter-rouge">flake8</code> and <code class="highlighter-rouge">isort</code> cap the line at 79 characters. This raises conflict causes failure.</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">Black</code> and <code class="highlighter-rouge">isort</code> format the imports differently</p>
+    <p><code class="highlighter-rouge">Black</code> and <code class="highlighter-rouge">isort</code> format the <em>imports</em> differently.</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">Flake8</code> can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However since your IDE/ editor also points out these issues, you should solve them manually. So, you will need to configure flake8 to ignore some minor errors.</p>
+    <p><code class="highlighter-rouge">Flake8</code> can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However, since your IDE/ editor also points out these issues anyway, you should solve them manually. So, you will need to configure flake8 to ignore some minor errors.</p>
   </li>
 </ul>
 
-<p>The following one is an example of how you can use <code class="highlighter-rouge">isort</code>, <code class="highlighter-rouge">black</code>, <code class="highlighter-rouge">flake8</code> linters without raising any conflicts.</p>
+<p>The following one is an example of how you can define your <code class="highlighter-rouge">.pre-commit-config.yaml</code> and configure the individual hooks so that <code class="highlighter-rouge">isort</code>, <code class="highlighter-rouge">black</code>, <code class="highlighter-rouge">flake8</code> linters can run without conflicts.</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .pre-commit-config.yaml</span>
 
@@ -319,7 +319,7 @@ window.onload = wrap_img;
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pre-commit run <span class="nt">--all-files</span>
 </code></pre></div></div>
 
-<p>This should apply your pre-commit hooks to your code base harmoniously. From now on, before each commit, the linters will make sure that your code complies with the rules specified in the configuration.</p>
+<p>This should apply the pre-commit hooks to your code base harmoniously. From now on, before each commit, the linters will make sure that your code complies with the rules specified in the configuration.</p>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
