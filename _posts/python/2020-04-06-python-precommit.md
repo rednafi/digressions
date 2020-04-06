@@ -96,7 +96,7 @@ pre-commit run --all-files
 
 To run the above mentioned linters as pre-commit hooks, you need to add their respective settings to the `.pre-commit-config.yaml` file. However, there are a few minor issues that need to be taken care of.
 
-* The default line length of `black` formatter is 88 (you should embrace that) but both `flake8` and `isort` cap the line at 79 characters. This raises conflict causes failure.
+* The default line length of `black` formatter is 88 (you should embrace that) but both `flake8` and `isort` cap the line at 79 characters. This raises conflict and can cause failures.
 
 * `Black` and `isort` format the *imports* differently.
 
