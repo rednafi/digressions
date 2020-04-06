@@ -25,7 +25,7 @@ print(CartesianPoint(1, 2, 3))
 ```
 
 ```
->> CartesianPoint(x = 1, y = 2, z = 3)
+>>> CartesianPoint(x = 1, y = 2, z = 3)
 ```
 
 This class only creates a `CartesianPoint` type and shows a pretty output of the instances created from it. However, it already has two methods inside, `__init__` and `__repr__` that do not do much.
@@ -52,7 +52,7 @@ print(point)
 ```
 
 ```
->> CartesianPoint(x=1, y=2, z=3)
+>>> CartesianPoint(x=1, y=2, z=3)
 ```
 
 In the above code, the magic is done by the `dataclass` decorator. Dataclasses require you to use explicit [type annotation](https://docs.python.org/3/library/typing.html) and it automatically implements methods like `__init__`, `__repr__`, `__eq__` etc beforehand. You can inspect the methods that `dataclass` auto defines via python's help.
@@ -152,7 +152,7 @@ print(point_1 == point_2)
 ```
 
 ```
->> False
+>>> False
 ```
 
 However, if you want to compare multiple instances of dataclasses, aka add `__gt__` or `__lt__` methods to your instances, you have to turn on the `order` flag manually.
@@ -177,7 +177,7 @@ print(point_1 > point_2)
 ```
 
 ```
->> True
+>>> True
 ```
 
 By default, while comparing intances, all of the fields are used. In our above case, all the fields  `x`, `y`, `z`of `point_1` instance are compared with all the fields of `point_2` instance. You can customize this using the `field` function.
@@ -206,8 +206,8 @@ print(point_1 < point_2)
 ```
 
 ```
->> True
->> False
+>>> True
+>>> False
 ```
 
 You can see the above code prints out `True` despite the intances have different `y` and `z` attributes.
@@ -240,7 +240,7 @@ print(norm)
 ```
 
 ```
->> 10.488088481701515
+>>> 10.488088481701515
 ```
 
 ## Making Instances Immutable
@@ -308,7 +308,7 @@ print({f"{point}": "origin"})
 ```
 
 ```
->> {'CartesianPoint(x=0, y=0, z=0)': 'origin'}
+>>> {'CartesianPoint(x=0, y=0, z=0)': 'origin'}
 ```
 
 ## Converting Instances to Dicts
@@ -323,7 +323,7 @@ print(asdict(point))
 ```
 
 ```
->> {'x': 1, 'y': 5, 'z': 6}
+>>> {'x': 1, 'y': 5, 'z': 6}
 ```
 
 
@@ -350,7 +350,7 @@ print(point.tup)
 ```
 
 ```
->> (4, 5, 6)
+>>> (4, 5, 6)
 ```
 
 
