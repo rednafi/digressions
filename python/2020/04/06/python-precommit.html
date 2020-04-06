@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Running Python Linters with Pre-commit Hooks | Redowan’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Running Python Linters with Pre-commit Hooks" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A sane approach to Python linting with pre-commit hooks" />
+<meta property="og:description" content="A sane approach to Python linting with pre-commit hooks" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html" />
+<meta property="og:site_name" content="Redowan’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-06T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-04-06T00:00:00-05:00","headline":"Running Python Linters with Pre-commit Hooks","description":"A sane approach to Python linting with pre-commit hooks","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html","dateModified":"2020-04-06T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Redowan's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Running Python Linters with Pre-commit Hooks | Redowan’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Running Python Linters with Pre-commit Hooks" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A sane approach to Python linting with pre-commit hooks" />
+<meta property="og:description" content="A sane approach to Python linting with pre-commit hooks" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html" />
+<meta property="og:site_name" content="Redowan’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-06T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-04-06T00:00:00-05:00","headline":"Running Python Linters with Pre-commit Hooks","description":"A sane approach to Python linting with pre-commit hooks","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html","dateModified":"2020-04-06T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Redowan's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/digressions/">Redowan&#39;s Digressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/digressions/about/">About Me</a><a class="page-link" href="/digressions/search/">Search</a><a class="page-link" href="/digressions/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Running Python Linters with Pre-commit Hooks
+    </h1><p class="page-description">A sane approach to Python linting with pre-commit hooks</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-06T00:00:00-05:00"
+        itemprop="datePublished">
+        Apr 6, 2020
+      </time>
+      • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+    <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i>
+      
+      <a class="category-tags-link"
+        href="/digressions/categories/#Python">Python</a>
+      
+      
+    </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#installing-pre-commit">Installing Pre-commit</a></li>
+<li class="toc-entry toc-h2"><a href="#defining-the-pre-commit-config-file">Defining the Pre-commit Config File</a></li>
+<li class="toc-entry toc-h2"><a href="#installing-the-git-hook-scripts">Installing the Git Hook scripts</a></li>
+<li class="toc-entry toc-h2"><a href="#running-the-hooks-against-all-the-files">Running the Hooks Against All the Files</a></li>
+<li class="toc-entry toc-h2"><a href="#running-the-linters-as-pre-commit-hooks">Running the Linters as Pre-commit Hooks</a></li>
+</ul><p><a href="https://pre-commit.com/#introduction">Pre-commit hooks</a> can be a neat way to run automated ad-hoc <em>tasks</em> before submitting every git commit. These tasks may include linting, trimming trailing whitespace, running code formatter before code review etc. Let’s see how multiple Python linters and formatters can be applied automatically before each commit to impose strict conformity on your codebase.</p>
+
+<p>To keep my sanity, I only use three linters in all of my python projects:</p>
+
+<ul>
+  <li>
+    <p><strong><a href="https://github.com/psf/black">Black</a></strong>: <code class="highlighter-rouge">Black</code> is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/timothycrosley/isort">Isort</a></strong>: <code class="highlighter-rouge">Isort</code> is a Python utility to sort imports alphabetically, and automatically separated into sections and by type.</p>
+
+    <p>Isort parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:</p>
+
+    <ul>
+      <li>Future</li>
+      <li>Python Standard Library</li>
+      <li>Third Party</li>
+      <li>Current Python Project</li>
+      <li>Explicitly Local (. before import, as in: <code class="highlighter-rouge">from . import x</code>)</li>
+      <li>Custom Separate Sections (Defined by <code class="highlighter-rouge">forced_separate</code> list in the configuration file)</li>
+      <li>Custom Sections (Defined by <code class="highlighter-rouge">sections</code> list in configuration file)</li>
+    </ul>
+
+    <p>Inside each section, the imports are sorted alphabetically. <code class="highlighter-rouge">Isort</code> automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/PyCQA/flake8">Flake8</a></strong>: <code class="highlighter-rouge">Flake8</code> is a wrapper around <code class="highlighter-rouge">PyFlakes</code>, <code class="highlighter-rouge">pycodestyle</code>, Ned Batchelder’s <a href="https://github.com/PyCQA/mccabe">McCabe script</a>. The combination of these three linters makes sure that your code is compliant with <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> and avoids obvious code smells.</p>
+  </li>
+</ul>
+
+<h2 id="installing-pre-commit">
+<a class="anchor" href="#installing-pre-commit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing Pre-commit</h2>
+
+<ul>
+  <li>
+    <p>Install using <code class="highlighter-rouge">pip</code>:</p>
+
+    <div class="language-python highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="n">pip</span> <span class="n">install</span> <span class="n">pre</span><span class="o">-</span><span class="n">commit</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Install via <code class="highlighter-rouge">curl</code>:</p>
+
+    <div class="language-python highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="n">curl</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pre</span><span class="o">-</span><span class="n">commit</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">install</span><span class="o">-</span><span class="n">local</span><span class="o">.</span><span class="n">py</span> <span class="o">|</span> <span class="n">python</span> <span class="o">-</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="defining-the-pre-commit-config-file">
+<a class="anchor" href="#defining-the-pre-commit-config-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining the Pre-commit Config File</h2>
+
+<p>Pre-commit configuration is a <code class="highlighter-rouge">.pre-commit-config.yaml</code> file where you define your tasks that you want to run before every commit. Once you have defined your configuration, it will run automatically every time you say <code class="highlighter-rouge">git commit -m "Commit message"</code>. The following example shows how black formatter can be added to the config file:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .pre-commit-config.yaml</span>
+
+<span class="na">repos</span><span class="pi">:</span>
+<span class="pi">-</span>   <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/pre-commit/pre-commit-hooks</span>
+    <span class="na">rev</span><span class="pi">:</span> <span class="s">v2.3.0</span>
+    <span class="na">hooks</span><span class="pi">:</span>
+    <span class="pi">-</span>   <span class="na">id</span><span class="pi">:</span> <span class="s">check-yaml</span>
+    <span class="pi">-</span>   <span class="na">id</span><span class="pi">:</span> <span class="s">end-of-file-fixer</span>
+    <span class="pi">-</span>   <span class="na">id</span><span class="pi">:</span> <span class="s">trailing-whitespace</span>
+<span class="pi">-</span>   <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/psf/black</span>
+    <span class="na">rev</span><span class="pi">:</span> <span class="s">19.3b0</span>
+    <span class="na">hooks</span><span class="pi">:</span>
+    <span class="pi">-</span>   <span class="na">id</span><span class="pi">:</span> <span class="s">black</span>
+</code></pre></div></div>
+
+<h2 id="installing-the-git-hook-scripts">
+<a class="anchor" href="#installing-the-git-hook-scripts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing the Git Hook scripts</h2>
+
+<p>Run</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pre-commit <span class="nb">install</span>
+</code></pre></div></div>
+
+<p>This will set up the git hook scripts and should show the following output in your terminal:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pre-commit installed at .git/hooks/pre-commit
+</code></pre></div></div>
+
+<p>Now you will be able to implicitly or explicitly run the hooks before each commit.</p>
+
+<h2 id="running-the-hooks-against-all-the-files">
+<a class="anchor" href="#running-the-hooks-against-all-the-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the Hooks Against All the Files</h2>
+<p>By default, the hooks will run every time you say:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">-m</span> <span class="s2">"Commit message"</span>
+</code></pre></div></div>
+
+<p>However, if you wish to run the hooks manually on every file, you can do that via:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pre-commit run <span class="nt">--all-files</span>
+</code></pre></div></div>
+
+<h2 id="running-the-linters-as-pre-commit-hooks">
+<a class="anchor" href="#running-the-linters-as-pre-commit-hooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the Linters as Pre-commit Hooks</h2>
+
+<p>To run the above mentioned linters as pre-commit hooks, you need to customize the configuation in the <code class="highlighter-rouge">.pre-commit-config.yaml</code> file. However, there are a few minor issues that needs to be taken care of.</p>
+
+<ul>
+  <li>
+    <p>The default line length of <code class="highlighter-rouge">black</code> formatter is 88 (you should embrace that) but both <code class="highlighter-rouge">flake8</code> and <code class="highlighter-rouge">isort</code> cap the line at 79 characters. This conflict causes the hook to fail.</p>
+  </li>
+  <li>
+    <p>Black and isort format the imports differently</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Flake8</code> can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However since your IDE/ editor also points out these issues, you should solve these manually. So, we need to configure flake8 to ignore some minor errors.</p>
+  </li>
+</ul>
+
+<p>The following one is an example of how you can use <code class="highlighter-rouge">isort</code>, <code class="highlighter-rouge">black</code>, <code class="highlighter-rouge">flake8</code> linters without raising any conflicts.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .pre-commit-config.yaml</span>
+
+<span class="c1"># isort</span>
+<span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/pre-commit/mirrors-isort</span>
+  <span class="na">rev</span><span class="pi">:</span> <span class="s">v4.3.21</span>
+  <span class="na">hooks</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">isort</span>
+      <span class="na">args</span><span class="pi">:</span> <span class="c1"># arguments to configure isort</span>
+        <span class="c1"># making isort line length compatible with black</span>
+        <span class="pi">-</span> <span class="s">--line_length </span><span class="m">88</span>
+        <span class="pi">-</span> <span class="s">--use_parentheses True</span>
+        <span class="pi">-</span> <span class="s">--include_trailing_comma True</span>
+        <span class="pi">-</span> <span class="s">--multi_line_output </span><span class="m">3</span>
+
+<span class="c1"># black</span>
+<span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/ambv/black</span>
+  <span class="na">rev</span><span class="pi">:</span> <span class="s">stable</span>
+  <span class="na">hooks</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">black</span>
+      <span class="na">args</span><span class="pi">:</span> <span class="c1"># arguments to configure black</span>
+        <span class="pi">-</span> <span class="s">--line-length=88</span>
+        <span class="pi">-</span> <span class="s">--include='\.pyi?$'</span>
+
+        <span class="c1"># these folders wont be formatted by black</span>
+        <span class="pi">-</span> <span class="s">--exclude="""\.git |</span>
+          <span class="s">\.__pycache__|</span>
+          <span class="s">\.hg|</span>
+          <span class="s">\.mypy_cache|</span>
+          <span class="s">\.tox|</span>
+          <span class="s">\.venv|</span>
+          <span class="s">_build|</span>
+          <span class="s">buck-out|</span>
+          <span class="s">build|</span>
+          <span class="s">dist"""</span>
+
+      <span class="na">language_version</span><span class="pi">:</span> <span class="s">python3.6</span>
+
+<span class="c1"># flake8</span>
+<span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/pre-commit/pre-commit-hooks</span>
+  <span class="na">rev</span><span class="pi">:</span> <span class="s">v2.3.0</span>
+  <span class="na">hooks</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">flake8</span>
+      <span class="na">args</span><span class="pi">:</span> <span class="c1"># arguments to configure flake8</span>
+        <span class="c1"># making isort line length compatible with black</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">--max-line-length=88"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">--max-complexity=18"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">--select=B,C,E,F,W,T4,B9"</span>
+
+        <span class="c1"># these are errors that will be ignored by flake8</span>
+        <span class="c1"># check out their meaning here</span>
+        <span class="c1"># https://flake8.pycqa.org/en/latest/user/error-codes.html</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">--ignore=E203,E266,E501,W503,F403,F401,E402"</span>
+</code></pre></div></div>
+
+<p>You can add the above lines to your configuration and run</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pre-commit run <span class="nt">--all-files</span>
+</code></pre></div></div>
+
+<p>This should apply your pre-commit hooks to your code base harmoniously.</p>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="rednafi/digressions"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/digressions/python/2020/04/06/python-precommit.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/digressions/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/digressions/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/digressions/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Sporadic digressions on software, tech &amp; personal beliefs</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

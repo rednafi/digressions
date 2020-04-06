@@ -1,4 +1,172 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-04-06T03:40:20-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Generic Functions with Python’s Singledispatch</title><link href="https://rednafi.github.io/digressions/python/2020/04/05/python-singledispatch.html" rel="alternate" type="text/html" title="Generic Functions with Python's Singledispatch" /><published>2020-04-05T00:00:00-05:00</published><updated>2020-04-05T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/python/2020/04/05/python-singledispatch</id><content type="html" xml:base="https://rednafi.github.io/digressions/python/2020/04/05/python-singledispatch.html">&lt;p&gt;Recently, I was refactoring a portion of a Python function that somewhat looked like this:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-04-06T06:59:20-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Redowan’s Digressions</title><subtitle>Sporadic digressions on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Running Python Linters with Pre-commit Hooks</title><link href="https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html" rel="alternate" type="text/html" title="Running Python Linters with Pre-commit Hooks" /><published>2020-04-06T00:00:00-05:00</published><updated>2020-04-06T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/python/2020/04/06/python-precommit</id><content type="html" xml:base="https://rednafi.github.io/digressions/python/2020/04/06/python-precommit.html">&lt;p&gt;&lt;a href=&quot;https://pre-commit.com/#introduction&quot;&gt;Pre-commit hooks&lt;/a&gt; can be a neat way to run automated ad-hoc &lt;em&gt;tasks&lt;/em&gt; before submitting every git commit. These tasks may include linting, trimming trailing whitespace, running code formatter before code review etc. Let’s see how multiple Python linters and formatters can be applied automatically before each commit to impose strict conformity on your codebase.&lt;/p&gt;
+
+&lt;p&gt;To keep my sanity, I only use three linters in all of my python projects:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/psf/black&quot;&gt;Black&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;Black&lt;/code&gt; is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/timothycrosley/isort&quot;&gt;Isort&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;Isort&lt;/code&gt; is a Python utility to sort imports alphabetically, and automatically separated into sections and by type.&lt;/p&gt;
+
+    &lt;p&gt;Isort parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;Future&lt;/li&gt;
+      &lt;li&gt;Python Standard Library&lt;/li&gt;
+      &lt;li&gt;Third Party&lt;/li&gt;
+      &lt;li&gt;Current Python Project&lt;/li&gt;
+      &lt;li&gt;Explicitly Local (. before import, as in: &lt;code class=&quot;highlighter-rouge&quot;&gt;from . import x&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;Custom Separate Sections (Defined by &lt;code class=&quot;highlighter-rouge&quot;&gt;forced_separate&lt;/code&gt; list in the configuration file)&lt;/li&gt;
+      &lt;li&gt;Custom Sections (Defined by &lt;code class=&quot;highlighter-rouge&quot;&gt;sections&lt;/code&gt; list in configuration file)&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;Inside each section, the imports are sorted alphabetically. &lt;code class=&quot;highlighter-rouge&quot;&gt;Isort&lt;/code&gt; automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/PyCQA/flake8&quot;&gt;Flake8&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;Flake8&lt;/code&gt; is a wrapper around &lt;code class=&quot;highlighter-rouge&quot;&gt;PyFlakes&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;pycodestyle&lt;/code&gt;, Ned Batchelder’s &lt;a href=&quot;https://github.com/PyCQA/mccabe&quot;&gt;McCabe script&lt;/a&gt;. The combination of these three linters makes sure that your code is compliant with &lt;a href=&quot;https://www.python.org/dev/peps/pep-0008/&quot;&gt;PEP 8&lt;/a&gt; and avoids obvious code smells.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;installing-pre-commit&quot;&gt;Installing Pre-commit&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Install using &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt;:&lt;/p&gt;
+
+    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;n&quot;&gt;pip&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pre&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Install via &lt;code class=&quot;highlighter-rouge&quot;&gt;curl&lt;/code&gt;:&lt;/p&gt;
+
+    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;n&quot;&gt;curl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;https&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pre&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;install&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;local&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;py&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;python&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;defining-the-pre-commit-config-file&quot;&gt;Defining the Pre-commit Config File&lt;/h2&gt;
+
+&lt;p&gt;Pre-commit configuration is a &lt;code class=&quot;highlighter-rouge&quot;&gt;.pre-commit-config.yaml&lt;/code&gt; file where you define your tasks that you want to run before every commit. Once you have defined your configuration, it will run automatically every time you say &lt;code class=&quot;highlighter-rouge&quot;&gt;git commit -m &quot;Commit message&quot;&lt;/code&gt;. The following example shows how black formatter can be added to the config file:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# .pre-commit-config.yaml&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;repos&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt;   &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/pre-commit/pre-commit-hooks&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v2.3.0&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;hooks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt;   &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;check-yaml&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt;   &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;end-of-file-fixer&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt;   &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;trailing-whitespace&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt;   &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/psf/black&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;19.3b0&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;hooks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt;   &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;black&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;installing-the-git-hook-scripts&quot;&gt;Installing the Git Hook scripts&lt;/h2&gt;
+
+&lt;p&gt;Run&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pre-commit &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This will set up the git hook scripts and should show the following output in your terminal:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pre-commit installed at .git/hooks/pre-commit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now you will be able to implicitly or explicitly run the hooks before each commit.&lt;/p&gt;
+
+&lt;h2 id=&quot;running-the-hooks-against-all-the-files&quot;&gt;Running the Hooks Against All the Files&lt;/h2&gt;
+&lt;p&gt;By default, the hooks will run every time you say:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Commit message&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;However, if you wish to run the hooks manually on every file, you can do that via:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pre-commit run &lt;span class=&quot;nt&quot;&gt;--all-files&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;running-the-linters-as-pre-commit-hooks&quot;&gt;Running the Linters as Pre-commit Hooks&lt;/h2&gt;
+
+&lt;p&gt;To run the above mentioned linters as pre-commit hooks, you need to customize the configuation in the &lt;code class=&quot;highlighter-rouge&quot;&gt;.pre-commit-config.yaml&lt;/code&gt; file. However, there are a few minor issues that needs to be taken care of.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The default line length of &lt;code class=&quot;highlighter-rouge&quot;&gt;black&lt;/code&gt; formatter is 88 (you should embrace that) but both &lt;code class=&quot;highlighter-rouge&quot;&gt;flake8&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;isort&lt;/code&gt; cap the line at 79 characters. This conflict causes the hook to fail.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Black and isort format the imports differently&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Flake8&lt;/code&gt; can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However since your IDE/ editor also points out these issues, you should solve these manually. So, we need to configure flake8 to ignore some minor errors.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The following one is an example of how you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;isort&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;black&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;flake8&lt;/code&gt; linters without raising any conflicts.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# .pre-commit-config.yaml&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# isort&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/pre-commit/mirrors-isort&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v4.3.21&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;hooks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;isort&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# arguments to configure isort&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# making isort line length compatible with black&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--line_length &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;88&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--use_parentheses True&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--include_trailing_comma True&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--multi_line_output &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# black&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/ambv/black&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;stable&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;hooks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;black&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# arguments to configure black&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--line-length=88&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--include='\.pyi?$'&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# these folders wont be formatted by black&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--exclude=&quot;&quot;&quot;\.git |&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;\.__pycache__|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;\.hg|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;\.mypy_cache|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;\.tox|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;\.venv|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;_build|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;buck-out|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;build|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;dist&quot;&quot;&quot;&lt;/span&gt;
+
+      &lt;span class=&quot;na&quot;&gt;language_version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;python3.6&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# flake8&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/pre-commit/pre-commit-hooks&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v2.3.0&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;hooks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;flake8&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# arguments to configure flake8&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# making isort line length compatible with black&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--max-line-length=88&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--max-complexity=18&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--select=B,C,E,F,W,T4,B9&quot;&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# these are errors that will be ignored by flake8&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# check out their meaning here&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# https://flake8.pycqa.org/en/latest/user/error-codes.html&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--ignore=E203,E266,E501,W503,F403,F401,E402&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can add the above lines to your configuration and run&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pre-commit run &lt;span class=&quot;nt&quot;&gt;--all-files&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This should apply your pre-commit hooks to your code base harmoniously.&lt;/p&gt;</content><author><name></name></author><summary type="html">Pre-commit hooks can be a neat way to run automated ad-hoc tasks before submitting every git commit. These tasks may include linting, trimming trailing whitespace, running code formatter before code review etc. Let’s see how multiple Python linters and formatters can be applied automatically before each commit to impose strict conformity on your codebase.</summary></entry><entry><title type="html">Generic Functions with Python’s Singledispatch</title><link href="https://rednafi.github.io/digressions/python/2020/04/05/python-singledispatch.html" rel="alternate" type="text/html" title="Generic Functions with Python's Singledispatch" /><published>2020-04-05T00:00:00-05:00</published><updated>2020-04-05T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/python/2020/04/05/python-singledispatch</id><content type="html" xml:base="https://rednafi.github.io/digressions/python/2020/04/05/python-singledispatch.html">&lt;p&gt;Recently, I was refactoring a portion of a Python function that somewhat looked like this:&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cond0&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cond1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
@@ -964,7 +1132,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CartesianPoint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; CartesianPoint(x = 1, y = 2, z = 3)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; CartesianPoint(x = 1, y = 2, z = 3)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;This class only creates a &lt;code class=&quot;highlighter-rouge&quot;&gt;CartesianPoint&lt;/code&gt; type and shows a pretty output of the instances created from it. However, it already has two methods inside, &lt;code class=&quot;highlighter-rouge&quot;&gt;__init__&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;__repr__&lt;/code&gt; that do not do much.&lt;/p&gt;
@@ -988,7 +1156,7 @@ docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;n
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;point&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; CartesianPoint(x=1, y=2, z=3)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; CartesianPoint(x=1, y=2, z=3)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;In the above code, the magic is done by the &lt;code class=&quot;highlighter-rouge&quot;&gt;dataclass&lt;/code&gt; decorator. Dataclasses require you to use explicit &lt;a href=&quot;https://docs.python.org/3/library/typing.html&quot;&gt;type annotation&lt;/a&gt; and it automatically implements methods like &lt;code class=&quot;highlighter-rouge&quot;&gt;__init__&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;__repr__&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;__eq__&lt;/code&gt; etc beforehand. You can inspect the methods that &lt;code class=&quot;highlighter-rouge&quot;&gt;dataclass&lt;/code&gt; auto defines via python’s help.&lt;/p&gt;
@@ -1079,7 +1247,7 @@ class CartesianPoint(builtins.object)
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;point_1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;point_2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; False
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; False
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;However, if you want to compare multiple instances of dataclasses, aka add &lt;code class=&quot;highlighter-rouge&quot;&gt;__gt__&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;__lt__&lt;/code&gt; methods to your instances, you have to turn on the &lt;code class=&quot;highlighter-rouge&quot;&gt;order&lt;/code&gt; flag manually.&lt;/p&gt;
@@ -1101,7 +1269,7 @@ class CartesianPoint(builtins.object)
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;point_1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;point_2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; True
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; True
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;By default, while comparing intances, all of the fields are used. In our above case, all the fields  &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;of &lt;code class=&quot;highlighter-rouge&quot;&gt;point_1&lt;/code&gt; instance are compared with all the fields of &lt;code class=&quot;highlighter-rouge&quot;&gt;point_2&lt;/code&gt; instance. You can customize this using the &lt;code class=&quot;highlighter-rouge&quot;&gt;field&lt;/code&gt; function.&lt;/p&gt;
@@ -1127,8 +1295,8 @@ class CartesianPoint(builtins.object)
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;point_1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;point_2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; True
-&amp;gt;&amp;gt; False
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; True
+&amp;gt;&amp;gt;&amp;gt; False
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;You can see the above code prints out &lt;code class=&quot;highlighter-rouge&quot;&gt;True&lt;/code&gt; despite the intances have different &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt; attributes.&lt;/p&gt;
@@ -1158,7 +1326,7 @@ class CartesianPoint(builtins.object)
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;norm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; 10.488088481701515
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; 10.488088481701515
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;making-instances-immutable&quot;&gt;Making Instances Immutable&lt;/h2&gt;
@@ -1217,7 +1385,7 @@ FrozenInstanceError: cannot assign to field 'x'
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{point}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;origin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; {'CartesianPoint(x=0, y=0, z=0)': 'origin'}
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; {'CartesianPoint(x=0, y=0, z=0)': 'origin'}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;converting-instances-to-dicts&quot;&gt;Converting Instances to Dicts&lt;/h2&gt;
@@ -1229,7 +1397,7 @@ FrozenInstanceError: cannot assign to field 'x'
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;point&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; {'x': 1, 'y': 5, 'z': 6}
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; {'x': 1, 'y': 5, 'z': 6}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;post-init-processing&quot;&gt;Post-init Processing&lt;/h2&gt;
@@ -1252,7 +1420,7 @@ FrozenInstanceError: cannot assign to field 'x'
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;point&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt; (4, 5, 6)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; (4, 5, 6)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;refactoring-the-entire-cartesian-point-class&quot;&gt;Refactoring the Entire Cartesian Point Class&lt;/h2&gt;
