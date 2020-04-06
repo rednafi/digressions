@@ -244,17 +244,17 @@ window.onload = wrap_img;
 <h2 id="running-the-linters-as-pre-commit-hooks">
 <a class="anchor" href="#running-the-linters-as-pre-commit-hooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the Linters as Pre-commit Hooks</h2>
 
-<p>To run the above mentioned linters as pre-commit hooks, you need to customize the configuation in the <code class="highlighter-rouge">.pre-commit-config.yaml</code> file. However, there are a few minor issues that needs to be taken care of.</p>
+<p>To run the above mentioned linters as pre-commit hooks, you need to add them to the configuation in the <code class="highlighter-rouge">.pre-commit-config.yaml</code> file. However, there are a few minor issues that need to be taken care of.</p>
 
 <ul>
   <li>
-    <p>The default line length of <code class="highlighter-rouge">black</code> formatter is 88 (you should embrace that) but both <code class="highlighter-rouge">flake8</code> and <code class="highlighter-rouge">isort</code> cap the line at 79 characters. This conflict causes the hook to fail.</p>
+    <p>The default line length of <code class="highlighter-rouge">black</code> formatter is 88 (you should embrace that) but both <code class="highlighter-rouge">flake8</code> and <code class="highlighter-rouge">isort</code> cap the line at 79 characters. This conflict causes the hooks to fail.</p>
   </li>
   <li>
-    <p>Black and isort format the imports differently</p>
+    <p><code class="highlighter-rouge">Black</code> and <code class="highlighter-rouge">isort</code> format the imports differently</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">Flake8</code> can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However since your IDE/ editor also points out these issues, you should solve these manually. So, we need to configure flake8 to ignore some minor errors.</p>
+    <p><code class="highlighter-rouge">Flake8</code> can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However since your IDE/ editor also points out these issues, you should solve them manually. So, you will need to configure flake8 to ignore some minor errors.</p>
   </li>
 </ul>
 
