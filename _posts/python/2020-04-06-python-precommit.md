@@ -165,4 +165,4 @@ You can add the above lines to your configuration and run
 pre-commit run --all-files
 ```
 
-This should apply your pre-commit hooks to your code base harmoniously.
+This should apply your pre-commit hooks to your code base harmoniously. From now on, before each commit, the linters will make sure that your code complies with the rules specified in the configuration.
