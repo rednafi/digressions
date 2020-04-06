@@ -94,13 +94,13 @@ pre-commit run --all-files
 
 ## Running the Linters as Pre-commit Hooks
 
-To run the above mentioned linters as pre-commit hooks, you need to customize the configuation in the `.pre-commit-config.yaml` file. However, there are a few minor issues that needs to be taken care of.
+To run the above mentioned linters as pre-commit hooks, you need to add them to the configuation in the `.pre-commit-config.yaml` file. However, there are a few minor issues that need to be taken care of.
 
-* The default line length of `black` formatter is 88 (you should embrace that) but both `flake8` and `isort` cap the line at 79 characters. This conflict causes the hook to fail.
+* The default line length of `black` formatter is 88 (you should embrace that) but both `flake8` and `isort` cap the line at 79 characters. This conflict causes the hooks to fail.
 
-* Black and isort format the imports differently
+* `Black` and `isort` format the imports differently
 
-* `Flake8` can be overly strict at times. You'll want to ignore basic errors like unused imports, spacing issues etc. However since your IDE/ editor also points out these issues, you should solve these manually. So, we need to configure flake8 to ignore some minor errors.
+* `Flake8` can be overly strict at times. You'll want to ignore basic errors like unused imports, spacing issues etc. However since your IDE/ editor also points out these issues, you should solve them manually. So, you will need to configure flake8 to ignore some minor errors.
 
 The following one is an example of how you can use `isort`, `black`, `flake8` linters without raising any conflicts.
 
