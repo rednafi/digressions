@@ -144,7 +144,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#installing-the-git-hook-scripts">Installing the Git Hook scripts</a></li>
 <li class="toc-entry toc-h2"><a href="#running-the-hooks-against-all-the-files">Running the Hooks Against All the Files</a></li>
 <li class="toc-entry toc-h2"><a href="#running-the-linters-as-pre-commit-hooks">Running the Linters as Pre-commit Hooks</a></li>
-</ul><p><a href="https://pre-commit.com/#introduction">Pre-commit hooks</a> can be a neat way to run automated ad-hoc <em>tasks</em> before submitting every git commit. These tasks may include linting, trimming trailing whitespace, running code formatter before code review etc. Let’s see how multiple Python linters and formatters can be applied automatically before each commit to impose strict conformity on your codebase.</p>
+</ul><p><a href="https://pre-commit.com/#introduction">Pre-commit hooks</a> can be a neat way to run automated ad-hoc <em>tasks</em> before submitting a new git commit. These tasks may include linting, trimming trailing whitespaces, running code formatter before code reviews etc. Let’s see how multiple Python linters and formatters can be applied automatically before each commit to impose strict conformity on your codebase.</p>
 
 <p>To keep my sanity, I only use three linters in all of my python projects:</p>
 
@@ -167,10 +167,10 @@ window.onload = wrap_img;
       <li>Custom Sections (Defined by <code class="highlighter-rouge">sections</code> list in configuration file)</li>
     </ul>
 
-    <p>Inside each section, the imports are sorted alphabetically. <code class="highlighter-rouge">Isort</code> automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).</p>
+    <p>Inside each section, the imports are sorted alphabetically. <em>Isort</em> automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).</p>
   </li>
   <li>
-    <p><strong><a href="https://github.com/PyCQA/flake8">Flake8</a></strong>: <code class="highlighter-rouge">Flake8</code> is a wrapper around <code class="highlighter-rouge">PyFlakes</code>, <code class="highlighter-rouge">pycodestyle</code>, Ned Batchelder’s <a href="https://github.com/PyCQA/mccabe">McCabe script</a>. The combination of these three linters makes sure that your code is compliant with <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> and free from obvious code smells.</p>
+    <p><strong><a href="https://github.com/PyCQA/flake8">Flake8</a></strong>: <em>Flake8</em> is a wrapper around <em>PyFlakes</em>, <em>pycodestyle</em>, Ned Batchelder’s <a href="https://github.com/PyCQA/mccabe">McCabe script</a>. The combination of these three linters makes sure that your code is compliant with <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> and free of some obvious code smells.</p>
   </li>
 </ul>
 
@@ -197,7 +197,7 @@ window.onload = wrap_img;
 <h2 id="defining-the-pre-commit-config-file">
 <a class="anchor" href="#defining-the-pre-commit-config-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining the Pre-commit Config File</h2>
 
-<p>Pre-commit configuration is a <code class="highlighter-rouge">.pre-commit-config.yaml</code> file where you define your hooks (tasks) that you want to run before every commit. Once you have defined your hooks in the config file, they will run automatically every time you say <code class="highlighter-rouge">git commit -m "Commit message"</code>. The following example shows how black formatter can be added to the config:</p>
+<p>Pre-commit configuration is a <code class="highlighter-rouge">.pre-commit-config.yaml</code> file where you define your hooks (tasks) that you want to run before every commit. Once you have defined your hooks in the config file, they will run automatically every time you say <code class="highlighter-rouge">git commit -m "Commit message"</code>. The following example shows how <em>black</em> and a few other linters can be added as hooks to the config:</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .pre-commit-config.yaml</span>
 
@@ -236,7 +236,7 @@ window.onload = wrap_img;
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit <span class="nt">-m</span> <span class="s2">"Commit message"</span>
 </code></pre></div></div>
 
-<p>However, if you wish to run the hooks manually on every file, you can do that via:</p>
+<p>However, if you wish to run the hooks manually on every file, you can do so via:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pre-commit run <span class="nt">--all-files</span>
 </code></pre></div></div>
@@ -251,14 +251,14 @@ window.onload = wrap_img;
     <p>The default line length of <code class="highlighter-rouge">black</code> formatter is 88 (you should embrace that) but both <code class="highlighter-rouge">flake8</code> and <code class="highlighter-rouge">isort</code> cap the line at 79 characters. This raises conflict and can cause failures.</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">Black</code> and <code class="highlighter-rouge">isort</code> format the <em>imports</em> differently.</p>
+    <p><em>Black</em> and <em>isort</em> format the <em>imports</em> differently.</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">Flake8</code> can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However, since your IDE/ editor also points out these issues anyway, you should solve them manually. So, you will need to configure flake8 to ignore some minor errors.</p>
+    <p><em>Flake8</em> can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However, since your IDE / editor also points out these issues anyway, you should solve them manually. You will need to configure <em>flake8</em> to ignore some of these minor errors.</p>
   </li>
 </ul>
 
-<p>The following one is an example of how you can define your <code class="highlighter-rouge">.pre-commit-config.yaml</code> and configure the individual hooks so that <code class="highlighter-rouge">isort</code>, <code class="highlighter-rouge">black</code>, <code class="highlighter-rouge">flake8</code> linters can run without conflicts.</p>
+<p>The following one is an example of how you can define your <code class="highlighter-rouge">.pre-commit-config.yaml</code> and configure the individual hooks so that <em>isort</em>, <em>black</em>, <em>flake8</em> linters can run without any conflicts.</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .pre-commit-config.yaml</span>
 
@@ -319,7 +319,7 @@ window.onload = wrap_img;
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pre-commit run <span class="nt">--all-files</span>
 </code></pre></div></div>
 
-<p>This should apply the pre-commit hooks to your code base harmoniously. From now on, before each commit, the linters will make sure that your code complies with the rules specified in the configuration file.</p>
+<p>This should apply the pre-commit hooks to your code base harmoniously. From now on, before each commit, the hooks will make sure that your code complies with the rules imposed by the linters.</p>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
