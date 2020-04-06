@@ -13,7 +13,7 @@ To keep my sanity, I only use three linters in all of my python projects:
 
 * **[Black](https://github.com/psf/black)**: `Black` is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you're reading.
 
-* **[Isort](https://github.com/timothycrosley/isort)**: `Isort` is a Python utility to sort imports alphabetically, and automatically separated into sections and by type.
+* **[Isort](https://github.com/timothycrosley/isort)**: `Isort` is a Python utility to sort *imports* alphabetically, and automatically separated into sections and by type.
 
     Isort parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:
 
@@ -27,7 +27,7 @@ To keep my sanity, I only use three linters in all of my python projects:
 
     Inside each section, the imports are sorted alphabetically. `Isort` automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).
 
-* **[Flake8](https://github.com/PyCQA/flake8)**: `Flake8` is a wrapper around `PyFlakes`, `pycodestyle`, Ned Batchelder's [McCabe script](https://github.com/PyCQA/mccabe). The combination of these three linters makes sure that your code is compliant with [PEP 8](https://www.python.org/dev/peps/pep-0008/) and avoids obvious code smells.
+* **[Flake8](https://github.com/PyCQA/flake8)**: `Flake8` is a wrapper around `PyFlakes`, `pycodestyle`, Ned Batchelder's [McCabe script](https://github.com/PyCQA/mccabe). The combination of these three linters makes sure that your code is compliant with [PEP 8](https://www.python.org/dev/peps/pep-0008/) and free from obvious code smells.
 
 ## Installing Pre-commit
 
@@ -45,7 +45,7 @@ To keep my sanity, I only use three linters in all of my python projects:
 
 ## Defining the Pre-commit Config File
 
-Pre-commit configuration is a `.pre-commit-config.yaml` file where you define your tasks that you want to run before every commit. Once you have defined your configuration, it will run automatically every time you say `git commit -m "Commit message"`. The following example shows how black formatter can be added to the config file:
+Pre-commit configuration is a `.pre-commit-config.yaml` file where you define your hooks (tasks) that you want to run before every commit. Once you have defined your hooks in the config file, they will run automatically every time you say `git commit -m "Commit message"`. The following example shows how black formatter can be added to the config:
 
 ```yaml
 # .pre-commit-config.yaml
@@ -94,15 +94,15 @@ pre-commit run --all-files
 
 ## Running the Linters as Pre-commit Hooks
 
-To run the above mentioned linters as pre-commit hooks, you need to add them to the configuation in the `.pre-commit-config.yaml` file. However, there are a few minor issues that need to be taken care of.
+To run the above mentioned linters as pre-commit hooks, you need to add their respective settings to the `.pre-commit-config.yaml` file. However, there are a few minor issues that need to be taken care of.
 
-* The default line length of `black` formatter is 88 (you should embrace that) but both `flake8` and `isort` cap the line at 79 characters. This conflict causes the hooks to fail.
+* The default line length of `black` formatter is 88 (you should embrace that) but both `flake8` and `isort` cap the line at 79 characters. This raises conflict causes failure.
 
-* `Black` and `isort` format the imports differently
+* `Black` and `isort` format the *imports* differently.
 
-* `Flake8` can be overly strict at times. You'll want to ignore basic errors like unused imports, spacing issues etc. However since your IDE/ editor also points out these issues, you should solve them manually. So, you will need to configure flake8 to ignore some minor errors.
+* `Flake8` can be overly strict at times. You'll want to ignore basic errors like unused imports, spacing issues etc. However, since your IDE/ editor also points out these issues anyway, you should solve them manually. So, you will need to configure flake8 to ignore some minor errors.
 
-The following one is an example of how you can use `isort`, `black`, `flake8` linters without raising any conflicts.
+The following one is an example of how you can define your `.pre-commit-config.yaml` and configure the individual hooks so that `isort`, `black`, `flake8` linters can run without conflicts.
 
 ```yaml
 # .pre-commit-config.yaml
@@ -165,4 +165,4 @@ You can add the above lines to your configuration and run
 pre-commit run --all-files
 ```
 
-This should apply your pre-commit hooks to your code base harmoniously. From now on, before each commit, the linters will make sure that your code complies with the rules specified in the configuration.
+This should apply the pre-commit hooks to your code base harmoniously. From now on, before each commit, the linters will make sure that your code complies with the rules specified in the configuration.
