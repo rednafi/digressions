@@ -121,7 +121,7 @@ window.onload = wrap_img;
       • <span class="read-time" title="Estimated read time">
     
     
-      7 min read
+      8 min read
     
 </span></p>
 
@@ -386,6 +386,19 @@ entering b: B
 Inside the composite context manager: ['A', 'B']
 exiting b: B
 exiting a: A
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">ExitStack</code> can be also used in cases where you want to manage multiple resources gracefully. For example, suppose, you want to create a list from the contents of multiple files in a directory. Let’s see, how you can do so while avoiding accidental memory leakage from naive resource management.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ExitStack</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># ExitStack ensures all files are properly closed after o/p
+</span><span class="k">with</span> <span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
+    <span class="n">streams</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">"r"</span><span class="p">))</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s">"*.py"</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">]</span>
 </code></pre></div></div>
 
 <h2 id="using-context-managers-to-create-sqlalchemy-session">
