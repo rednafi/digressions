@@ -388,7 +388,7 @@ exiting b: B
 exiting a: A
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">ExitStack</code> can be also used in cases where you want to manage multiple resources gracefully. For example, suppose, you want to create a list from the contents of multiple files in a directory. Let’s see, how you can do so while avoiding accidental memory leakage from naive resource management.</p>
+<p><code class="highlighter-rouge">ExitStack</code> can be also used in cases where you want to manage multiple resources gracefully. For example, suppose, you need to create a list from the contents of multiple files in a directory. Let’s see, how you can do so while avoiding accidental memory leakage with robust resource management.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ExitStack</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
