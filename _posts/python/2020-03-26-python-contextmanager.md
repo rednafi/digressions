@@ -281,7 +281,7 @@ exiting b: B
 exiting a: A
 ```
 
-`ExitStack` can be also used in cases where you want to manage multiple resources gracefully. For example, suppose, you want to create a list from the contents of multiple files in a directory. Let's see, how you can do so while avoiding accidental memory leakage from naive resource management.
+`ExitStack` can be also used in cases where you want to manage multiple resources gracefully. For example, suppose, you need to create a list from the contents of multiple files in a directory. Let's see, how you can do so while avoiding accidental memory leakage with robust resource management.
 
 ```python
 from contextlib import ExitStack
