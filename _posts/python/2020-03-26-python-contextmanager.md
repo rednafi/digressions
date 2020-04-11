@@ -61,7 +61,6 @@ with CustomFileOpen("file.txt", "wt") as f:
 Creating context managers by writing a class with `__enter__` and `__exit__` methods, is not difficult. However, you can achieve better brevity by defining them using `contextlib.contextmanager` decorator. This decorator converts a generator function into a context manager. The blueprint for creating context manager decorators goes something like this:
 
 
-
 ```python
 @contextlib.contextmanager
 def generator_func(<arguments>):
@@ -280,6 +279,20 @@ entering b: B
 Inside the composite context manager: ['A', 'B']
 exiting b: B
 exiting a: A
+```
+
+`ExitStack` can be also used in cases where you want to manage multiple resources gracefully. For example, suppose, you want to create a list from the contents of multiple files in a directory. Let's see, how you can do so while avoiding accidental memory leakage from naive resource management.
+
+```python
+from contextlib import ExitStack
+from pathlib import Path
+
+# ExitStack ensures all files are properly closed after o/p
+with ExitStack() as stack:
+    streams = (
+        stack.enter_context(open(fname, "r")) for fname in Path("src").rglob("*.py")
+    )
+    contents = [f.read() for f in streams]
 ```
 
 ## Using Context Managers to Create SQLAlchemy Session
