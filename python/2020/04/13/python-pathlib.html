@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>No Really, Python’s Pathlib is Great | Redowan’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="No Really, Python’s Pathlib is Great" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Dipping toes into Python’s object-oriented filesystem paths" />
+<meta property="og:description" content="Dipping toes into Python’s object-oriented filesystem paths" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/04/13/python-pathlib.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/04/13/python-pathlib.html" />
+<meta property="og:site_name" content="Redowan’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-04-13T00:00:00-05:00","headline":"No Really, Python’s Pathlib is Great","description":"Dipping toes into Python’s object-oriented filesystem paths","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/04/13/python-pathlib.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/04/13/python-pathlib.html","dateModified":"2020-04-13T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Redowan's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>No Really, Python’s Pathlib is Great | Redowan’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="No Really, Python’s Pathlib is Great" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Dipping toes into Python’s object-oriented filesystem paths" />
+<meta property="og:description" content="Dipping toes into Python’s object-oriented filesystem paths" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/04/13/python-pathlib.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/04/13/python-pathlib.html" />
+<meta property="og:site_name" content="Redowan’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-04-13T00:00:00-05:00","headline":"No Really, Python’s Pathlib is Great","description":"Dipping toes into Python’s object-oriented filesystem paths","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/04/13/python-pathlib.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/04/13/python-pathlib.html","dateModified":"2020-04-13T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Redowan's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/digressions/">Redowan&#39;s Digressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/digressions/about/">About Me</a><a class="page-link" href="/digressions/search/">Search</a><a class="page-link" href="/digressions/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">No Really, Python&#39;s Pathlib is Great
+    </h1><p class="page-description">Dipping toes into Python&#39;s object-oriented filesystem paths</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-13T00:00:00-05:00"
+        itemprop="datePublished">
+        Apr 13, 2020
+      </time>
+      • <span class="read-time" title="Estimated read time">
+    
+    
+      12 min read
+    
+</span></p>
+
+    
+    <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i>
+      
+      <a class="category-tags-link"
+        href="/digressions/categories/#Python">Python</a>
+      
+      
+    </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#problem-with-pythons-path-handling">Problem with Python’s Path Handling</a></li>
+<li class="toc-entry toc-h2"><a href="#joining--creating-new-paths">Joining &amp; Creating New Paths</a></li>
+<li class="toc-entry toc-h2"><a href="#making-directories--renaming-files">Making Directories &amp; Renaming Files</a></li>
+<li class="toc-entry toc-h2"><a href="#listing-specific-types-of-files-in-a-directory">Listing Specific Types of Files in a Directory</a></li>
+<li class="toc-entry toc-h2"><a href="#opening-multiple-files--reading-their-contents">Opening Multiple Files &amp; Reading their Contents</a></li>
+<li class="toc-entry toc-h2"><a href="#anatomy-of-the-pathlib-module">Anatomy of the Pathlib Module</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#operators">Operators</a></li>
+<li class="toc-entry toc-h3"><a href="#attributes--methods">Attributes &amp; Methods</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#pathparts">Path.parts</a></li>
+<li class="toc-entry toc-h4"><a href="#pathparents--pathparent">Path.parents &amp; Path.parent</a></li>
+<li class="toc-entry toc-h4"><a href="#pathname">Path.name</a></li>
+<li class="toc-entry toc-h4"><a href="#pathsuffixes--pathsuffix">Path.suffixes &amp; Path.suffix</a></li>
+<li class="toc-entry toc-h4"><a href="#pathstem">Path.stem</a></li>
+<li class="toc-entry toc-h4"><a href="#pathis_absolute">Path.is_absolute</a></li>
+<li class="toc-entry toc-h4"><a href="#pathjoinpathother">Path.joinpath(*other)</a></li>
+<li class="toc-entry toc-h4"><a href="#pathcwd">Path.cwd()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathhome">Path.home()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathexists">Path.exists()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathexpanduser">Path.expanduser()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathglob">Path.glob()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathrglobpattern">Path.rglob(pattern)</a></li>
+<li class="toc-entry toc-h4"><a href="#pathis_dir">Path.is_dir()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathis_file">Path.is_file()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathis_absolute-1">Path.is_absolute()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathiterdir">Path.iterdir()</a></li>
+<li class="toc-entry toc-h4"><a href="#pathmkdirmode0o777-parentsfalse-exist_okfalse">Path.mkdir(mode=0o777, parents=False, exist_ok=False)</a></li>
+<li class="toc-entry toc-h4"><a href="#pathopenmoder-buffering-1-encodingnone-errorsnone-newlinenone">Path.open(mode=’r’, buffering=-1, encoding=None, errors=None, newline=None)</a></li>
+<li class="toc-entry toc-h4"><a href="#pathrenametarget">Path.rename(target)</a></li>
+<li class="toc-entry toc-h4"><a href="#pathreplacetarget">Path.replace(target)</a></li>
+<li class="toc-entry toc-h4"><a href="#pathresolvestrictfalse">Path.resolve(strict=False)</a></li>
+<li class="toc-entry toc-h4"><a href="#pathrmdir">Path.rmdir()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#so-should-you-use-it">So, Should You Use It?</a></li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+<li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
+</ul><p>When I first encountered Python’s <code class="highlighter-rouge">pathlib</code> module for path manipulation, I brushed it aside assuming it to be just an OOP way of doing what <code class="highlighter-rouge">os.path</code> already does quite well. The official doc also dubs it as the <code class="highlighter-rouge">Object-oriented filesystem paths</code>. However, back in 2019 when <a href="https://code.djangoproject.com/ticket/29983">this</a> ticket confirmed that Django was replacing <code class="highlighter-rouge">os.path</code> with <code class="highlighter-rouge">pathlib</code>, I got curious.</p>
+
+<p>The <code class="highlighter-rouge">os.path</code> module has always been the de facto standard for working with paths in Python. But the API can feel massive as it performs a plethora of other loosely coupled system related jobs. I’ve to look things up constantly even to perform some of the most basic tasks like joining multiple paths, listing all the files in a folder having a particular extension, opening multiple files in a directory etc. The <code class="highlighter-rouge">pathlib</code> module can do nearly everything that <code class="highlighter-rouge">os.path</code> offers and comes with some additional cherries on top.</p>
+
+<h2 id="problem-with-pythons-path-handling">
+<a class="anchor" href="#problem-with-pythons-path-handling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Problem with Python’s Path Handling</h2>
+
+<p>Traditionally, Python has represented file paths as regular text strings. So far, using paths as strings with <code class="highlighter-rouge">os.path</code> module has been adequate although a bit cumbersome . However, paths are not actually strings and this has necessitated the usage of multiple modules to provide disparate functionalities that are scattered all around the standard library, including libraries like <code class="highlighter-rouge">os</code>, <code class="highlighter-rouge">glob</code>, and <code class="highlighter-rouge">shutil</code>. The following code uses three modules just to copy multiple python files from current directory to another directory called <code class="highlighter-rouge">src</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="s">"*.py"</span><span class="p">):</span>
+    <span class="n">new_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">"src"</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">new_path</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The above pattern can get complicated fairly quickly and you have to know or look for specific modules and methods in a large search space to perform your path manipulations. Let’s have a look at a few more examples of performing the same tasks using <code class="highlighter-rouge">os.path</code> and <code class="highlighter-rouge">pathlib</code> modules.</p>
+
+<h2 id="joining--creating-new-paths">
+<a class="anchor" href="#joining--creating-new-paths" aria-hidden="true"><span class="octicon octicon-link"></span></a>Joining &amp; Creating New Paths</h2>
+
+<p>Say you want to achieve the following goals:</p>
+
+<ul>
+  <li>
+    <p>There is a file named <code class="highlighter-rouge">file.txt</code> in your current directory and you want to create the path for another file named <code class="highlighter-rouge">file_another.txt</code> in the same directory</p>
+  </li>
+  <li>
+    <p>Then you want to save the absolute path of <code class="highlighter-rouge">file_another.txt</code> in a new variable.</p>
+  </li>
+</ul>
+
+<p>Let’s see how you’d usually do this via the <code class="highlighter-rouge">os</code> module.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">join</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">abspath</span><span class="p">(</span><span class="s">"./file.txt"</span><span class="p">)</span>
+<span class="n">base_dir</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+<span class="n">file_another_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span> <span class="s">"file_another.txt"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The variables <code class="highlighter-rouge">file_path</code>, <code class="highlighter-rouge">base_dir</code>, <code class="highlighter-rouge">file_another_path</code> look like this on my machine:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">"file_path:"</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"base_dir:"</span><span class="p">,</span> <span class="n">base_dir</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"file_another_path:"</span><span class="p">,</span> <span class="n">file_another_path</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; file_path: /home/rednafi/code/demo/file.txt
+&gt;&gt;&gt; base_dir: /home/rednafi/code/demo
+&gt;&gt;&gt; file_another_path: /home/rednafi/code/demo/file_another.txt
+</code></pre></div></div>
+
+<p>You can use the usual string methods to transform the paths but generally, that’s not a good idea. So, instead of joining two paths with <code class="highlighter-rouge">+</code> like regular strings, you should use <code class="highlighter-rouge">os.path.join()</code> to join the components of a path. This is because different operating systems do not define paths in the same way. Windows uses <code class="highlighter-rouge">"\"</code> while Mac and *nix based OSes use <code class="highlighter-rouge">"/"</code> as a separator.  Joining with <code class="highlighter-rouge">os.path.join()</code> ensures correct path separator on the corresponding operating system. Pathlib module uses <code class="highlighter-rouge">"/"</code> operator overloading and make this a little less painful.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"file.txt"</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">base_dir</span> <span class="o">=</span> <span class="n">file_path</span><span class="o">.</span><span class="n">parent</span>
+<span class="n">file_another_path</span> <span class="o">=</span> <span class="n">base_dir</span> <span class="o">/</span> <span class="s">"another_file.txt"</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"file_path:"</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"base_dir:"</span><span class="p">,</span> <span class="n">base_dir</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"file_another_path:"</span><span class="p">,</span> <span class="n">file_another_path</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; file_path: /home/rednafi/code/demo/file.txt
+&gt;&gt;&gt; base_dir: /home/rednafi/code/demo
+&gt;&gt;&gt; file_another_path: /home/rednafi/code/demo/file_another.txt
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">resolve</code> method finds out the absolute path of the file. From there you can use the <code class="highlighter-rouge">parent</code> method to find out the base directory and add the <code class="highlighter-rouge">another_file.txt</code> accordingly.</p>
+
+<h2 id="making-directories--renaming-files">
+<a class="anchor" href="#making-directories--renaming-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Making Directories &amp; Renaming Files</h2>
+
+<p>Here’s a piece of code that:</p>
+
+<ul>
+  <li>Tries to make a <code class="highlighter-rouge">src/stuff/</code> directory when it already exists</li>
+  <li>Renames a file in the <code class="highlighter-rouge">src</code> directory called  <code class="highlighter-rouge">.config</code> to <code class="highlighter-rouge">.stuffconfig</code>:</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">"src"</span><span class="p">,</span> <span class="s">"stuff"</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s">"src/.config"</span><span class="p">,</span> <span class="s">"src/.stuffconfig"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Here is the same thing done using the <code class="highlighter-rouge">pathlib</code> module:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff"</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">Path</span><span class="p">(</span><span class="s">"src/.config"</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s">"src/.stuffconfig"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('src/.stuffconfig')
+</code></pre></div></div>
+
+<p>Notice the output where the renamed file path is printed. It’s not a simple string, rather a <code class="highlighter-rouge">PosixPath</code> object that indicates the type of host system (Linux in this case). You can almost always use stringified path values and the Path objects interchangeably.</p>
+
+<h2 id="listing-specific-types-of-files-in-a-directory">
+<a class="anchor" href="#listing-specific-types-of-files-in-a-directory" aria-hidden="true"><span class="octicon octicon-link"></span></a>Listing Specific Types of Files in a Directory</h2>
+
+<p>Let’s say you want to recursively visit nested directories and list <code class="highlighter-rouge">.py</code> files in a directroy called source. The directory looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>src/
+├── stuff
+│   ├── __init__.py
+│   └── submodule.py
+├── .stuffconfig
+├── somefiles.tar.gz
+└── module.py
+</code></pre></div></div>
+
+<p>Usually, <code class="highlighter-rouge">glob</code> module is used to resolve this kind of situation:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+
+<span class="n">top_level_py_files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s">"src/*.py"</span><span class="p">)</span>
+<span class="n">all_py_files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s">"src/**/*.py"</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">top_level_py_files</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">all_py_files</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ['src/module.py']
+&gt;&gt;&gt; ['src/module.py', 'src/stuff/__init__.py', 'src/stuff/submodule.py']
+</code></pre></div></div>
+
+<p>The above approach works perfectly. However, if you don’t want to use another module just for a single job, <code class="highlighter-rouge">pathlib</code> has embedded <code class="highlighter-rouge">glob</code> and <code class="highlighter-rouge">rglob</code> methods. You can entirely ignore glob and achieve the same result in the following way:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">top_level_py_files</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"*.py"</span><span class="p">)</span>
+<span class="n">all_py_files</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s">"*.py"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">top_level_py_files</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">all_py_files</span><span class="p">))</span>
+</code></pre></div></div>
+<p>This will also print the same as before:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; [PosixPath('src/module.py')]
+&gt;&gt;&gt; [PosixPath('src/module.py'),
+    PosixPath('src/stuff/__init__.py'),
+    PosixPath('src/stuff/submodule.py')]
+</code></pre></div></div>
+
+<p>By default, both <code class="highlighter-rouge">Path.glob</code> and <code class="highlighter-rouge">Path.rglob</code> returns a generator object. Calling <code class="highlighter-rouge">list</code> on them gives you the desired result. Notice how <code class="highlighter-rouge">rglob</code> method can discover the desired files without you having to mention the directory structure with wildcards explicitly. Pretty neat, huh?</p>
+
+<h2 id="opening-multiple-files--reading-their-contents">
+<a class="anchor" href="#opening-multiple-files--reading-their-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Opening Multiple Files &amp; Reading their Contents</h2>
+
+<p>Now let’s open the <code class="highlighter-rouge">.py</code> files and read their contents that you recursively discovered in the previous example.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+
+<span class="n">contents</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="s">"src/**/*.py"</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">contents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ['from contextlib ...']
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">pathlib</code> implementation is almost identical as above.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">contents</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s">"*.py"</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">contents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ['from contextlib import ...']
+</code></pre></div></div>
+
+<p>You can also cook up a more robust implementation with generator comprehension and context manager.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ExitStack</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># ExitStack ensures all files are properly closed after o/p
+</span><span class="k">with</span> <span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
+    <span class="n">streams</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">"r"</span><span class="p">))</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s">"*.py"</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ['from contextlib import ...']
+</code></pre></div></div>
+
+<h2 id="anatomy-of-the-pathlib-module">
+<a class="anchor" href="#anatomy-of-the-pathlib-module" aria-hidden="true"><span class="octicon octicon-link"></span></a>Anatomy of the Pathlib Module</h2>
+
+<p>Primarily, <code class="highlighter-rouge">pathlib</code> has two high-level components, <code class="highlighter-rouge">pure path</code> and <code class="highlighter-rouge">concrete path</code>. Pure paths are absolute <code class="highlighter-rouge">Path</code> objects that can be instantiated regardless of the host operating system. On the other hand, to instantiate a concrete path, you need to be on the specific type of host expected by the class. These two high level components are made out of six individual classes internally coupled by inheritance. They are:</p>
+
+<ol>
+  <li>PurePath (Useful when you want to work with windows path on a Linux machine)</li>
+  <li>PurePosixPath (Subclass of <code class="highlighter-rouge">PurePath</code>)</li>
+  <li>PureWindowsPath (Subclass of <code class="highlighter-rouge">PurePath</code>)</li>
+  <li>Path (Concrete path object, most of the time, you’ll be dealing with this one)</li>
+  <li>PosixPath (Concrete posix path, subclass of <code class="highlighter-rouge">Path</code>)</li>
+  <li>WindowsPath (Concrete windows path, subclass of <code class="highlighter-rouge">Path</code>)</li>
+</ol>
+
+<p>This UML diagram from the official docs does a better job at explaining the internal relationships between the component classes.</p>
+
+<p align="center">
+  <img src="https://docs.python.org/3/_images/pathlib-inheritance.png">
+</p>
+
+<p>Unless you are doing cross platform path manipulation, most of the time you’ll be working with the concrete <code class="highlighter-rouge">Path</code> object. So we’ll focus on the methods and properties of <code class="highlighter-rouge">Path</code> class only.</p>
+
+<h3 id="operators">
+<a class="anchor" href="#operators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Operators</h3>
+
+<p>Instead of using <code class="highlighter-rouge">os.path.join</code> you can use <code class="highlighter-rouge">/</code> operator to create child paths.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">base_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span>
+<span class="n">CHILD_DIR</span> <span class="o">=</span> <span class="n">base_dir</span> <span class="o">/</span> <span class="s">"stuff"</span>
+<span class="n">FILE</span> <span class="o">=</span> <span class="n">CHILD_DIR</span> <span class="o">/</span> <span class="s">"__init__.py"</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">FILE</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('src/stuff/__init__.py')
+</code></pre></div></div>
+
+<h3 id="attributes--methods">
+<a class="anchor" href="#attributes--methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Attributes &amp; Methods</h3>
+
+<p>The following tree shows an inexhaustive list of attributes and methods that are associated with <code class="highlighter-rouge">Path</code> object. I have cherry picked some of the attributes and methods that I use most of the time while doing path manipulation. Head over to the official docs for a more detailed list. We’ll linearly traverse through the tree and provide necessary examples to grasp their usage.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Path
+│
+├── Attributes
+│       ├── parts
+│       ├── parent &amp; parents
+│       ├── name
+│       ├── suffix &amp; suffixes
+│       └── stem
+│
+│  
+└── Methods
+        ├── joinpath(*other)
+        ├── cwd()
+        ├── home()
+        ├── exists()
+        ├── expanduser()
+        ├── glob()
+        ├── rglob(pattern)
+        ├── is_dir()
+        ├── is_file()
+        ├── is_absolute()
+        ├── iterdir()
+        ├── mkdir(mode=0o777, parents=False, exist_ok=False)
+        ├── open(mode='r', buffering=-1, encoding=None, errors=None, newline=None)
+        ├── rename(target)
+        ├── replace(target)
+        ├── resolve(strict=False)
+        └── rmdir()
+</code></pre></div></div>
+
+<p>Let’s dive into their usage one by one. For all the examples, We’ll be using the previously seen directory structure.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>src/
+├── stuff
+│   ├── __init__.py
+│   └── module.py
+├── .stuffconfig
+├── somefiles.tar.gz
+└── module.py
+</code></pre></div></div>
+
+<h4 id="pathparts">
+<a class="anchor" href="#pathparts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.parts</h4>
+
+<p>Returns a tuple containing individual components of a path.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/__init__.py"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">parts</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ('src', 'stuff', '__init__.py')
+</code></pre></div></div>
+
+<h4 id="pathparents--pathparent">
+<a class="anchor" href="#pathparents--pathparent" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.parents &amp; Path.parent</h4>
+
+<p><code class="highlighter-rouge">Path.parents</code> returns an immutable sequence containing the all logical ancestors of the path. While <code class="highlighter-rouge">Path.parent</code> returns the immediate predecessor of the path.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/__init__.py"</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">file_path</span><span class="o">.</span><span class="n">parents</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; src/stuff
+... src
+... .
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">file_path</span><span class="o">.</span><span class="n">parent</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('src/stuff')
+</code></pre></div></div>
+
+<h4 id="pathname">
+<a class="anchor" href="#pathname" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.name</h4>
+
+<p>Returns the last component of a path as string. Usually used to extract file name from a path.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/things.py"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">name</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'things.py'
+</code></pre></div></div>
+
+<h4 id="pathsuffixes--pathsuffix">
+<a class="anchor" href="#pathsuffixes--pathsuffix" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.suffixes &amp; Path.suffix</h4>
+
+<p><code class="highlighter-rouge">Path.suffixes</code> returns a list of extensions of the final component. <code class="highlighter-rouge">Path.suffix</code> only returns the last extension.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/somefile.tar.gz"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">suffixes</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ['.tar', '.gz']
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">file_path</span><span class="o">.</span><span class="n">suffix</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt;'.gz'
+</code></pre></div></div>
+
+<h4 id="pathstem">
+<a class="anchor" href="#pathstem" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.stem</h4>
+
+<p>Returns the final path component without the suffix.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/somefile.tar.gz"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">stem</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'somefile.tar'
+</code></pre></div></div>
+
+<h4 id="pathis_absolute">
+<a class="anchor" href="#pathis_absolute" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.is_absolute</h4>
+
+<p>Checks if a path is absolute or not. Return boolean value.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/somefile.tar.gz"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; False
+</code></pre></div></div>
+
+<h4 id="pathjoinpathother">
+<a class="anchor" href="#pathjoinpathother" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.joinpath(*other)</h4>
+
+<p>This method is used to combine multiple components into a complete path. This can be used as an alternative to <code class="highlighter-rouge">"/"</code> operator for joining path components.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s">"stuff"</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s">"__init__.py"</span><span class="p">)</span>
+<span class="n">file_path</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('src/stuff/__init__.py')
+</code></pre></div></div>
+
+<h4 id="pathcwd">
+<a class="anchor" href="#pathcwd" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.cwd()</h4>
+
+<p>Returns the current working directory.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/somefile.tar.gz"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('/home/rednafi/code/demo')
+</code></pre></div></div>
+
+<h4 id="pathhome">
+<a class="anchor" href="#pathhome" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.home()</h4>
+
+<p>Returns home directory.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('/home/rednafi')
+</code></pre></div></div>
+
+<h4 id="pathexists">
+<a class="anchor" href="#pathexists" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.exists()</h4>
+
+<p>Checks if a path exists or not. Returns boolean value.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/thisisabsent.py"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; False
+</code></pre></div></div>
+
+<h4 id="pathexpanduser">
+<a class="anchor" href="#pathexpanduser" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.expanduser()</h4>
+
+<p>Returns a new path with expanded <code class="highlighter-rouge">~</code> symbol.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"~/code/demo/src/stuff/somefile.tar.gz"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('/home/rednafi/code/demo/src/stuff/somefile.tar.gz')
+</code></pre></div></div>
+
+<h4 id="pathglob">
+<a class="anchor" href="#pathglob" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.glob()</h4>
+
+<p>Globs and yields all file paths matching a specific pattern. Let’s discover all the files in <code class="highlighter-rouge">src/stuff/</code> directory that have <code class="highlighter-rouge">.py</code> extension.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/"</span><span class="p">)</span>
+<span class="n">file_paths</span> <span class="o">=</span> <span class="n">dir_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"*.py"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">file_paths</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; [PosixPath('src/stuff/__init__.py'), PosixPath('src/stuff/submodule.py')]
+</code></pre></div></div>
+
+<h4 id="pathrglobpattern">
+<a class="anchor" href="#pathrglobpattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.rglob(pattern)</h4>
+
+<p>This is like <code class="highlighter-rouge">Path.glob</code> method but matches the file pattern recursively.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span>
+<span class="n">file_paths</span> <span class="o">=</span> <span class="n">dir_path</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s">"*.py"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">file_paths</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; [PosixPath('src/module.py'),
+    PosixPath('src/stuff/__init__.py'),
+    PosixPath('src/stuff/submodule.py')]
+</code></pre></div></div>
+
+<h4 id="pathis_dir">
+<a class="anchor" href="#pathis_dir" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.is_dir()</h4>
+
+<p>Checks if a path points to a directory or not. Returns boolean value.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/"</span><span class="p">)</span>
+<span class="n">dir_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; True
+</code></pre></div></div>
+
+<h4 id="pathis_file">
+<a class="anchor" href="#pathis_file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.is_file()</h4>
+
+<p>Checks if a path points to a file. Returns boolean value.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/"</span><span class="p">)</span>
+<span class="n">dir_path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; False
+</code></pre></div></div>
+
+<h4 id="pathis_absolute-1">
+<a class="anchor" href="#pathis_absolute-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.is_absolute()</h4>
+
+<p>Checks if a path is absolute or relative. Returns boolean value.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/"</span><span class="p">)</span>
+<span class="n">dir_path</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; False
+</code></pre></div></div>
+
+<h4 id="pathiterdir">
+<a class="anchor" href="#pathiterdir" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.iterdir()</h4>
+
+<p>When the path points to a directory, this yields the content path objects.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">base_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">content</span> <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">base_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; [PosixPath('src/stuff'),
+     PosixPath('src/module.py'),
+     PosixPath('src/.stuffconfig')]
+</code></pre></div></div>
+
+<h4 id="pathmkdirmode0o777-parentsfalse-exist_okfalse">
+<a class="anchor" href="#pathmkdirmode0o777-parentsfalse-exist_okfalse" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.mkdir(mode=0o777, parents=False, exist_ok=False)</h4>
+
+<p>Creates a new directory at this given path.</p>
+
+<p><strong>Parameters:</strong></p>
+
+<ul>
+  <li>
+    <p><strong>mode:</strong>(<em>str</em>) Posix permissions (mimicking the POSIX mkdir -p command)</p>
+  </li>
+  <li>
+    <p><strong>parents:</strong>(<em>boolean</em>) If parents is <code class="highlighter-rouge">True</code>, any missing parents of this path are created as needed.
+  Otherwise, if the parent is absent, <code class="highlighter-rouge">FileNotFoundError</code> is raised.</p>
+  </li>
+  <li>
+    <p><strong>exist_ok:</strong> (<em>boolean</em>) If <code class="highlighter-rouge">False</code>, FileExistsError is raised if the target directory already exists. If <code class="highlighter-rouge">True</code>, FileExistsError is ignored.</p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/other/side"</span><span class="p">)</span>
+<span class="n">dir_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="pathopenmoder-buffering-1-encodingnone-errorsnone-newlinenone">
+<a class="anchor" href="#pathopenmoder-buffering-1-encodingnone-errorsnone-newlinenone" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.open(mode=’r’, buffering=-1, encoding=None, errors=None, newline=None)</h4>
+
+<p>This is same as the built in <code class="highlighter-rouge">open</code> function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/module.py"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">contents</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"r"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; from contextlib import contextmanager
+... from time import time
+... .....
+</code></pre></div></div>
+
+<h4 id="pathrenametarget">
+<a class="anchor" href="#pathrenametarget" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.rename(target)</h4>
+
+<p>Renames this file or directory to the given target and returns a new Path instance pointing to target. This will raise <code class="highlighter-rouge">FileNotFoundError</code> if the file is not found.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/submodule.py"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">file_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s">"anothermodule.py"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('src/stuff/anothermodule.py')
+</code></pre></div></div>
+
+<h4 id="pathreplacetarget">
+<a class="anchor" href="#pathreplacetarget" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.replace(target)</h4>
+
+<p>Replaces a file or directory to the given target. Returns the new path instance.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff/anothermodule.py"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">file_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s">"Dockerfile"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('src/stuff/Dockerfile')
+</code></pre></div></div>
+
+<h4 id="pathresolvestrictfalse">
+<a class="anchor" href="#pathresolvestrictfalse" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.resolve(strict=False)</h4>
+
+<p>Make the path absolute, resolving any symlinks. A new path object is returned. If strict is <code class="highlighter-rouge">True</code> and the path doesn’t exist, <code class="highlighter-rouge">FileNotFoundError</code> will be raised.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/./stuff/Dockerfile"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('/home/rednafi/code/demo/src/stuff/Dockerfile')
+</code></pre></div></div>
+
+<h4 id="pathrmdir">
+<a class="anchor" href="#pathrmdir" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path.rmdir()</h4>
+
+<p>Removes a path pointing to a file or directory. The directory must be empty, otherwise, <code class="highlighter-rouge">OSError</code> is raised.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src/stuff"</span><span class="p">)</span>
+<span class="n">file_path</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="so-should-you-use-it">
+<a class="anchor" href="#so-should-you-use-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>So, Should You Use It?</h2>
+
+<p>Pathlib was introduced in python 3.4. However, if you are working with python 3.5 or earlier, in some special cases, you might have to convert <code class="highlighter-rouge">pathlib.Path</code> objects to regular strings. But since python 3.6, <code class="highlighter-rouge">Path</code> objects works almost everywhere you are using stringified paths. Also, the <code class="highlighter-rouge">Path</code> object nicely abstracts away the complexity that arises while working with paths in different operating systems.</p>
+
+<p>The ability to manipulate paths in an OO way and not having to rummage through the massive <code class="highlighter-rouge">os</code> or <code class="highlighter-rouge">shutil</code> module can make path manipulation a lot less painful.</p>
+
+<h2 id="references">
+<a class="anchor" href="#references" aria-hidden="true"><span class="octicon octicon-link"></span></a>References</h2>
+
+<ol>
+  <li><a href="https://docs.python.org/3/library/pathlib.html">pathlib — Object-oriented filesystem paths</a></li>
+  <li><a href="https://realpython.com/python-pathlib/">Python 3’s pathlib Module: Taming the File System</a></li>
+  <li><a href="https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/#The_os_module_is_crowded">Why you should be using pathlib</a></li>
+</ol>
+
+<h2 id="remarks">
+<a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
+
+<p>All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.</p>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="rednafi/digressions"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/digressions/python/2020/04/13/python-pathlib.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/digressions/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/digressions/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/digressions/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Sporadic digressions on software, tech &amp; personal beliefs</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

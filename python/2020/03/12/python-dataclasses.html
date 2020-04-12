@@ -173,7 +173,7 @@ window.onload = wrap_img;
 <h2 id="dataclasses">
 <a class="anchor" href="#dataclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dataclasses</h2>
 
-<p>Let’s see how dataclasses can help to improve this situation. Dataclasses were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Rewriting the above class using <code class="highlighter-rouge">dataclass</code> will look like this:</p>
+<p>Let’s see how data classes can help to improve this situation. Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Rewriting the above class using <code class="highlighter-rouge">dataclass</code> will look like this:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
@@ -193,7 +193,7 @@ window.onload = wrap_img;
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; CartesianPoint(x=1, y=2, z=3)
 </code></pre></div></div>
 
-<p>In the above code, the magic is done by the <code class="highlighter-rouge">dataclass</code> decorator. Dataclasses require you to use explicit <a href="https://docs.python.org/3/library/typing.html">type annotation</a> and it automatically implements methods like <code class="highlighter-rouge">__init__</code>, <code class="highlighter-rouge">__repr__</code>, <code class="highlighter-rouge">__eq__</code> etc beforehand. You can inspect the methods that <code class="highlighter-rouge">dataclass</code> auto defines via python’s help.</p>
+<p>In the above code, the magic is done by the <code class="highlighter-rouge">dataclass</code> decorator. Data classes require you to use explicit <a href="https://docs.python.org/3/library/typing.html">type annotation</a> and it automatically implements methods like <code class="highlighter-rouge">__init__</code>, <code class="highlighter-rouge">__repr__</code>, <code class="highlighter-rouge">__eq__</code> etc beforehand. You can inspect the methods that <code class="highlighter-rouge">dataclass</code> auto defines via python’s help.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">help</span><span class="p">(</span><span class="n">CartesianPoint</span><span class="p">)</span>
 </code></pre></div></div>
@@ -309,7 +309,7 @@ class CartesianPoint(builtins.object)
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; True
 </code></pre></div></div>
 
-<p>By default, while comparing intances, all of the fields are used. In our above case, all the fields  <code class="highlighter-rouge">x</code>, <code class="highlighter-rouge">y</code>, <code class="highlighter-rouge">z</code>of <code class="highlighter-rouge">point_1</code> instance are compared with all the fields of <code class="highlighter-rouge">point_2</code> instance. You can customize this using the <code class="highlighter-rouge">field</code> function.</p>
+<p>By default, while comparing instances, all of the fields are used. In our above case, all the fields  <code class="highlighter-rouge">x</code>, <code class="highlighter-rouge">y</code>, <code class="highlighter-rouge">z</code>of <code class="highlighter-rouge">point_1</code> instance are compared with all the fields of <code class="highlighter-rouge">point_2</code> instance. You can customize this using the <code class="highlighter-rouge">field</code> function.</p>
 
 <p>Suppose you want to acknowledge two instances as equal only when attribute <code class="highlighter-rouge">x</code> of both of them are equal. You can emulate this in the following way:</p>
 
@@ -336,7 +336,7 @@ class CartesianPoint(builtins.object)
 &gt;&gt;&gt; False
 </code></pre></div></div>
 
-<p>You can see the above code prints out <code class="highlighter-rouge">True</code> despite the intances have different <code class="highlighter-rouge">y</code> and <code class="highlighter-rouge">z</code> attributes.</p>
+<p>You can see the above code prints out <code class="highlighter-rouge">True</code> despite the instances have different <code class="highlighter-rouge">y</code> and <code class="highlighter-rouge">z</code> attributes.</p>
 
 <h2 id="adding-methods">
 <a class="anchor" href="#adding-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Adding Methods</h2>
@@ -406,7 +406,7 @@ FrozenInstanceError: cannot assign to field 'x'
 <h2 id="making-instances-hashable">
 <a class="anchor" href="#making-instances-hashable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Making Instances Hashable</h2>
 
-<p>You can turn on the <code class="highlighter-rouge">unsafe_hash</code> parameter of the <code class="highlighter-rouge">dataclass</code> decorator to make the class instances hashable. This may come in handy when you want to use your instances as dictionary keys or want to perfom set operation on them. However, if you are using <code class="highlighter-rouge">unsafe_hash</code> make sure that your dataclasses do not contain any mutable data structure in it.</p>
+<p>You can turn on the <code class="highlighter-rouge">unsafe_hash</code> parameter of the <code class="highlighter-rouge">dataclass</code> decorator to make the class instances hashable. This may come in handy when you want to use your instances as dictionary keys or want to perform set operation on them. However, if you are using <code class="highlighter-rouge">unsafe_hash</code> make sure that your dataclasses do not contain any mutable data structure in it.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
