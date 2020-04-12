@@ -696,7 +696,7 @@ file_path.rmdir()
 
 ## So, Should You Use It?
 
-Pathlib was introduced in python 3.4. However, if you are working with python 3.5 or earlier, in some special cases, you might have to convert `pathlib.Path` objects to regular strings. But since python 3.6, `Path` objects works almost everywhere you are using stringified paths. Also, the `Path` object nicely abstracts away the complexity that arises while working with paths in different operating systems.
+Pathlib was introduced in python 3.4. However, if you are working with python 3.5 or earlier, in some special cases, you might have to convert `pathlib.Path` objects to regular strings. But since python 3.6, `Path` objects work almost everywhere you are using stringified paths. Also, the `Path` object nicely abstracts away the complexity that arises while working with paths in different operating systems.
 
 The ability to manipulate paths in an OO way and not having to rummage through the massive `os` or `shutil` module can make path manipulation a lot less painful.
 
