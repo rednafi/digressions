@@ -122,6 +122,7 @@ Running this will return the same result as before.
 ```
 
 ### Example-2: Singledispatch with custom argument type
+
 Suppose, you want to dispatch your function based on custom argument type where the type will be deduced from data. Consider this example:
 
 ```python

@@ -32,7 +32,7 @@ This class only creates a `CartesianPoint` type and shows a pretty output of the
 
 ## Dataclasses
 
-Let's see how dataclasses can help to improve this situation. Dataclasses were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Rewriting the above class using `dataclass` will look like this:
+Let's see how data classes can help to improve this situation. Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Rewriting the above class using `dataclass` will look like this:
 
 
 ```python
@@ -55,7 +55,7 @@ print(point)
 >>> CartesianPoint(x=1, y=2, z=3)
 ```
 
-In the above code, the magic is done by the `dataclass` decorator. Dataclasses require you to use explicit [type annotation](https://docs.python.org/3/library/typing.html) and it automatically implements methods like `__init__`, `__repr__`, `__eq__` etc beforehand. You can inspect the methods that `dataclass` auto defines via python's help.
+In the above code, the magic is done by the `dataclass` decorator. Data classes require you to use explicit [type annotation](https://docs.python.org/3/library/typing.html) and it automatically implements methods like `__init__`, `__repr__`, `__eq__` etc beforehand. You can inspect the methods that `dataclass` auto defines via python's help.
 
 
 ```python
@@ -180,7 +180,7 @@ print(point_1 > point_2)
 >>> True
 ```
 
-By default, while comparing intances, all of the fields are used. In our above case, all the fields  `x`, `y`, `z`of `point_1` instance are compared with all the fields of `point_2` instance. You can customize this using the `field` function.
+By default, while comparing instances, all of the fields are used. In our above case, all the fields  `x`, `y`, `z`of `point_1` instance are compared with all the fields of `point_2` instance. You can customize this using the `field` function.
 
 Suppose you want to acknowledge two instances as equal only when attribute `x` of both of them are equal. You can emulate this in the following way:
 
@@ -210,7 +210,7 @@ print(point_1 < point_2)
 >>> False
 ```
 
-You can see the above code prints out `True` despite the intances have different `y` and `z` attributes.
+You can see the above code prints out `True` despite the instances have different `y` and `z` attributes.
 
 ## Adding Methods
 
@@ -286,7 +286,7 @@ FrozenInstanceError: cannot assign to field 'x'
 
 ## Making Instances Hashable
 
-You can turn on the `unsafe_hash` parameter of the `dataclass` decorator to make the class instances hashable. This may come in handy when you want to use your instances as dictionary keys or want to perfom set operation on them. However, if you are using `unsafe_hash` make sure that your dataclasses do not contain any mutable data structure in it.
+You can turn on the `unsafe_hash` parameter of the `dataclass` decorator to make the class instances hashable. This may come in handy when you want to use your instances as dictionary keys or want to perform set operation on them. However, if you are using `unsafe_hash` make sure that your dataclasses do not contain any mutable data structure in it.
 
 
 ```python

@@ -80,6 +80,7 @@ pre-commit installed at .git/hooks/pre-commit
 Now you will be able to implicitly or explicitly run the hooks before each commit.
 
 ## Running the Hooks Against All the Files
+
 By default, the hooks will run every time you say:
 
 ```bash
