@@ -310,9 +310,9 @@ Let's dive into their usage one by one. For all the examples, We'll be using the
 src/
 ├── stuff
 │   ├── __init__.py
-│   └── module.py
+│   └── submodule.py
 ├── .stuffconfig
-├── somefiles.tar.gz
+├── somefile.tar.gz
 └── module.py
 ```
 
@@ -363,12 +363,12 @@ Returns the last component of a path as string. Usually used to extract file nam
 ```python
 from pathlib import Path
 
-file_path = Path("src/things.py")
+file_path = Path("src/module.py")
 file_path.name
 ```
 
 ```
->>> 'things.py'
+>>> 'module.py'
 ```
 
 #### Path.suffixes & Path.suffix
