@@ -259,10 +259,10 @@ Instead of using `os.path.join` you can use `/` operator to create child paths.
 from pathlib import Path
 
 base_dir = Path("src")
-CHILD_DIR = base_dir / "stuff"
-FILE = CHILD_DIR / "__init__.py"
+child_dir = base_dir / "stuff"
+file_path = CHILD_DIR / "__init__.py"
 
-print(FILE)
+print(file_path)
 ```
 
 ```
