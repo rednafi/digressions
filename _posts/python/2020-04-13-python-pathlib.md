@@ -260,7 +260,7 @@ from pathlib import Path
 
 base_dir = Path("src")
 child_dir = base_dir / "stuff"
-file_path = CHILD_DIR / "__init__.py"
+file_path = child_dir / "__init__.py"
 
 print(file_path)
 ```
