@@ -414,10 +414,10 @@ window.onload = wrap_img;
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="n">base_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s">"src"</span><span class="p">)</span>
-<span class="n">CHILD_DIR</span> <span class="o">=</span> <span class="n">base_dir</span> <span class="o">/</span> <span class="s">"stuff"</span>
-<span class="n">FILE</span> <span class="o">=</span> <span class="n">CHILD_DIR</span> <span class="o">/</span> <span class="s">"__init__.py"</span>
+<span class="n">child_dir</span> <span class="o">=</span> <span class="n">base_dir</span> <span class="o">/</span> <span class="s">"stuff"</span>
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">CHILD_DIR</span> <span class="o">/</span> <span class="s">"__init__.py"</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">FILE</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 </code></pre></div></div>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; PosixPath('src/stuff/__init__.py')
