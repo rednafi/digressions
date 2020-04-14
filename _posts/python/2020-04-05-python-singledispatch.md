@@ -159,7 +159,7 @@ Running this snippet will print out:
 >>> Dog data has been processed successfully!
 ```
 
-To refactor this with `singledispatch`, you can create two data types `Cat` and `Dog`. A `class_factory` function will determine data type based on condition and `singledispatch` will take care of dispatching the appropriate implementation of the `process` function.
+To refactor this with `singledispatch`, you can create two data types `Cat` and `Dog`.When you make `Cat` and `Dog` objects from the classes and pass them through the `process` function, singledispatch will take care of dispatching the appropriate implementation of that function.
 
 ```python
 from functools import singledispatch
@@ -168,19 +168,14 @@ from dataclasses import dataclass
 
 @dataclass
 class Cat:
-    data: dict
+    genus: str
+    species: str
 
 
 @dataclass
 class Dog:
-    data: dict
-
-
-def class_factory(data):
-    if data["genus"] == "Felis" and data["bucket"] == "cat":
-        return Cat(data)
-    elif data["genus"] == "Canis" and data["bucket"] == "dog":
-        return Dog(data)
+    genus: str
+    species: str
 
 
 @singledispatch
@@ -196,15 +191,13 @@ def sub_process(obj):
 
 @process.register(Dog)
 def sub_process(obj):
+    # processing dog
     return "Dog data has been processed successfully!"
 
 
 if __name__ == "__main__":
-    cat_data = {"genus": "Felis", "species": "catus", "bucket": "cat"}
-    dog_data = {"genus": "Canis", "species": "familiaris", "bucket": "dog"}
-
-    cat_obj = class_factory(cat_data)
-    dog_obj = class_factory(dog_data)
+    cat_obj = Cat(genus="Felis", species="catus")
+    dog_obj = Dog(genus="Canis", species="familiaris")
 
     print(process(cat_obj))
     print(process(dog_obj))
