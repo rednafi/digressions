@@ -285,7 +285,7 @@ When function overloading happens based on its argument types, the resulting fun
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Dog</span> <span class="n">data</span> <span class="n">has</span> <span class="n">been</span> <span class="n">processed</span> <span class="n">successfully</span><span class="err">!</span>
 </code></pre></div></div>
 
-<p>To refactor this with <code class="highlighter-rouge">singledispatch</code>, you can create two data types <code class="highlighter-rouge">Cat</code> and <code class="highlighter-rouge">Dog</code>. A <code class="highlighter-rouge">class_factory</code> function will determine data type based on condition and <code class="highlighter-rouge">singledispatch</code> will take care of dispatching the appropriate implementation of the <code class="highlighter-rouge">process</code> function.</p>
+<p>To refactor this with <code class="highlighter-rouge">singledispatch</code>, you can create two data types <code class="highlighter-rouge">Cat</code> and <code class="highlighter-rouge">Dog</code>.When you make <code class="highlighter-rouge">Cat</code> and <code class="highlighter-rouge">Dog</code> objects from the classes and pass them through the <code class="highlighter-rouge">process</code> function, singledispatch will take care of dispatching the appropriate implementation of that function.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
@@ -293,19 +293,14 @@ When function overloading happens based on its argument types, the resulting fun
 
 <span class="o">@</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">Cat</span><span class="p">:</span>
-    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="n">genus</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">species</span><span class="p">:</span> <span class="nb">str</span>
 
 
 <span class="o">@</span><span class="n">dataclass</span>
 <span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
-    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span>
-
-
-<span class="k">def</span> <span class="nf">class_factory</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">"genus"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Felis"</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s">"bucket"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"cat"</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Cat</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">data</span><span class="p">[</span><span class="s">"genus"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Canis"</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s">"bucket"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"dog"</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Dog</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">genus</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">species</span><span class="p">:</span> <span class="nb">str</span>
 
 
 <span class="o">@</span><span class="n">singledispatch</span>
@@ -321,15 +316,13 @@ When function overloading happens based on its argument types, the resulting fun
 
 <span class="o">@</span><span class="n">process</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Dog</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">sub_process</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">"Dog data has been processed successfully!"</span>
+    <span class="c1"># processing dog
+</span>    <span class="k">return</span> <span class="s">"Dog data has been processed successfully!"</span>
 
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">cat_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"genus"</span><span class="p">:</span> <span class="s">"Felis"</span><span class="p">,</span> <span class="s">"species"</span><span class="p">:</span> <span class="s">"catus"</span><span class="p">,</span> <span class="s">"bucket"</span><span class="p">:</span> <span class="s">"cat"</span><span class="p">}</span>
-    <span class="n">dog_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"genus"</span><span class="p">:</span> <span class="s">"Canis"</span><span class="p">,</span> <span class="s">"species"</span><span class="p">:</span> <span class="s">"familiaris"</span><span class="p">,</span> <span class="s">"bucket"</span><span class="p">:</span> <span class="s">"dog"</span><span class="p">}</span>
-
-    <span class="n">cat_obj</span> <span class="o">=</span> <span class="n">class_factory</span><span class="p">(</span><span class="n">cat_data</span><span class="p">)</span>
-    <span class="n">dog_obj</span> <span class="o">=</span> <span class="n">class_factory</span><span class="p">(</span><span class="n">dog_data</span><span class="p">)</span>
+    <span class="n">cat_obj</span> <span class="o">=</span> <span class="n">Cat</span><span class="p">(</span><span class="n">genus</span><span class="o">=</span><span class="s">"Felis"</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="s">"catus"</span><span class="p">)</span>
+    <span class="n">dog_obj</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="n">genus</span><span class="o">=</span><span class="s">"Canis"</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="s">"familiaris"</span><span class="p">)</span>
 
     <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="n">cat_obj</span><span class="p">))</span>
     <span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="p">(</span><span class="n">dog_obj</span><span class="p">))</span>
