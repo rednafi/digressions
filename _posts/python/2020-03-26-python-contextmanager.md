@@ -62,13 +62,31 @@ Creating context managers by writing a class with `__enter__` and `__exit__` met
 
 
 ```python
-@contextlib.contextmanager
-def generator_func(<arguments>):
+@contextmanager
+def some_generator(<arguments>):
     <setup>
     try:
         yield <value>
     finally:
         <cleanup>
+```
+
+When you use the context manager with the `with` statement:
+
+```python
+with some_generator(<arguments>) as <variable>:
+    <body>
+```
+
+It roughly translates to:
+
+```python
+<setup>
+try:
+    <variable> = <value>
+    <body>
+finally:
+    <cleanup>
 ```
 
 Let's implement the same `CustomFileOpen` context manager with `contextmanager` decorator.
