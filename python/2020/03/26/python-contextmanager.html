@@ -194,13 +194,29 @@ window.onload = wrap_img;
 
 <p>Creating context managers by writing a class with <code class="highlighter-rouge">__enter__</code> and <code class="highlighter-rouge">__exit__</code> methods, is not difficult. However, you can achieve better brevity by defining them using <code class="highlighter-rouge">contextlib.contextmanager</code> decorator. This decorator converts a generator function into a context manager. The blueprint for creating context manager decorators goes something like this:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
-<span class="k">def</span> <span class="nf">generator_func</span><span class="p">(</span><span class="o">&lt;</span><span class="n">arguments</span><span class="o">&gt;</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">some_generator</span><span class="p">(</span><span class="o">&lt;</span><span class="n">arguments</span><span class="o">&gt;</span><span class="p">):</span>
     <span class="o">&lt;</span><span class="n">setup</span><span class="o">&gt;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">yield</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="o">&lt;</span><span class="n">cleanup</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>When you use the context manager with the <code class="highlighter-rouge">with</code> statement:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">some_generator</span><span class="p">(</span><span class="o">&lt;</span><span class="n">arguments</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">as</span> <span class="o">&lt;</span><span class="n">variable</span><span class="o">&gt;</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>It roughly translates to:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">setup</span><span class="o">&gt;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">variable</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">cleanup</span><span class="o">&gt;</span>
 </code></pre></div></div>
 
 <p>Let’s implement the same <code class="highlighter-rouge">CustomFileOpen</code> context manager with <code class="highlighter-rouge">contextmanager</code> decorator.</p>
