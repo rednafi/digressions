@@ -220,7 +220,7 @@ window.onload = wrap_img;
 </code></pre></div></div>
 
 <p>The setup code goes before the <code class="highlighter-rouge">try..finally</code> block.
-Notice the point where the generator yields. This is where the codeblock nested in the <code class="highlighter-rouge">with</code> statement gets executed. After the completion of the codeblock, the generator is then resumed. If an unhandled exception occurs in the block, it is reraised inside the generator at the point where the yield occurred. If no unhandled exception occurs, the code proceeds to the finally block and there you can run your cleanup code.</p>
+Notice the point where the generator yields. This is where the codeblock nested in the <code class="highlighter-rouge">with</code> statement gets executed. After the completion of the codeblock, the generator is then resumed. If an unhandled exception occurs in the block, it is reraised inside the generator at the point where the <code class="highlighter-rouge">yield</code> occurred and then the <code class="highlighter-rouge">finally</code> block is executed. If no unhandled exception occurs, the code gracefully proceeds to the <code class="highlighter-rouge">finally</code> block where you run your cleanup code.</p>
 
 <p>Let’s implement the same <code class="highlighter-rouge">CustomFileOpen</code> context manager with <code class="highlighter-rouge">contextmanager</code> decorator.</p>
 
