@@ -90,7 +90,7 @@ finally:
 ```
 
 The setup code goes before the `try..finally` block.
-Notice the point where the generator yields. This is where the codeblock nested in the `with` statement gets executed. After the completion of the codeblock, the generator is then resumed. If an unhandled exception occurs in the block, it is reraised inside the generator at the point where the yield occurred. If no unhandled exception occurs, the code proceeds to the finally block and there you can run your cleanup code.
+Notice the point where the generator yields. This is where the codeblock nested in the `with` statement gets executed. After the completion of the codeblock, the generator is then resumed. If an unhandled exception occurs in the block, it is reraised inside the generator at the point where the `yield` occurred and then the `finally` block is executed. If no unhandled exception occurs, the code gracefully proceeds to the `finally` block where you run your cleanup code.
 
 Let's implement the same `CustomFileOpen` context manager with `contextmanager` decorator.
 
