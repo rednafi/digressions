@@ -145,7 +145,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#nesting-contexts">Nesting Contexts</a></li>
 <li class="toc-entry toc-h2"><a href="#combining-multiple-context-managers">Combining Multiple Context Managers</a></li>
 <li class="toc-entry toc-h2"><a href="#using-context-managers-to-create-sqlalchemy-session">Using Context Managers to Create SQLAlchemy Session</a></li>
-<li class="toc-entry toc-h2"><a href="#abstract-away-exception-handling-monstrosity-with-context-managers">Abstract Away Exception Handling Monstrosity with Context Managers</a></li>
+<li class="toc-entry toc-h2"><a href="#abstract-away-exception-handling-monstrosity-with-context-managers">Abstract Away Exception Handling Monstrosity with Context Managers</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#persistent-parameters-across-http-requests">Persistent Parameters Across Http Requests</a></li>
+</ul>
+</li>
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
 </ul><p>Python’s context managers are great for resource management and stopping the propagation of leaked abstractions. You’ve probably used it while opening a file or a database connection. Usually it starts with a <code class="highlighter-rouge">with</code> statement like this:</p>
@@ -574,8 +578,29 @@ Custom handling of Zero Division Error! Printing only 2 levels of traceback..
 None
 </code></pre></div></div>
 
+<h3 id="persistent-parameters-across-http-requests">
+<a class="anchor" href="#persistent-parameters-across-http-requests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Persistent Parameters Across Http Requests</h3>
+
+<p>Another great use case for context managers is making parameters persistent across multiple http requests. Python’s <code class="highlighter-rouge">requests</code> library has a <code class="highlighter-rouge">Session</code> object that will let you easily achieve this. So if you’re making several requests to the same host, the underlying TCP connection will be reused, which can result in a significant performance increase. The following example is taken directly from <a href="https://2.python-requests.org/en/v2.8.1/user/advanced/">requests’</a> official docs. Let’s persist some cookies across requests.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://httpbin.org/cookies/set/sessioncookie/123456789'</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"http://httpbin.org/cookies"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This should show:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "cookies": {
+    "sessioncookie": "123456789"
+  }
+}
+</code></pre></div></div>
+
 <h2 id="remarks">
 <a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
+
 <p>All the code snippets are updated for python <code class="highlighter-rouge">3.8</code>. To avoid redundencies, I have purposefully excluded examples of nested with statements and now deprecated <code class="highlighter-rouge">contextlib.nested</code> function to create nested context managers.</p>
 
 <h2 id="resources">
