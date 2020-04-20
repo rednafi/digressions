@@ -9,6 +9,6 @@
 https://rednafi.github.io/digressions/
 
 # Redowan's Digressions
-powered by [fastpages](https://github.com/fastai/fastpages)_
+powered by [fastpages](https://github.com/fastai/fastpages)
 
 </div>
