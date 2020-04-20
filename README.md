@@ -8,7 +8,7 @@
 
 https://rednafi.github.io/digressions/
 
-# Redowan's Digressions
+# Red's Digressions
 powered by [fastpages](https://github.com/fastai/fastpages)
 
 </div>
