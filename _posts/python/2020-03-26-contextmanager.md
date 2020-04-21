@@ -90,7 +90,7 @@ finally:
 ```
 
 The setup code goes before the `try..finally` block.
-Notice the point where the generator yields. This is where the codeblock nested in the `with` statement gets executed. After the completion of the codeblock, the generator is then resumed. If an unhandled exception occurs in the block, it is reraised inside the generator at the point where the `yield` occurred and then the `finally` block is executed. If no unhandled exception occurs, the code gracefully proceeds to the `finally` block where you run your cleanup code.
+Notice the point where the generator yields. This is where the code block nested in the `with` statement gets executed. After the completion of the code block, the generator is then resumed. If an unhandled exception occurs in the block, it is re-raised inside the generator at the point where the `yield` occurred and then the `finally` block is executed. If no unhandled exception occurs, the code gracefully proceeds to the `finally` block where you run your cleanup code.
 
 Let's implement the same `CustomFileOpen` context manager with `contextmanager` decorator.
 
@@ -347,7 +347,7 @@ def session_scope():
         session.close()
 ```
 
-The excerpt above creates an in memory `SQLite` connection and a `session_scope` function with context manager. The session_scope function takes care of commiting and rolling back in case of exception automatically. The `session_scope` function can be used to run queries in the following way:
+The excerpt above creates an in memory `SQLite` connection and a `session_scope` function with context manager. The session_scope function takes care of committing and rolling back in case of exception automatically. The `session_scope` function can be used to run queries in the following way:
 
 
 ```python
@@ -509,6 +509,7 @@ This should show:
 All the code snippets are updated for python `3.8`. To avoid redundencies, I have purposefully excluded examples of nested with statements and now deprecated `contextlib.nested` function to create nested context managers.
 
 ## Resources
+
 1. [Python Contextlib Documentation](https://docs.python.org/3/library/contextlib.html)
 2. [Python with Context Manager - Jeff Knupp](https://jeffknupp.com/blog/2016/03/07/python-with-context-managers/)
 2. [SQLALchemy Session Creation](https://docs.sqlalchemy.org/en/13/core/engines.html)
