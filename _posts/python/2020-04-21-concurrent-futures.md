@@ -370,7 +370,7 @@ if __name__ == "__main__":
 >>> hash_all => 1673.842430114746 ms
 ```
 
-If you look closely, even in the concurrent version, the `for` loop in `hash_one` function is running sequentially. However, the other `for` loop in the `hash_all` function is being executed through multiple processes. Here, I have used 10 workers and a chunksize of 2. The number of workers and chunksize were adjusted to achieve maximum performance. As you can see the concurrent version of the above CPU intensive operation is about 9 times faster than its sequential counterpart.
+If you look closely, even in the concurrent version, the `for` loop in `hash_one` function is running sequentially. However, the other `for` loop in the `hash_all` function is being executed through multiple processes. Here, I have used 10 workers and a chunksize of 2. The number of workers and chunksize were adjusted to achieve maximum performance. As you can see the concurrent version of the above CPU intensive operation is about 11 times faster than its sequential counterpart.
 
 ## Avoiding Concurrency Pitfalls
 
