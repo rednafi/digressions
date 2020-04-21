@@ -67,7 +67,7 @@ Similar to `map(func, *iterables)` except:
 
     When using `ProcessPoolExecutor`, this method chops iterables into a number of chunks which it submits to the pool as separate tasks. The (approximate) size of these chunks can be specified by setting `chunksize` to a positive integer. For very long iterables, using a large value for `chunksize` can significantly improve performance compared to the default size of 1. With ThreadPoolExecutor, `chunksize` has no effect.
 
-## Generic Workflows for Running Concurrent Tasks
+## Generic Workflows for Running Tasks Concurrently
 
 A lot of my scripts contains some variants of the following:
 
@@ -569,7 +569,7 @@ Although intuitively, it may seem like the task of checking prime numbers should
 
 ## Remarks
 
-All the code above were written and tested on a machine running Ubuntu 18.04 and Python 3.8. Regarding your machine's configuration, you might observe different execution time for each piece of code.
+All the code above were written and tested on a machine running Ubuntu 18.04 and Python 3.8. Depending on your machine's configuration, you might observe different execution time for each piece of code.
 
 ## References
 
