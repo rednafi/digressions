@@ -518,7 +518,7 @@ if __name__ == "__main__":
 ... 19089 is prime: False
 ... 19090 is prime: False
 ... ...
-... main => 120.17250061035156 ms
+... main => 140.17250061035156 ms
 ```
 
 The multiprocessing version of the same code is even slower. The tasks doesn't justify opening so many processes.
