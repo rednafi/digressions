@@ -518,7 +518,7 @@ window.onload = wrap_img;
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; hash_all =&gt; 1673.842430114746 ms
 </code></pre></div></div>
 
-<p>If you look closely, even in the concurrent version, the <code class="highlighter-rouge">for</code> loop in <code class="highlighter-rouge">hash_one</code> function is running sequentially. However, the other <code class="highlighter-rouge">for</code> loop in the <code class="highlighter-rouge">hash_all</code> function is being executed through multiple processes. Here, I have used 10 workers and a chunksize of 2. The number of workers and chunksize were adjusted to achieve maximum performance. As you can see the concurrent version of the above CPU intensive operation is about 9 times faster than its sequential counterpart.</p>
+<p>If you look closely, even in the concurrent version, the <code class="highlighter-rouge">for</code> loop in <code class="highlighter-rouge">hash_one</code> function is running sequentially. However, the other <code class="highlighter-rouge">for</code> loop in the <code class="highlighter-rouge">hash_all</code> function is being executed through multiple processes. Here, I have used 10 workers and a chunksize of 2. The number of workers and chunksize were adjusted to achieve maximum performance. As you can see the concurrent version of the above CPU intensive operation is about 11 times faster than its sequential counterpart.</p>
 
 <h2 id="avoiding-concurrency-pitfalls">
 <a class="anchor" href="#avoiding-concurrency-pitfalls" aria-hidden="true"><span class="octicon octicon-link"></span></a>Avoiding Concurrency Pitfalls</h2>
