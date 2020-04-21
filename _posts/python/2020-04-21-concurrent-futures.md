@@ -166,7 +166,7 @@ def func(n):
 
 This will print out the name of the method and how long it took to execute it.
 
-### Download & Save Files from URLs with Multi Threading
+### Download & Save Files from URLs with Multi-threading
 
 First, let's download some pdf files from a bunch of URLs and save them to the disk. This is presumably an I/O bound task and we'll be using the `ThreadPoolExecutor` class to carry out the operation. But before that, let's do this sequentially first.
 
