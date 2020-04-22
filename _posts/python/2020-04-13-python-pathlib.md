@@ -700,13 +700,12 @@ Pathlib was introduced in python 3.4. However, if you are working with python 3.
 
 The ability to manipulate paths in an OO way and not having to rummage through the massive `os` or `shutil` module can make path manipulation a lot less painful.
 
+## Remarks
+
+All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.
 
 ## References
 
 1. [pathlib — Object-oriented filesystem paths](https://docs.python.org/3/library/pathlib.html)
 2. [Python 3's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)
 3. [Why you should be using pathlib](https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/#The_os_module_is_crowded)
-
-## Remarks
-
-All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.
