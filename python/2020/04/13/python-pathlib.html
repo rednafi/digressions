@@ -177,8 +177,8 @@ window.onload = wrap_img;
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#so-should-you-use-it">So, Should You Use It?</a></li>
-<li class="toc-entry toc-h2"><a href="#references">References</a></li>
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
 </ul><p>When I first encountered Python’s <code class="highlighter-rouge">pathlib</code> module for path manipulation, I brushed it aside assuming it to be just an OOP way of doing what <code class="highlighter-rouge">os.path</code> already does quite well. The official doc also dubs it as the <code class="highlighter-rouge">Object-oriented filesystem paths</code>. However, back in 2019 when <a href="https://code.djangoproject.com/ticket/29983">this</a> ticket confirmed that Django was replacing <code class="highlighter-rouge">os.path</code> with <code class="highlighter-rouge">pathlib</code>, I got curious.</p>
 
 <p>The <code class="highlighter-rouge">os.path</code> module has always been the de facto standard for working with paths in Python. But the API can feel massive as it performs a plethora of other loosely coupled system related jobs. I’ve to look things up constantly even to perform some of the most basic tasks like joining multiple paths, listing all the files in a folder having a particular extension, opening multiple files in a directory etc. The <code class="highlighter-rouge">pathlib</code> module can do nearly everything that <code class="highlighter-rouge">os.path</code> offers and comes with some additional cherries on top.</p>
@@ -833,6 +833,11 @@ window.onload = wrap_img;
 
 <p>The ability to manipulate paths in an OO way and not having to rummage through the massive <code class="highlighter-rouge">os</code> or <code class="highlighter-rouge">shutil</code> module can make path manipulation a lot less painful.</p>
 
+<h2 id="remarks">
+<a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
+
+<p>All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.</p>
+
 <h2 id="references">
 <a class="anchor" href="#references" aria-hidden="true"><span class="octicon octicon-link"></span></a>References</h2>
 
@@ -841,11 +846,6 @@ window.onload = wrap_img;
   <li><a href="https://realpython.com/python-pathlib/">Python 3’s pathlib Module: Taming the File System</a></li>
   <li><a href="https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/#The_os_module_is_crowded">Why you should be using pathlib</a></li>
 </ol>
-
-<h2 id="remarks">
-<a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
-
-<p>All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.</p>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
