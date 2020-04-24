@@ -248,7 +248,7 @@ This UML diagram from the official docs does a better job at explaining the inte
   <img src="https://docs.python.org/3/_images/pathlib-inheritance.png">
 </p>
 
-Unless you are doing cross platform path manipulation, most of the time you'll be working with the concrete `Path` object. So we'll focus on the methods and properties of `Path` class only.
+Unless you are doing cross platform path manipulation, most of the time you'll be working with the concrete `Path` object. So I'll focus on the methods and properties of `Path` class only.
 
 ### Operators
 

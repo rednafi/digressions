@@ -34,7 +34,7 @@ def func45(data):
     ...
 ```
 
-This pattern gets tedious when the number of conditions and actionable functions start to grow. I I was looking for a functional approach to avoid defining and calling three different functions that do very similar things. Situations like this is where [parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism) comes into play. The idea is, you have to define a single function that will be dynamically overloaded with alternative implementations based on the type of the function arguments.
+This pattern gets tedious when the number of conditions and actionable functions start to grow. I was looking for a functional approach to avoid defining and calling three different functions that do very similar things. Situations like this is where [parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism) comes into play. The idea is, you have to define a single function that will be dynamically overloaded with alternative implementations based on the type of the function arguments.
 
 ## Function Overloading & Generic Functions
 

@@ -118,7 +118,7 @@ Notice the variable `futures` where the original tasks are mapped with their cor
 
 ### Running Tasks with Executor.map
 
-Another way the results can be collected in the same order they were scheduled is via using `execuror.map()` method.
+Another way the results can be collected in the same order they're scheduled is via using `execuror.map()` method.
 
 
 ```python
@@ -130,13 +130,13 @@ with concurrent.futures.Executor() as executor:
         print(f"The result of {arg} is {res}")
 ```
 
-Notice how the map function takes the entire iterable at once. It spits out the results immdiately rather than lazily and in the same order they were scheduled. If any unhandled exception occurs during the operation, it will also be raised immediately and the execution won't go any further.
+Notice how the map function takes the entire iterable at once. It spits out the results immediately rather than lazily and in the same order they're scheduled. If any unhandled exception occurs during the operation, it'll also be raised immediately and the execution won't go any further.
 
 In Python 3.5+, `executor.map()` receives an optional argument: `chunksize`. While using `ProcessPoolExecutor`, for very long iterables, using a large value for chunksize can significantly improve performance compared to the default size of 1. With `ThreadPoolExecutor`, chunksize has no effect.
 
 ## A Few Real World Examples
 
-Before proceeding with the examples, let's write a small [decorator](https://www.python.org/dev/peps/pep-0318/) that will be helpful to measure and compare the execution time between concurrent and sequential code.
+Before proceeding with the examples, let's write a small [decorator](https://www.python.org/dev/peps/pep-0318/) that'll be helpful to measure and compare the execution time between concurrent and sequential code.
 
 
 ```python
@@ -429,7 +429,7 @@ with ThreadPoolExecutor(max_workers=1) as executor:
 
 The above situation usually happens when a subroutine produces nested `Future` object and runs runs on a single thread. In the function `wait_on_future`, the `executor.submit(pow, 5, 2)` creates another `Future` object. Since I'm running the entire thing using a single thread, the internal future object is blocking the thread and the external `executor.submit()` method inside the context manager can not use any threads. This situation can be avoided using multiple threads but in general, this is a bad design itself.
 
-Then there are situations when you might be getting lower performance with concurrent code than its sequential counterpart. This could happen for multiple reasons.
+Then there're situations when you might be getting lower performance with concurrent code than its sequential counterpart. This could happen for multiple reasons.
 
 1. Threads were used to perform CPU bound tasks
 2. Multiprocessing were used to perform I/O bound tasks
@@ -477,7 +477,7 @@ if __name__ == "__main__":
 ... main => 67.65174865722656 ms
 ```
 
-The above examples verifies whether a number in a list is prime or not. We ran the function on 1000 numbers to determine if they were prime or not. The sequential version took roughly 67ms to do that. However, look below where the threaded version of the same code takes more than double the time (140ms) to so the same task.
+The above examples verifies whether a number in a list is prime or not. We ran the function on 1000 numbers to determine if they're prime or not. The sequential version took roughly 67ms to do that. However, look below where the threaded version of the same code takes more than double the time (140ms) to so the same task.
 
 
 ```python

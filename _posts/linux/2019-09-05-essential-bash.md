@@ -722,7 +722,7 @@ set -o pipefail
 ```
 Let's have a look at each of them separately.
 
-* **set-e:** This instruction forces the bash script to exit immediately if any command has a non zero exit status. If there is an issue in any of the lines in your code, the subsequent lines simply won't run.
+* **set-e:** This instruction forces the bash script to exit immediately if any command has a non zero exit status. If there's an issue in any of the lines in your code, the subsequent lines simply won't run.
 
 * **set-u:** If your code has a reference to any variable that wasn't defined previously, this will cause the program to exit.
 

@@ -90,7 +90,7 @@ finally:
 ```
 
 The setup code goes before the `try..finally` block.
-Notice the point where the generator yields. This is where the code block nested in the `with` statement gets executed. After the completion of the code block, the generator is then resumed. If an unhandled exception occurs in the block, it is re-raised inside the generator at the point where the `yield` occurred and then the `finally` block is executed. If no unhandled exception occurs, the code gracefully proceeds to the `finally` block where you run your cleanup code.
+Notice the point where the generator yields. This is where the code block nested in the `with` statement gets executed. After the completion of the code block, the generator is then resumed. If an unhandled exception occurs in the block, it's re-raised inside the generator at the point where the `yield` occurred and then the `finally` block is executed. If no unhandled exception occurs, the code gracefully proceeds to the `finally` block where you run your cleanup code.
 
 Let's implement the same `CustomFileOpen` context manager with `contextmanager` decorator.
 
@@ -224,7 +224,7 @@ exiting : B
 exiting : A
 ```
 
-Notice the order they were closed. Context managers are treated as a stack, and should be exited in reverse order in which they were entered. If an exception occurs, this order matters, as any context manager could suppress the exception, at which point the remaining managers will not even get notified of this. The `__exit__` method is also permitted to raise a different exception, and other context managers then should be able to handle that new exception.
+Notice the order they're closed. Context managers are treated as a stack, and should be exited in reverse order in which they're entered. If an exception occurs, this order matters, as any context manager could suppress the exception, at which point the remaining managers will not even get notified of this. The `__exit__` method is also permitted to raise a different exception, and other context managers then should be able to handle that new exception.
 
 ## Combining Multiple Context Managers
 

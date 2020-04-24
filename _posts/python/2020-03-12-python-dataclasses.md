@@ -329,7 +329,7 @@ print(asdict(point))
 
 ## Post-init Processing
 
-When dataclass generates the `__init__` method, internally it will call `_post_init__` method. You can add additional processing in the `__post_init__` method. Here, I have added another attribute `tup` that returns the cartesian point as a tuple.
+When dataclass generates the `__init__` method, internally it'll call `_post_init__` method. You can add additional processing in the `__post_init__` method. Here, I have added another attribute `tup` that returns the cartesian point as a tuple.
 
 
 ```python
