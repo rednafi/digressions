@@ -444,7 +444,7 @@ FrozenInstanceError: cannot assign to field 'x'
 <h2 id="post-init-processing">
 <a class="anchor" href="#post-init-processing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Post-init Processing</h2>
 
-<p>When dataclass generates the <code class="highlighter-rouge">__init__</code> method, internally it will call <code class="highlighter-rouge">_post_init__</code> method. You can add additional processing in the <code class="highlighter-rouge">__post_init__</code> method. Here, I have added another attribute <code class="highlighter-rouge">tup</code> that returns the cartesian point as a tuple.</p>
+<p>When dataclass generates the <code class="highlighter-rouge">__init__</code> method, internally it’ll call <code class="highlighter-rouge">_post_init__</code> method. You can add additional processing in the <code class="highlighter-rouge">__post_init__</code> method. Here, I have added another attribute <code class="highlighter-rouge">tup</code> that returns the cartesian point as a tuple.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 

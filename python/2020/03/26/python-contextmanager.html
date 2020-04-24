@@ -224,7 +224,7 @@ window.onload = wrap_img;
 </code></pre></div></div>
 
 <p>The setup code goes before the <code class="highlighter-rouge">try..finally</code> block.
-Notice the point where the generator yields. This is where the code block nested in the <code class="highlighter-rouge">with</code> statement gets executed. After the completion of the code block, the generator is then resumed. If an unhandled exception occurs in the block, it is re-raised inside the generator at the point where the <code class="highlighter-rouge">yield</code> occurred and then the <code class="highlighter-rouge">finally</code> block is executed. If no unhandled exception occurs, the code gracefully proceeds to the <code class="highlighter-rouge">finally</code> block where you run your cleanup code.</p>
+Notice the point where the generator yields. This is where the code block nested in the <code class="highlighter-rouge">with</code> statement gets executed. After the completion of the code block, the generator is then resumed. If an unhandled exception occurs in the block, it’s re-raised inside the generator at the point where the <code class="highlighter-rouge">yield</code> occurred and then the <code class="highlighter-rouge">finally</code> block is executed. If no unhandled exception occurs, the code gracefully proceeds to the <code class="highlighter-rouge">finally</code> block where you run your cleanup code.</p>
 
 <p>Let’s implement the same <code class="highlighter-rouge">CustomFileOpen</code> context manager with <code class="highlighter-rouge">contextmanager</code> decorator.</p>
 
@@ -344,7 +344,7 @@ exiting : B
 exiting : A
 </code></pre></div></div>
 
-<p>Notice the order they were closed. Context managers are treated as a stack, and should be exited in reverse order in which they were entered. If an exception occurs, this order matters, as any context manager could suppress the exception, at which point the remaining managers will not even get notified of this. The <code class="highlighter-rouge">__exit__</code> method is also permitted to raise a different exception, and other context managers then should be able to handle that new exception.</p>
+<p>Notice the order they’re closed. Context managers are treated as a stack, and should be exited in reverse order in which they’re entered. If an exception occurs, this order matters, as any context manager could suppress the exception, at which point the remaining managers will not even get notified of this. The <code class="highlighter-rouge">__exit__</code> method is also permitted to raise a different exception, and other context managers then should be able to handle that new exception.</p>
 
 <h2 id="combining-multiple-context-managers">
 <a class="anchor" href="#combining-multiple-context-managers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Combining Multiple Context Managers</h2>

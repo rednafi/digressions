@@ -278,7 +278,7 @@ window.onload = wrap_img;
 <h3 id="running-tasks-with-executormap">
 <a class="anchor" href="#running-tasks-with-executormap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running Tasks with Executor.map</h3>
 
-<p>Another way the results can be collected in the same order they were scheduled is via using <code class="highlighter-rouge">execuror.map()</code> method.</p>
+<p>Another way the results can be collected in the same order they’re scheduled is via using <code class="highlighter-rouge">execuror.map()</code> method.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">concurrent.futures</span>
 
@@ -288,14 +288,14 @@ window.onload = wrap_img;
         <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"The result of {arg} is {res}"</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Notice how the map function takes the entire iterable at once. It spits out the results immdiately rather than lazily and in the same order they were scheduled. If any unhandled exception occurs during the operation, it will also be raised immediately and the execution won’t go any further.</p>
+<p>Notice how the map function takes the entire iterable at once. It spits out the results immediately rather than lazily and in the same order they’re scheduled. If any unhandled exception occurs during the operation, it’ll also be raised immediately and the execution won’t go any further.</p>
 
 <p>In Python 3.5+, <code class="highlighter-rouge">executor.map()</code> receives an optional argument: <code class="highlighter-rouge">chunksize</code>. While using <code class="highlighter-rouge">ProcessPoolExecutor</code>, for very long iterables, using a large value for chunksize can significantly improve performance compared to the default size of 1. With <code class="highlighter-rouge">ThreadPoolExecutor</code>, chunksize has no effect.</p>
 
 <h2 id="a-few-real-world-examples">
 <a class="anchor" href="#a-few-real-world-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Few Real World Examples</h2>
 
-<p>Before proceeding with the examples, let’s write a small <a href="https://www.python.org/dev/peps/pep-0318/">decorator</a> that will be helpful to measure and compare the execution time between concurrent and sequential code.</p>
+<p>Before proceeding with the examples, let’s write a small <a href="https://www.python.org/dev/peps/pep-0318/">decorator</a> that’ll be helpful to measure and compare the execution time between concurrent and sequential code.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
@@ -573,7 +573,7 @@ window.onload = wrap_img;
 
 <p>The above situation usually happens when a subroutine produces nested <code class="highlighter-rouge">Future</code> object and runs runs on a single thread. In the function <code class="highlighter-rouge">wait_on_future</code>, the <code class="highlighter-rouge">executor.submit(pow, 5, 2)</code> creates another <code class="highlighter-rouge">Future</code> object. Since I’m running the entire thing using a single thread, the internal future object is blocking the thread and the external <code class="highlighter-rouge">executor.submit()</code> method inside the context manager can not use any threads. This situation can be avoided using multiple threads but in general, this is a bad design itself.</p>
 
-<p>Then there are situations when you might be getting lower performance with concurrent code than its sequential counterpart. This could happen for multiple reasons.</p>
+<p>Then there’re situations when you might be getting lower performance with concurrent code than its sequential counterpart. This could happen for multiple reasons.</p>
 
 <ol>
   <li>Threads were used to perform CPU bound tasks</li>
@@ -620,7 +620,7 @@ window.onload = wrap_img;
 ... main =&gt; 67.65174865722656 ms
 </code></pre></div></div>
 
-<p>The above examples verifies whether a number in a list is prime or not. We ran the function on 1000 numbers to determine if they were prime or not. The sequential version took roughly 67ms to do that. However, look below where the threaded version of the same code takes more than double the time (140ms) to so the same task.</p>
+<p>The above examples verifies whether a number in a list is prime or not. We ran the function on 1000 numbers to determine if they’re prime or not. The sequential version took roughly 67ms to do that. However, look below where the threaded version of the same code takes more than double the time (140ms) to so the same task.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ProcessPoolExecutor</span><span class="p">,</span> <span class="n">ThreadPoolExecutor</span>
 <span class="kn">import</span> <span class="nn">math</span>
