@@ -567,7 +567,7 @@ if __name__ == "__main__":
 
 Although intuitively, it may seem like the task of checking prime numbers should be a CPU bound operation, it's also important to determine if the task itself is computationally heavy enough to justify spawning multiple threads or processes. Otherwise you might end up with complicated code that performs worse than the simple solutions.
 
-## Remarks## Remarks
+## Remarks
 
 All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.
 
