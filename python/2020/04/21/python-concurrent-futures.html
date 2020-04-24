@@ -159,7 +159,7 @@ window.onload = wrap_img;
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#avoiding-concurrency-pitfalls">Avoiding Concurrency Pitfalls</a></li>
-<li class="toc-entry toc-h2"><a href="#remarks-remarks">Remarks## Remarks</a></li>
+<li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#references">References</a></li>
 </ul><p>Writing concurrent code in Python can be tricky. Before you even start, you have to worry about all these icky stuff like whether the task at hand is I/O or CPU bound or whether putting the extra effort to achieve concurrency is even going to give you the boost you need. Also, the presence of Global Interpreter Lock, <a href="https://wiki.python.org/moin/GlobalInterpreterLock">GIL</a> foists further limitations on writing truly concurrent code. But for the sake of sanity, you can oversimplify it like this without being blatantly incorrect:</p>
 
@@ -704,8 +704,8 @@ window.onload = wrap_img;
 
 <p>Although intuitively, it may seem like the task of checking prime numbers should be a CPU bound operation, it’s also important to determine if the task itself is computationally heavy enough to justify spawning multiple threads or processes. Otherwise you might end up with complicated code that performs worse than the simple solutions.</p>
 
-<h2 id="remarks-remarks">
-<a class="anchor" href="#remarks-remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks## Remarks</h2>
+<h2 id="remarks">
+<a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
 
 <p>All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.</p>
 
