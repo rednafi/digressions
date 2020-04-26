@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-04-24T18:38:31-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Red’s Digressions</title><subtitle>Sporadic cogitations on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Migrating From Medium &amp;amp; Other Maladies</title><link href="https://rednafi.github.io/digressions/meta/2020/04/24/leaving-medium.html" rel="alternate" type="text/html" title="Migrating From Medium &amp; Other Maladies" /><published>2020-04-24T00:00:00-05:00</published><updated>2020-04-24T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/meta/2020/04/24/leaving-medium</id><content type="html" xml:base="https://rednafi.github.io/digressions/meta/2020/04/24/leaving-medium.html">&lt;p&gt;I picked up Medium primarily for dumping my thoughts and learnings immediately after discovering it back in 2016. I have published several pieces of writings on software engineering and garnered a healthy amount of audience there. Up until very recently, it has served me quite well. Medium aims to democratize online content writing by lowering the access barrier for the non-technical writers and does a fairly good job in doing so. It’s extremely easy to fire up Medium’s built-in editor and just start writing. There’s nothing to install or configure as everything is embedded into their website. The formatting tools are not fancy but adequate and the process of publishing involves merely adding a few tags and hitting the designated button. This reduction of friction usually means less focus on formatting, deployment, hosting and more focus on the actual writing. May be that’s why people outside of the tech sphere have embraced the platform wholeheartedly. Also, the platform has fantastic SEO and no matter what you are writing about, it’s almost guaranteed to gather a few eyeballs around it. There are a number of publications dedicated to different topics and they make the process of building up an audience even easier. However, the good stuffs probably end there.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-04-26T02:52:01-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Red’s Digressions</title><subtitle>Sporadic cogitations on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Migrating From Medium &amp;amp; Other Maladies</title><link href="https://rednafi.github.io/digressions/meta/2020/04/24/leaving-medium.html" rel="alternate" type="text/html" title="Migrating From Medium &amp; Other Maladies" /><published>2020-04-24T00:00:00-05:00</published><updated>2020-04-24T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/meta/2020/04/24/leaving-medium</id><content type="html" xml:base="https://rednafi.github.io/digressions/meta/2020/04/24/leaving-medium.html">&lt;p&gt;I picked up Medium primarily for dumping my thoughts and learnings immediately after discovering it back in 2016. I have published several pieces of writings on software engineering and garnered a healthy amount of audience there. Up until very recently, it has served me quite well. Medium aims to democratize online content writing by lowering the access barrier for the non-technical writers and does a fairly good job in doing so. It’s extremely easy to fire up Medium’s built-in editor and just start writing. There’s nothing to install or configure as everything is embedded into their website. The formatting tools are not fancy but adequate and the process of publishing involves merely adding a few tags and hitting the designated button. This reduction of friction usually means less focus on formatting, deployment, hosting and more focus on the actual writing. May be that’s why people outside of the tech sphere have embraced the platform wholeheartedly. Also, the platform has fantastic SEO and no matter what you are writing about, it’s almost guaranteed to gather a few eyeballs around it. There are a number of publications dedicated to different topics and they make the process of building up an audience even easier. However, the good stuffs probably end there.&lt;/p&gt;
 
 &lt;p&gt;Although Medium has been adopted by numerous technical writers and publications, it wasn’t necessarily built targeting this group and doesn’t consider them as first class citizens of the platform. I primarily write about Python, data science, software development and infosec in general. There’re multiple pain points that eventually forced me to steer away from Medium and look for better alternatives. First, It doesn’t support markdown syntax and the bare-bone formatting tools can get in the way of writing contents that have code snippets or require custom formatting. Secondly, there’s no built-in support for code syntax highlighting and you have to embed your code snippets as github gists. Managing and maintaining all these random gists can be a lot of work if you have many sizeable blogs that contain code snippets. Also, there’s no proper support for Latex syntax to render mathematical equations. That’s a huge deal breaker for me since many of my Data Science blogs use mathematical equations to explain disparate concepts. Usually, you get around this by converting the equations to images and embedding them in the blogs. But it completely borks mobile device readability. Another thing is that you don’t control your contents in the platform, Medium hosts and manages them for you. It can be both a blessing and a curse. Blessing because you don’t have to worry about deploying, hosting or managing your writings but at the same time you lose control over them too. Medium can censor you without you even knowing and as of writing this rant, you can only export your content to html, not to markdown format. So, if you ever think of leaving the platform, migrating can be big pain in the rear.&lt;/p&gt;
 
@@ -1197,9 +1197,9 @@
     &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/psf/black&quot;&gt;Black&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;Black&lt;/code&gt; is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/timothycrosley/isort&quot;&gt;Isort&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;Isort&lt;/code&gt; is a Python utility to sort &lt;em&gt;imports&lt;/em&gt; alphabetically, and automatically separated into sections and by type.&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/asottile/reorder_python_imports&quot;&gt;Reorder Python Imports&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;reorder-python-import&lt;/code&gt; is a Python utility to sort &lt;em&gt;imports&lt;/em&gt; alphabetically, and automatically separated into sections and by type. It’s basically a fork of the widely used &lt;a href=&quot;https://github.com/timothycrosley/isort&quot;&gt;isort&lt;/a&gt; tool.&lt;/p&gt;
 
-    &lt;p&gt;Isort parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:&lt;/p&gt;
+    &lt;p&gt;It parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:&lt;/p&gt;
 
     &lt;ul&gt;
       &lt;li&gt;Future&lt;/li&gt;
@@ -1211,7 +1211,7 @@
       &lt;li&gt;Custom Sections (Defined by &lt;code class=&quot;highlighter-rouge&quot;&gt;sections&lt;/code&gt; list in configuration file)&lt;/li&gt;
     &lt;/ul&gt;
 
-    &lt;p&gt;Inside each section, the imports are sorted alphabetically. &lt;em&gt;Isort&lt;/em&gt; automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).&lt;/p&gt;
+    &lt;p&gt;Inside each section, the imports are sorted alphabetically. This also automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/PyCQA/flake8&quot;&gt;Flake8&lt;/a&gt;&lt;/strong&gt;: &lt;em&gt;Flake8&lt;/em&gt; is a wrapper around &lt;em&gt;PyFlakes&lt;/em&gt;, &lt;em&gt;pycodestyle&lt;/em&gt;, Ned Batchelder’s &lt;a href=&quot;https://github.com/PyCQA/mccabe&quot;&gt;McCabe script&lt;/a&gt;. The combination of these three linters makes sure that your code is compliant with &lt;a href=&quot;https://www.python.org/dev/peps/pep-0008/&quot;&gt;PEP 8&lt;/a&gt; and free of some obvious code smells.&lt;/p&gt;
@@ -1266,7 +1266,7 @@
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pre-commit installed at .git/hooks/pre-commit
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Now you will be able to implicitly or explicitly run the hooks before each commit.&lt;/p&gt;
+&lt;p&gt;Now you’ll be able to implicitly or explicitly run the hooks before each commit.&lt;/p&gt;
 
 &lt;h2 id=&quot;running-the-hooks-against-all-the-files&quot;&gt;Running the Hooks Against All the Files&lt;/h2&gt;
 
@@ -1286,10 +1286,7 @@
 
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;The default line length of &lt;code class=&quot;highlighter-rouge&quot;&gt;black&lt;/code&gt; formatter is 88 (you should embrace that) but both &lt;code class=&quot;highlighter-rouge&quot;&gt;flake8&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;isort&lt;/code&gt; cap the line at 79 characters. This raises conflict and can cause failures.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;em&gt;Black&lt;/em&gt; and &lt;em&gt;isort&lt;/em&gt; format the &lt;em&gt;imports&lt;/em&gt; differently.&lt;/p&gt;
+    &lt;p&gt;The default line length of &lt;code class=&quot;highlighter-rouge&quot;&gt;black&lt;/code&gt; formatter is 88 (you should embrace that) but &lt;code class=&quot;highlighter-rouge&quot;&gt;flake8&lt;/code&gt; caps the line at 79 characters. This raises conflict and can cause failures.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;&lt;em&gt;Flake8&lt;/em&gt; can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However, since your IDE / editor also points out these issues anyway, you should solve them manually. You will need to configure &lt;em&gt;flake8&lt;/em&gt; to ignore some of these minor errors.&lt;/p&gt;
@@ -1300,17 +1297,13 @@
 
 &lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# .pre-commit-config.yaml&lt;/span&gt;
 
-&lt;span class=&quot;c1&quot;&gt;# isort&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/pre-commit/mirrors-isort&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v4.3.21&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# reorder imports&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/asottile/reorder_python_imports&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v2.2.0&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;hooks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;isort&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# arguments to configure isort&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;# making isort line length compatible with black&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--line_length &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;88&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--use_parentheses True&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--include_trailing_comma True&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;--multi_line_output &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;reorder-python-imports&lt;/span&gt;
+
 
 &lt;span class=&quot;c1&quot;&gt;# black&lt;/span&gt;
 &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/ambv/black&lt;/span&gt;
@@ -1334,6 +1327,7 @@
           &lt;span class=&quot;s&quot;&gt;dist&quot;&quot;&quot;&lt;/span&gt;
 
       &lt;span class=&quot;na&quot;&gt;language_version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;python3.6&lt;/span&gt;
+
 
 &lt;span class=&quot;c1&quot;&gt;# flake8&lt;/span&gt;
 &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/pre-commit/pre-commit-hooks&lt;/span&gt;

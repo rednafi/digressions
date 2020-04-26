@@ -153,9 +153,9 @@ window.onload = wrap_img;
     <p><strong><a href="https://github.com/psf/black">Black</a></strong>: <code class="highlighter-rouge">Black</code> is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.</p>
   </li>
   <li>
-    <p><strong><a href="https://github.com/timothycrosley/isort">Isort</a></strong>: <code class="highlighter-rouge">Isort</code> is a Python utility to sort <em>imports</em> alphabetically, and automatically separated into sections and by type.</p>
+    <p><strong><a href="https://github.com/asottile/reorder_python_imports">Reorder Python Imports</a></strong>: <code class="highlighter-rouge">reorder-python-import</code> is a Python utility to sort <em>imports</em> alphabetically, and automatically separated into sections and by type. It’s basically a fork of the widely used <a href="https://github.com/timothycrosley/isort">isort</a> tool.</p>
 
-    <p>Isort parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:</p>
+    <p>It parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:</p>
 
     <ul>
       <li>Future</li>
@@ -167,7 +167,7 @@ window.onload = wrap_img;
       <li>Custom Sections (Defined by <code class="highlighter-rouge">sections</code> list in configuration file)</li>
     </ul>
 
-    <p>Inside each section, the imports are sorted alphabetically. <em>Isort</em> automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).</p>
+    <p>Inside each section, the imports are sorted alphabetically. This also automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).</p>
   </li>
   <li>
     <p><strong><a href="https://github.com/PyCQA/flake8">Flake8</a></strong>: <em>Flake8</em> is a wrapper around <em>PyFlakes</em>, <em>pycodestyle</em>, Ned Batchelder’s <a href="https://github.com/PyCQA/mccabe">McCabe script</a>. The combination of these three linters makes sure that your code is compliant with <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> and free of some obvious code smells.</p>
@@ -227,7 +227,7 @@ window.onload = wrap_img;
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pre-commit installed at .git/hooks/pre-commit
 </code></pre></div></div>
 
-<p>Now you will be able to implicitly or explicitly run the hooks before each commit.</p>
+<p>Now you’ll be able to implicitly or explicitly run the hooks before each commit.</p>
 
 <h2 id="running-the-hooks-against-all-the-files">
 <a class="anchor" href="#running-the-hooks-against-all-the-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the Hooks Against All the Files</h2>
@@ -249,10 +249,7 @@ window.onload = wrap_img;
 
 <ul>
   <li>
-    <p>The default line length of <code class="highlighter-rouge">black</code> formatter is 88 (you should embrace that) but both <code class="highlighter-rouge">flake8</code> and <code class="highlighter-rouge">isort</code> cap the line at 79 characters. This raises conflict and can cause failures.</p>
-  </li>
-  <li>
-    <p><em>Black</em> and <em>isort</em> format the <em>imports</em> differently.</p>
+    <p>The default line length of <code class="highlighter-rouge">black</code> formatter is 88 (you should embrace that) but <code class="highlighter-rouge">flake8</code> caps the line at 79 characters. This raises conflict and can cause failures.</p>
   </li>
   <li>
     <p><em>Flake8</em> can be overly strict at times. You’ll want to ignore basic errors like unused imports, spacing issues etc. However, since your IDE / editor also points out these issues anyway, you should solve them manually. You will need to configure <em>flake8</em> to ignore some of these minor errors.</p>
@@ -263,17 +260,13 @@ window.onload = wrap_img;
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .pre-commit-config.yaml</span>
 
-<span class="c1"># isort</span>
-<span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/pre-commit/mirrors-isort</span>
-  <span class="na">rev</span><span class="pi">:</span> <span class="s">v4.3.21</span>
+
+<span class="c1"># reorder imports</span>
+<span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/asottile/reorder_python_imports</span>
+  <span class="na">rev</span><span class="pi">:</span> <span class="s">v2.2.0</span>
   <span class="na">hooks</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">isort</span>
-      <span class="na">args</span><span class="pi">:</span> <span class="c1"># arguments to configure isort</span>
-        <span class="c1"># making isort line length compatible with black</span>
-        <span class="pi">-</span> <span class="s">--line_length </span><span class="m">88</span>
-        <span class="pi">-</span> <span class="s">--use_parentheses True</span>
-        <span class="pi">-</span> <span class="s">--include_trailing_comma True</span>
-        <span class="pi">-</span> <span class="s">--multi_line_output </span><span class="m">3</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">reorder-python-imports</span>
+
 
 <span class="c1"># black</span>
 <span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/ambv/black</span>
@@ -297,6 +290,7 @@ window.onload = wrap_img;
           <span class="s">dist"""</span>
 
       <span class="na">language_version</span><span class="pi">:</span> <span class="s">python3.6</span>
+
 
 <span class="c1"># flake8</span>
 <span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/pre-commit/pre-commit-hooks</span>
