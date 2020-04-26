@@ -13,9 +13,9 @@ To keep my sanity, I only use three linters in all of my python projects:
 
 * **[Black](https://github.com/psf/black)**: `Black` is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you're reading.
 
-* **[Isort](https://github.com/timothycrosley/isort)**: `Isort` is a Python utility to sort *imports* alphabetically, and automatically separated into sections and by type.
+* **[Reorder Python Imports](https://github.com/asottile/reorder_python_imports)**: `reorder-python-import` is a Python utility to sort *imports* alphabetically, and automatically separated into sections and by type. It's basically a fork of the widely used [isort](https://github.com/timothycrosley/isort) tool.
 
-    Isort parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:
+    It parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:
 
     - Future
     - Python Standard Library
@@ -25,7 +25,7 @@ To keep my sanity, I only use three linters in all of my python projects:
     - Custom Separate Sections (Defined by `forced_separate` list in the configuration file)
     - Custom Sections (Defined by `sections` list in configuration file)
 
-    Inside each section, the imports are sorted alphabetically. *Isort* automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).
+    Inside each section, the imports are sorted alphabetically. This also automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).
 
 * **[Flake8](https://github.com/PyCQA/flake8)**: *Flake8* is a wrapper around *PyFlakes*, *pycodestyle*, Ned Batchelder's [McCabe script](https://github.com/PyCQA/mccabe). The combination of these three linters makes sure that your code is compliant with [PEP 8](https://www.python.org/dev/peps/pep-0008/) and free of some obvious code smells.
 
@@ -77,7 +77,7 @@ This will set up the git hook scripts and should show the following output in yo
 pre-commit installed at .git/hooks/pre-commit
 ```
 
-Now you will be able to implicitly or explicitly run the hooks before each commit.
+Now you'll be able to implicitly or explicitly run the hooks before each commit.
 
 ## Running the Hooks Against All the Files
 
@@ -97,9 +97,7 @@ pre-commit run --all-files
 
 To run the above mentioned linters as pre-commit hooks, you need to add their respective settings to the `.pre-commit-config.yaml` file. However, there're a few minor issues that need to be taken care of.
 
-* The default line length of `black` formatter is 88 (you should embrace that) but both `flake8` and `isort` cap the line at 79 characters. This raises conflict and can cause failures.
-
-* *Black* and *isort* format the *imports* differently.
+* The default line length of `black` formatter is 88 (you should embrace that) but `flake8` caps the line at 79 characters. This raises conflict and can cause failures.
 
 * *Flake8* can be overly strict at times. You'll want to ignore basic errors like unused imports, spacing issues etc. However, since your IDE / editor also points out these issues anyway, you should solve them manually. You will need to configure *flake8* to ignore some of these minor errors.
 
@@ -108,17 +106,13 @@ The following one is an example of how you can define your `.pre-commit-config.y
 ```yaml
 # .pre-commit-config.yaml
 
-# isort
-- repo: https://github.com/pre-commit/mirrors-isort
-  rev: v4.3.21
+
+# reorder imports
+- repo: https://github.com/asottile/reorder_python_imports
+  rev: v2.2.0
   hooks:
-    - id: isort
-      args: # arguments to configure isort
-        # making isort line length compatible with black
-        - --line_length 88
-        - --use_parentheses True
-        - --include_trailing_comma True
-        - --multi_line_output 3
+    - id: reorder-python-imports
+
 
 # black
 - repo: https://github.com/ambv/black
@@ -142,6 +136,7 @@ The following one is an example of how you can define your `.pre-commit-config.y
           dist"""
 
       language_version: python3.6
+
 
 # flake8
 - repo: https://github.com/pre-commit/pre-commit-hooks
