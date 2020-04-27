@@ -145,11 +145,8 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#nesting-contexts">Nesting Contexts</a></li>
 <li class="toc-entry toc-h2"><a href="#combining-multiple-context-managers">Combining Multiple Context Managers</a></li>
 <li class="toc-entry toc-h2"><a href="#using-context-managers-to-create-sqlalchemy-session">Using Context Managers to Create SQLAlchemy Session</a></li>
-<li class="toc-entry toc-h2"><a href="#abstract-away-exception-handling-monstrosity-with-context-managers">Abstract Away Exception Handling Monstrosity with Context Managers</a>
-<ul>
-<li class="toc-entry toc-h3"><a href="#persistent-parameters-across-http-requests-with-context-managers">Persistent Parameters Across Http Requests with Context Managers</a></li>
-</ul>
-</li>
+<li class="toc-entry toc-h2"><a href="#abstract-away-exception-handling-monstrosity-with-context-managers">Abstract Away Exception Handling Monstrosity with Context Managers</a></li>
+<li class="toc-entry toc-h2"><a href="#persistent-parameters-across-http-requests-with-context-managers">Persistent Parameters Across Http Requests with Context Managers</a></li>
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
 </ul><p>Python’s context managers are great for resource management and stopping the propagation of leaked abstractions. You’ve probably used it while opening a file or a database connection. Usually it starts with a <code class="highlighter-rouge">with</code> statement like this:</p>
@@ -578,8 +575,8 @@ Custom handling of Zero Division Error! Printing only 2 levels of traceback..
 None
 </code></pre></div></div>
 
-<h3 id="persistent-parameters-across-http-requests-with-context-managers">
-<a class="anchor" href="#persistent-parameters-across-http-requests-with-context-managers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Persistent Parameters Across Http Requests with Context Managers</h3>
+<h2 id="persistent-parameters-across-http-requests-with-context-managers">
+<a class="anchor" href="#persistent-parameters-across-http-requests-with-context-managers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Persistent Parameters Across Http Requests with Context Managers</h2>
 
 <p>Another great use case for context managers is making parameters persistent across multiple http requests. Python’s <code class="highlighter-rouge">requests</code> library has a <code class="highlighter-rouge">Session</code> object that will let you easily achieve this. So, if you’re making several requests to the same host, the underlying TCP connection will be reused, which can result in a significant performance increase. The following example is taken directly from <a href="https://2.python-requests.org/en/v2.8.1/user/advanced/">requests’</a> official docs. Let’s persist some cookies across requests.</p>
 
