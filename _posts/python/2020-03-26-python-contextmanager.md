@@ -482,7 +482,7 @@ Custom handling of Zero Division Error! Printing only 2 levels of traceback..
 None
 ```
 
-### Persistent Parameters Across Http Requests with Context Managers
+## Persistent Parameters Across Http Requests with Context Managers
 
 Another great use case for context managers is making parameters persistent across multiple http requests. Python's `requests` library has a `Session` object that will let you easily achieve this. So, if you’re making several requests to the same host, the underlying TCP connection will be reused, which can result in a significant performance increase. The following example is taken directly from [requests'](https://2.python-requests.org/en/v2.8.1/user/advanced/) official docs. Let's persist some cookies across requests.
 
