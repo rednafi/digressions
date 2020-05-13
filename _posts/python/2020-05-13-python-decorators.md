@@ -131,7 +131,7 @@ Well, that's unusual.
 
 The `burger` function was called with the string `deli` and the returned function was bound to the name `ingr`. On calling `ingr()`, the message was still remembered and used to derive the outcome although the outer function `burger` had already finished its execution.
 
-This technique by which some data ("deli") gets attached to the code is called closure in Python. This value in the enclosing scope is remembered even when the variable goes out of scope or the function itself is removed from the current namespace. Decorators uses the idea of non-local variables multiple times and soon you'll see how.
+This technique by which some data ("deli") gets attached to the code is called closure in Python. The value in the enclosing scope is remembered even when the variable goes out of scope or the function itself is removed from the current namespace. Decorators uses the idea of non-local variables multiple times and soon you'll see how.
 
 ## Creating Decorators
 
@@ -168,7 +168,7 @@ ans()
     This will get printed after the function is called.
 ```
 
-In the above two lines, you can see a very simple decorator in action. Our `deco` function takes in a target function, manipulates the target function inside the `wrapper` function and then returns the `wrapper` function. Running the function returned by the decorator, you will get your modified result. To put it simply, decorators wraps a function and modifies its behavior.
+In the above two lines, you can see a very simple decorator in action. Our `deco` function takes in a target function, manipulates the target function inside a `wrapper` function and then returns the `wrapper` function. Running the function returned by the decorator, you will get your modified result. To put it simply, decorators wraps a function and modifies its behavior.
 
 > The decorator function runs at the time the decorated function is imported/defined, not when it is called.
 
@@ -205,9 +205,11 @@ print(ans())
     42
 ```
 
+Can you guess why the return value of the decorated function appeared in the last line instead of in the middle like before?
+
 ## The @ Syntactic Sugar
 
-The way you previously used decorator feels a little clunky. First, you have to type the name `ans` three times to call and use the decorator. Also, it becomes harder to tell apart where the decorator is actually working. So Python allows you to use decorator with the special syntax `@`. You can apply your decorators while defining your functions, like this:
+The way you've used decorator in the last section might feel a little clunky. First, you have to type the name `ans` three times to call and use the decorator. Also, it becomes harder to tell apart where the decorator is actually working. So Python allows you to use decorator with the special syntax `@`. You can apply your decorators while defining your functions, like this:
 
 
 ```python
@@ -225,7 +227,7 @@ Sometimes the above syntax is called the **pie syntax** and it's just a syntacti
 
 ## Decorating Functions with Arguments
 
-The naive decorator that we've implemented above will only work for functions that take no arguments. It'll fail and raise `TypeError` if your try to decorate a function with arguments with `deco`. Now let's create another decorator called `yell` which will take in a function that returns a string value and transform that string value to uppercase.
+The naive decorator that we've implemented above will only work for functions that take no arguments. It'll fail and raise `TypeError` if your try to decorate a function having arguments with `deco`. Now let's create another decorator called `yell` which will take in a function that returns a string value and transform that string value to uppercase.
 
 ```python
 def yell(func):
@@ -257,7 +259,7 @@ Function `hello` takes a `name:string` as parameter and returns a message as str
 
 ## Lost Identity
 
-In Python, you can introspect any object and its properties via the interactive shell. A function knows its identity, docstring etc. For instance, you can inspect the built in `abs` function in the following ways:
+In Python, you can introspect any object and its properties via the interactive shell. A function knows its identity, docstring etc. For instance, you can inspect the built in `print` function in the following ways:
 
 ```python
 print
@@ -322,7 +324,7 @@ help(hello)
 ```
 
 
-Now what's going on there. The decorator `yell` has made the function `hello` confused about its identity. Instead of reporting its own name, it takes the identity of the inner function `wrapper`. This can be confusing while doing debugging. You can fix this using builtin `functools.wraps` decorator. This will make sure that the original identity of the decorated function gets preserved.
+Now what's going on there. The decorator `yell` has made the function `hello` confused about its identity. Instead of reporting its own name, it takes the identity of the inner function `wrapper`. This can be confusing while doing debugging. You can fix this using builtin `functools.wraps` decorator. This will make sure that the original identity of the decorated function stays preserved.
 
 ```python
 import functools
@@ -353,7 +355,7 @@ hello("Galaxy")
 ```
 
 
-Introspecting the `hello` function decorated with modified decorator will give us our desired result.
+Introspecting the `hello` function decorated with modified decorator will give you the desired result.
 
 ```python
 hello.__name__
@@ -396,7 +398,7 @@ def decorator(func):
 
 ### Timer
 
-Timer decorator will help you time your callables in a non-intrusive way. It helps you while debugging and profiling your functions.
+Timer decorator will help you time your callables in a non-intrusive way. It can help you while debugging and profiling your functions.
 
 
 ```python
@@ -439,7 +441,7 @@ dothings(100_000)
 
 ### Exception Logger
 
-Just like the `timer` decorator, we can define a logger decorator that will log the state of a callable. For this demonstration, I'll be defining a exception logger that will show additional information like timestamp, argument names when an exception occurs in the decorated callable.
+Just like the `timer` decorator, we can define a logger decorator that will log the state of a callable. For this demonstration, I'll be defining a exception logger that will show additional information like timestamp, argument names when an exception occurs inside of the decorated callable.
 
 
 ```python
@@ -493,7 +495,6 @@ divint(1, 0)
 
 The decorator first prints a few info regarding the function and then raises the original error.
 
-
 ### Validation & Runtime Checks
 
 Python’s type system is strongly typed, but very dynamic. For all its benefits, this means some bugs can try to creep in, which more statically typed languages (like Java) would catch at compile time. Looking beyond even that, you may want to enforce more sophisticated, custom checks on data going in or out. Decorators can let you easily handle all of this, and apply it to many functions at once.
@@ -546,7 +547,7 @@ print(long_summary())
 
 ### Retry
 
-Imagine a situation where your defined callable fails due to some I/O related issues and you'd like to retry that again. Decorator can help you to achieve that in a reusable manner. Let's define a `retry` decorator that will rerun the decorated function multiple times if http error occurs.
+Imagine a situation where your defined callable fails due to some I/O related issues and you'd like to retry that again. Decorator can help you to achieve that in a reusable manner. Let's define a `retry` decorator that will rerun the decorated function multiple times if an http error occurs.
 
 ```python
 import functools
@@ -640,7 +641,7 @@ The decorators are called in a bottom up order. First, the decorator `greet` get
 
 ## Decorators with Arguments
 
-While defining the `retry` decorator in the previous section, you may have noticed that I've hard coded the number of times I'd like the function to retry if an http error occurs. It'd be handy if you could inject the number of tries as a parameter into the decorator and make it work accordingly. This is not a trivial task and you'll need three levels of nested functions to achieve that.
+While defining the `retry` decorator in the previous section, you may have noticed that I've hard coded the number of times I'd like the function to retry if an error occurs. It'd be handy if you could inject the number of tries as a parameter into the decorator and make it work accordingly. This is not a trivial task and you'll need three levels of nested functions to achieve that.
 
 Before doing that let's cook up a trivial example of how you can define decorators with parameters.
 
