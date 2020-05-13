@@ -8,7 +8,7 @@ categories: [Python]
 ---
 
 
-When I first learned about Python decorators, using them felt like doing  voodoo magic. Decorators can give you the ability to add new functionalities to any callable without actually touching or changing the code inside it. This can typically yield better encapsulation and help you write cleaner and more understandable code. However, decorator is considered as a fairly advanced topic in Python since understanding and writing it requires you to have command over multiple additional concepts like first class objects, higher order functions, closures etc. First, I'll try to introduce these concepts as necessary and then unravel the core concept of decorator layer by layer. So let's dive in.
+When I first learned about Python decorators, using them felt like doing voodoo magic. Decorators can give you the ability to add new functionalities to any callable without actually touching or changing the code inside it. This can typically yield better encapsulation and help you write cleaner and more understandable code. However, *decorator* is considered as a fairly advanced topic in Python since understanding and writing it requires you to have command over multiple additional concepts like first class objects, higher order functions, closures etc. First, I'll try to introduce these concepts as necessary and then unravel the core concept of decorator layer by layer. So let's dive in.
 
 ## First Class Objects
 
@@ -291,14 +291,14 @@ help(print)
 >>> Help on built-in function print in module builtins:
 
     print(...)
-        print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+    print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
 
-        Prints the values to a stream, or to sys.stdout by default.
-        Optional keyword arguments:
-        file:  a file-like object (stream); defaults to the current sys.stdout.
-        sep:   string inserted between values, default a space.
-        end:   string appended after the last value, default a newline.
-        flush: whether to forcibly flush the stream.
+    Prints the values to a stream, or to sys.stdout by default.
+    Optional keyword arguments:
+    file:  a file-like object (stream); defaults to the current sys.stdout.
+    sep:   string inserted between values, default a space.
+    end:   string appended after the last value, default a newline.
+    flush: whether to forcibly flush the stream.
 ```
 
 This introspection works similarly for functions that you defined yourself. I'll be using the previously defined `hello` function.
