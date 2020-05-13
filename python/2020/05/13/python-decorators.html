@@ -259,7 +259,7 @@ window.onload = wrap_img;
 <p>You saw examples of inner functions at work in the previous section. Nested functions can access variables of the enclosing scope. In Python, these non-local variables are read only by default and we must declare them explicitly as non-local (using <code class="highlighter-rouge">nonlocal</code> keyword) in order to modify them. Following is an example of a nested function accessing a non-local variable.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">burger</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">ingrediants</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">ingredients</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">"deli"</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="s">"steak"</span><span class="p">,</span> <span class="s">"pastrami"</span><span class="p">,</span> <span class="s">"emmental"</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s">"smashed"</span><span class="p">:</span>
@@ -267,7 +267,7 @@ window.onload = wrap_img;
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 
-    <span class="k">return</span> <span class="n">ingrediants</span>
+    <span class="k">return</span> <span class="n">ingredients</span>
 </code></pre></div></div>
 
 <p>Now run the function,</p>
