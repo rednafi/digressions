@@ -162,10 +162,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#more-decorator-examples">More Decorator Examples</a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#caching-return-values">Caching Return Values</a></li>
-</ul>
-</li>
-<li class="toc-entry toc-h2"><a href="#unit-conversion">Unit Conversion</a>
-<ul>
+<li class="toc-entry toc-h3"><a href="#unit-conversion">Unit Conversion</a></li>
 <li class="toc-entry toc-h3"><a href="#function-registration">Function Registration</a></li>
 </ul>
 </li>
@@ -1055,8 +1052,8 @@ window.onload = wrap_img;
 
 <p>Least Recently Used (LRU) Cache organizes items in order of use, allowing you to quickly identify which item hasn’t been used for the longest amount of time. In the above case, the parameter <code class="highlighter-rouge">max_size</code> refers to the maximum numbers of responses to be saved up before it starts deleting the earliest ones. While you run the decorated function, you’ll see first time it’ll take roughly 3 seconds to return the result. But if you rerun the function again with the same parameter it’ll spit the result from the cache almost instantly.</p>
 
-<h2 id="unit-conversion">
-<a class="anchor" href="#unit-conversion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Unit Conversion</h2>
+<h3 id="unit-conversion">
+<a class="anchor" href="#unit-conversion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Unit Conversion</h3>
 
 <p>The following decorator converts length from SI units to multiple other units without polluting your target function with conversion logics.</p>
 
