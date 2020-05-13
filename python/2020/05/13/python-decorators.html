@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Untangling Python Decorators | Red’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Untangling Python Decorators" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Dissecting the anatomy of decorators in Python" />
+<meta property="og:description" content="Dissecting the anatomy of decorators in Python" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html" />
+<meta property="og:site_name" content="Red’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-05-13T00:00:00-05:00","headline":"Untangling Python Decorators","description":"Dissecting the anatomy of decorators in Python","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html","dateModified":"2020-05-13T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Red's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Untangling Python Decorators | Red’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Untangling Python Decorators" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Dissecting the anatomy of decorators in Python" />
+<meta property="og:description" content="Dissecting the anatomy of decorators in Python" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html" />
+<meta property="og:site_name" content="Red’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-05-13T00:00:00-05:00","headline":"Untangling Python Decorators","description":"Dissecting the anatomy of decorators in Python","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html","dateModified":"2020-05-13T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Red's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/digressions/">Red&#39;s Digressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/digressions/about/">About Me</a><a class="page-link" href="/digressions/search/">Search</a><a class="page-link" href="/digressions/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Untangling Python Decorators
+    </h1><p class="page-description">Dissecting the anatomy of decorators in Python</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-13T00:00:00-05:00"
+        itemprop="datePublished">
+        May 13, 2020
+      </time>
+      • <span class="read-time" title="Estimated read time">
+    
+    
+      22 min read
+    
+</span></p>
+
+    
+    <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i>
+      
+      <a class="category-tags-link"
+        href="/digressions/categories/#Python">Python</a>
+      
+      
+    </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#first-class-objects">First Class Objects</a></li>
+<li class="toc-entry toc-h2"><a href="#higher-order-functions">Higher Order Functions</a></li>
+<li class="toc-entry toc-h2"><a href="#closures">Closures</a></li>
+<li class="toc-entry toc-h2"><a href="#creating-decorators">Creating Decorators</a></li>
+<li class="toc-entry toc-h2"><a href="#the--syntactic-sugar">The @ Syntactic Sugar</a></li>
+<li class="toc-entry toc-h2"><a href="#decorating-functions-with-arguments">Decorating Functions with Arguments</a></li>
+<li class="toc-entry toc-h2"><a href="#lost-identity">Lost Identity</a></li>
+<li class="toc-entry toc-h2"><a href="#real-world-decorators">Real World Decorators</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#timer">Timer</a></li>
+<li class="toc-entry toc-h3"><a href="#exception-logger">Exception Logger</a></li>
+<li class="toc-entry toc-h3"><a href="#validation--runtime-checks">Validation &amp; Runtime Checks</a></li>
+<li class="toc-entry toc-h3"><a href="#retry">Retry</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#stacking-decorators">Stacking Decorators</a></li>
+<li class="toc-entry toc-h2"><a href="#decorators-with-arguments">Decorators with Arguments</a></li>
+<li class="toc-entry toc-h2"><a href="#decorators-with--without-arguments">Decorators with &amp; without Arguments</a></li>
+<li class="toc-entry toc-h2"><a href="#a-generalized-pattern">A Generalized Pattern</a></li>
+<li class="toc-entry toc-h2"><a href="#defining-decorators-with-classes">Defining Decorators with Classes</a></li>
+<li class="toc-entry toc-h2"><a href="#more-decorator-examples">More Decorator Examples</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#caching-return-values">Caching Return Values</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#unit-conversion">Unit Conversion</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#function-registration">Function Registration</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ul><p>When I first learned about Python decorators, using them felt like doing  voodoo magic. Decorators can give you the ability to add new functionalities to any callable without actually touching or changing the code inside it. This can typically yield better encapsulation and help you write cleaner and more understandable code. However, decorator is considered as a fairly advanced topic in Python since understanding and writing it requires you to have command over multiple additional concepts like first class objects, higher order functions, closures etc. First, I’ll try to introduce these concepts as necessary and then unravel the core concept of decorator layer by layer. So let’s dive in.</p>
+
+<h2 id="first-class-objects">
+<a class="anchor" href="#first-class-objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>First Class Objects</h2>
+
+<p>In Python, basically everything is an object and functions are regarded as first-class objects. It means that functions can be passed around and used as arguments, just like any other object (string, int, float, list, and so on). You can assign functions to variables and treat them like any other objects. Consider this example:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">func_a</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">"I was angry with my friend."</span>
+
+
+<span class="k">def</span> <span class="nf">func_b</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">"I told my wrath, my wrath did end"</span>
+
+
+<span class="k">def</span> <span class="nf">func_c</span><span class="p">(</span><span class="o">*</span><span class="n">funcs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">func</span><span class="p">())</span>
+
+
+<span class="n">main_func</span> <span class="o">=</span> <span class="n">func_c</span>
+<span class="n">main_func</span><span class="p">(</span><span class="n">func_a</span><span class="p">,</span> <span class="n">func_b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; I was angry with my friend.
+&gt;&gt;&gt; I told my wrath, my wrath did end
+</code></pre></div></div>
+
+<p>The above example demonstrates how Python treats functions as first class citizens. First, I defined two functions, <code class="highlighter-rouge">func_a</code> and <code class="highlighter-rouge">func_b</code> and then <code class="highlighter-rouge">func_c</code> takes them as parameters. <code class="highlighter-rouge">func_c</code> runs the functions taken as parameters and prints the results. Then we assign <code class="highlighter-rouge">func_c</code> to variable <code class="highlighter-rouge">main_func</code>. Finally, we run <code class="highlighter-rouge">main_func</code> and it behaves just like <code class="highlighter-rouge">func_c</code>.</p>
+
+<h2 id="higher-order-functions">
+<a class="anchor" href="#higher-order-functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Higher Order Functions</h2>
+
+<p>Python also allows you to use functions as return values. You can take in another function and return that function or you can define a function within another function and return the inner function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">higher</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="s">"""This is a higher order function.
+    It returns another function.
+    """</span>
+
+    <span class="k">return</span> <span class="n">func</span>
+
+
+<span class="k">def</span> <span class="nf">lower</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">"I'm hunting high and low"</span>
+
+
+<span class="n">higher</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; &lt;function __main__.lower()&gt;
+</code></pre></div></div>
+
+<p>Now you can assign the result of <code class="highlighter-rouge">higher</code> to another variable and execute the output function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">h</span> <span class="o">=</span> <span class="n">higher</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+<span class="n">h</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; "I'm hunting high and low"
+</code></pre></div></div>
+
+<p>Let’s look into another example where you can define a nested function within a function and return the nested function instead of its result.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">outer</span><span class="p">():</span>
+    <span class="s">"""Define and return a nested function from another function."""</span>
+
+    <span class="k">def</span> <span class="nf">inner</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s">"Hello from the inner func"</span>
+
+    <span class="k">return</span> <span class="n">inner</span>
+
+
+<span class="n">inn</span> <span class="o">=</span> <span class="n">outer</span><span class="p">()</span>
+<span class="n">inn</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'Hello from the inner func'
+</code></pre></div></div>
+
+<p>Notice how the nested function <code class="highlighter-rouge">inner</code> was defined inside the <code class="highlighter-rouge">outer</code> function and then the return statement of the <code class="highlighter-rouge">outer</code> function returned the nested function. After definition, to get to the nested function, first we called the <code class="highlighter-rouge">outer</code> function and received the result as another function. Then executing the result of the <code class="highlighter-rouge">outer</code> function prints out the message from the <code class="highlighter-rouge">inner</code> function.</p>
+
+<h2 id="closures">
+<a class="anchor" href="#closures" aria-hidden="true"><span class="octicon octicon-link"></span></a>Closures</h2>
+
+<p>You saw examples of inner functions at work in the previous section. Nested functions can access variables of the enclosing scope. In Python, these non-local variables are read only by default and we must declare them explicitly as non-local (using <code class="highlighter-rouge">nonlocal</code> keyword) in order to modify them. Following is an example of a nested function accessing a non-local variable.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">burger</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">ingrediants</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">"deli"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="s">"steak"</span><span class="p">,</span> <span class="s">"pastrami"</span><span class="p">,</span> <span class="s">"emmental"</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s">"smashed"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="s">"chicken"</span><span class="p">,</span> <span class="s">"nacho cheese"</span><span class="p">,</span> <span class="s">"jalapeno"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">return</span> <span class="n">ingrediants</span>
+</code></pre></div></div>
+
+<p>Now run the function,</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ingr</span> <span class="o">=</span> <span class="n">burger</span><span class="p">(</span><span class="s">"deli"</span><span class="p">)</span>
+<span class="n">ingr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ('steak', 'pastrami', 'emmental')
+</code></pre></div></div>
+
+<p>Well, that’s unusual.</p>
+
+<p>The <code class="highlighter-rouge">burger</code> function was called with the string <code class="highlighter-rouge">deli</code> and the returned function was bound to the name <code class="highlighter-rouge">ingr</code>. On calling <code class="highlighter-rouge">ingr()</code>, the message was still remembered and used to derive the outcome although the outer function <code class="highlighter-rouge">burger</code> had already finished its execution.</p>
+
+<p>This technique by which some data (“deli”) gets attached to the code is called closure in Python. This value in the enclosing scope is remembered even when the variable goes out of scope or the function itself is removed from the current namespace. Decorators uses the idea of non-local variables multiple times and soon you’ll see how.</p>
+
+<h2 id="creating-decorators">
+<a class="anchor" href="#creating-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating Decorators</h2>
+
+<p>With these prerequisites out of the way, let’s go ahead and create your first simple decorator.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">deco</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"This will get printed before the function is called."</span><span class="p">)</span>
+        <span class="n">func</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"This will get printed after the function is called."</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>Before using the decorator, let’s define a simple function without any parameters.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">ans</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Treating the functions as first-class objects, you can use your decorator like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ans</span> <span class="o">=</span> <span class="n">deco</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+<span class="n">ans</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; This will get printed before the function is called.
+    42
+    This will get printed after the function is called.
+</code></pre></div></div>
+
+<p>In the above two lines, you can see a very simple decorator in action. Our <code class="highlighter-rouge">deco</code> function takes in a target function, manipulates the target function inside the <code class="highlighter-rouge">wrapper</code> function and then returns the <code class="highlighter-rouge">wrapper</code> function. Running the function returned by the decorator, you will get your modified result. To put it simply, decorators wraps a function and modifies its behavior.</p>
+
+<blockquote>
+  <p>The decorator function runs at the time the decorated function is imported/defined, not when it is called.</p>
+</blockquote>
+
+<p>Before moving onto the next section, let’s see how we can get the return value of target function instead of just printing it.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">deco</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="s">"""This modified decorator also returns the result of func."""</span>
+
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"This will get printed before the function is called."</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"This will get printed after the function is called."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="k">def</span> <span class="nf">ans</span><span class="p">():</span>
+    <span class="k">return</span> <span class="mi">42</span>
+</code></pre></div></div>
+
+<p>In the above example, the wrapper function returns the result of the target function and the wrapper itself. This makes it possible to get the result of the modified function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ans</span> <span class="o">=</span> <span class="n">deco</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ans</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; This will get printed before the function is called.
+    This will get printed after the function is called.
+    42
+</code></pre></div></div>
+
+<h2 id="the--syntactic-sugar">
+<a class="anchor" href="#the--syntactic-sugar" aria-hidden="true"><span class="octicon octicon-link"></span></a>The @ Syntactic Sugar</h2>
+
+<p>The way you previously used decorator feels a little clunky. First, you have to type the name <code class="highlighter-rouge">ans</code> three times to call and use the decorator. Also, it becomes harder to tell apart where the decorator is actually working. So Python allows you to use decorator with the special syntax <code class="highlighter-rouge">@</code>. You can apply your decorators while defining your functions, like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">deco</span>
+<span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+    <span class="o">...</span>
+
+
+<span class="c1"># Now call your decorated function just like a normal one
+</span><span class="n">func</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Sometimes the above syntax is called the <strong>pie syntax</strong> and it’s just a syntactic sugar for <code class="highlighter-rouge">func = deco(func)</code>.</p>
+
+<h2 id="decorating-functions-with-arguments">
+<a class="anchor" href="#decorating-functions-with-arguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Decorating Functions with Arguments</h2>
+
+<p>The naive decorator that we’ve implemented above will only work for functions that take no arguments. It’ll fail and raise <code class="highlighter-rouge">TypeError</code> if your try to decorate a function with arguments with <code class="highlighter-rouge">deco</code>. Now let’s create another decorator called <code class="highlighter-rouge">yell</code> which will take in a function that returns a string value and transform that string value to uppercase.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">yell</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">"!"</span>
+        <span class="k">return</span> <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>Create the target function that returns string value.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">yell</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"Hello {name}"</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hello</span><span class="p">(</span><span class="s">"redowan"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'HELLO REDOWAN!'
+</code></pre></div></div>
+
+<p>Function <code class="highlighter-rouge">hello</code> takes a <code class="highlighter-rouge">name:string</code> as parameter and returns a message as string. Look how the <code class="highlighter-rouge">yell</code> decorator is modifying the original return string, transforming that to uppercase and adding an extra <code class="highlighter-rouge">!</code> sign without directly changing any code in the <code class="highlighter-rouge">hello</code> function.</p>
+
+<h2 id="lost-identity">
+<a class="anchor" href="#lost-identity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lost Identity</h2>
+
+<p>In Python, you can introspect any object and its properties via the interactive shell. A function knows its identity, docstring etc. For instance, you can inspect the built in <code class="highlighter-rouge">abs</code> function in the following ways:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; &lt;function print&gt;
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="o">.</span><span class="n">__name__</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'print'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="o">.</span><span class="n">__doc__</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; "print(value, ..., sep=' ', end='\\n', file=sys.stdout, flush=False)\n\nPrints the values to a stream, or to sys.stdout by default.\nOptional keyword arguments:\nfile:  a file-like object (stream); defaults to the current sys.stdout.\nsep:   string inserted between values, default a space.\nend:   string appended after the last value, default a newline.\nflush: whether to forcibly flush the stream."
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">help</span><span class="p">(</span><span class="k">print</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Help on built-in function print in module builtins:
+
+    print(...)
+        print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+
+        Prints the values to a stream, or to sys.stdout by default.
+        Optional keyword arguments:
+        file:  a file-like object (stream); defaults to the current sys.stdout.
+        sep:   string inserted between values, default a space.
+        end:   string appended after the last value, default a newline.
+        flush: whether to forcibly flush the stream.
+</code></pre></div></div>
+
+<p>This introspection works similarly for functions that you defined yourself. I’ll be using the previously defined <code class="highlighter-rouge">hello</code> function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hello</span><span class="o">.</span><span class="n">__name__</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'wrapper'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">help</span><span class="p">(</span><span class="n">hello</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Help on function wrapper in module __main__:
+    wrapper(*args, **kwargs)
+</code></pre></div></div>
+
+<p>Now what’s going on there. The decorator <code class="highlighter-rouge">yell</code> has made the function <code class="highlighter-rouge">hello</code> confused about its identity. Instead of reporting its own name, it takes the identity of the inner function <code class="highlighter-rouge">wrapper</code>. This can be confusing while doing debugging. You can fix this using builtin <code class="highlighter-rouge">functools.wraps</code> decorator. This will make sure that the original identity of the decorated function gets preserved.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">yell</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">"!"</span>
+        <span class="k">return</span> <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="o">@</span><span class="n">yell</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="s">"Hello from the other side."</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"Hello {name}"</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hello</span><span class="p">(</span><span class="s">"Galaxy"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'HELLO GALAXY!'
+</code></pre></div></div>
+
+<p>Introspecting the <code class="highlighter-rouge">hello</code> function decorated with modified decorator will give us our desired result.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hello</span><span class="o">.</span><span class="n">__name__</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'hello'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">help</span><span class="p">(</span><span class="n">hello</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Help on function hello in module __main__:
+
+    hello(name)
+        Hello from the other side.
+</code></pre></div></div>
+
+<h2 id="real-world-decorators">
+<a class="anchor" href="#real-world-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Real World Decorators</h2>
+
+<p>Before moving on to the next section let’s see a few real world examples of decorators. To define all the decorators, we’ll be using the following template that we’ve perfected so far.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Do something before
+</span>        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># Do something after
+</span>        <span class="k">return</span> <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<h3 id="timer">
+<a class="anchor" href="#timer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Timer</h3>
+
+<p>Timer decorator will help you time your callables in a non-intrusive way. It helps you while debugging and profiling your functions.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="s">"""This decorator prints out the execution time of a callable."""</span>
+
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">run_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Finished running {func.__name__} in {run_time:.4f} seconds."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">val</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="o">@</span><span class="n">timer</span>
+<span class="k">def</span> <span class="nf">dothings</span><span class="p">(</span><span class="n">n_times</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_times</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">((</span><span class="n">i</span> <span class="o">**</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100_000</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<p>In the above way, we can introspect the time it requires for function <code class="highlighter-rouge">dothings</code> to complete its execution.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dothings</span><span class="p">(</span><span class="mi">100_000</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Finished running dothings in 0.0231 seconds.
+    24999500002500000000
+</code></pre></div></div>
+
+<h3 id="exception-logger">
+<a class="anchor" href="#exception-logger" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exception Logger</h3>
+
+<p>Just like the <code class="highlighter-rouge">timer</code> decorator, we can define a logger decorator that will log the state of a callable. For this demonstration, I’ll be defining a exception logger that will show additional information like timestamp, argument names when an exception occurs in the decorated callable.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+
+<span class="k">def</span> <span class="nf">logexc</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="c1"># Stringify the arguments
+</span>        <span class="n">args_rep</span> <span class="o">=</span> <span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+        <span class="n">kwargs_rep</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="s">"{k}={v!r}"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="s">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args_rep</span> <span class="o">+</span> <span class="n">kwargs_rep</span><span class="p">)</span>
+
+        <span class="c1"># Try running the function
+</span>        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"Time: "</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">Y-</span><span class="si">%</span><span class="s">m-</span><span class="si">%</span><span class="s">d [</span><span class="si">%</span><span class="s">H:</span><span class="si">%</span><span class="s">M:</span><span class="si">%</span><span class="s">S]"</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"Arguments: "</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"Error:</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="o">@</span><span class="n">logexc</span>
+<span class="k">def</span> <span class="nf">divint</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<p>Let’s invoke ZeroDivisionError to see the logger in action.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">divint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Time:  2020-05-12 [12:03:31]
+    Arguments:  1, 0
+    Error:
+
+        ------------------------------------------------------------
+
+        ZeroDivisionError         Traceback (most recent call last)
+        ....
+</code></pre></div></div>
+
+<p>The decorator first prints a few info regarding the function and then raises the original error.</p>
+
+<h3 id="validation--runtime-checks">
+<a class="anchor" href="#validation--runtime-checks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validation &amp; Runtime Checks</h3>
+
+<p>Python’s type system is strongly typed, but very dynamic. For all its benefits, this means some bugs can try to creep in, which more statically typed languages (like Java) would catch at compile time. Looking beyond even that, you may want to enforce more sophisticated, custom checks on data going in or out. Decorators can let you easily handle all of this, and apply it to many functions at once.</p>
+
+<p>Imagine this: you have a set of functions, each returning a dictionary, which (among other fields) includes a field called “summary.” The value of this summary must not be more than 30 characters long; if violated, that’s an error. Here is a decorator that raises a ValueError if that happens:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">validate_summary</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">"summary"</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">"Summary exceeds 30 character limit."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="o">@</span><span class="n">validate_summary</span>
+<span class="k">def</span> <span class="nf">short_summary</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">"summary"</span><span class="p">:</span> <span class="s">"This is a short summary"</span><span class="p">}</span>
+
+
+<span class="o">@</span><span class="n">validate_summary</span>
+<span class="k">def</span> <span class="nf">long_summary</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">"summary"</span><span class="p">:</span> <span class="s">"This is a long summary that exceeds character limit."</span><span class="p">}</span>
+
+
+<span class="k">print</span><span class="p">(</span><span class="n">short_summary</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">long_summary</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; {'summary': 'This is a short summary'}
+
+    -------------------------------------------------------------------
+
+    ValueError                       Traceback (most recent call last)
+
+    &lt;ipython-input-178-7375d8e2a623&gt; in &lt;module&gt;
+            19
+            20 print(short_summary())
+    ---&gt; 21 print(long_summary())
+    ...
+</code></pre></div></div>
+
+<h3 id="retry">
+<a class="anchor" href="#retry" aria-hidden="true"><span class="octicon octicon-link"></span></a>Retry</h3>
+
+<p>Imagine a situation where your defined callable fails due to some I/O related issues and you’d like to retry that again. Decorator can help you to achieve that in a reusable manner. Let’s define a <code class="highlighter-rouge">retry</code> decorator that will rerun the decorated function multiple times if http error occurs.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+
+<span class="k">def</span> <span class="nf">retry</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="s">"""This will rerun the decorated callable 3 times if
+    the callable encounters http 500/404 error."""</span>
+
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">n_tries</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span> <span class="ow">or</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span> <span class="ow">and</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="n">n_tries</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"retrying... ({tries})"</span><span class="p">)</span>
+                <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+            <span class="k">break</span>
+        <span class="k">return</span> <span class="n">resp</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="o">@</span><span class="n">retry</span>
+<span class="k">def</span> <span class="nf">getdata</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resp</span>
+
+
+<span class="n">resp</span> <span class="o">=</span> <span class="n">getdata</span><span class="p">(</span><span class="s">"https://httpbin.org/get/1"</span><span class="p">)</span>
+<span class="n">resp</span><span class="o">.</span><span class="n">text</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; retrying... (0)
+    retrying... (1)
+    retrying... (2)
+
+    '&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"&gt;\n&lt;title&gt;404 Not Found&lt;/title&gt;\n&lt;h1&gt;Not Found&lt;/h1&gt;\n&lt;p&gt;The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.&lt;/p&gt;\n'
+</code></pre></div></div>
+
+<h2 id="stacking-decorators">
+<a class="anchor" href="#stacking-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stacking Decorators</h2>
+
+<p>You can apply multiple decorators to a function by stacking them on top of each other. Let’s define two simple decorators and use them both on a function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="s">"""Greet in English."""</span>
+
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="n">val</span> <span class="o">+</span> <span class="s">"!"</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="k">def</span> <span class="nf">flare</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="s">"""Add flares to the string."""</span>
+
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"🎉 "</span> <span class="o">+</span> <span class="n">val</span> <span class="o">+</span> <span class="s">" 🎉"</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="o">@</span><span class="n">flare</span>
+<span class="o">@</span><span class="n">greet</span>
+<span class="k">def</span> <span class="nf">getname</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">name</span>
+
+
+<span class="n">getname</span><span class="p">(</span><span class="s">"Nafi"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; '🎉 Hello Nafi! 🎉'
+</code></pre></div></div>
+
+<p>The decorators are called in a bottom up order. First, the decorator <code class="highlighter-rouge">greet</code> gets applied on the result of <code class="highlighter-rouge">getname</code> function and then the result of <code class="highlighter-rouge">greet</code> gets passed to the <code class="highlighter-rouge">flare</code> decorator. The decorator stack above can be written as <code class="highlighter-rouge">flare(greet(getname(name)))</code>. Change the order of the decorators and see what happens!</p>
+
+<h2 id="decorators-with-arguments">
+<a class="anchor" href="#decorators-with-arguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Decorators with Arguments</h2>
+
+<p>While defining the <code class="highlighter-rouge">retry</code> decorator in the previous section, you may have noticed that I’ve hard coded the number of times I’d like the function to retry if an http error occurs. It’d be handy if you could inject the number of tries as a parameter into the decorator and make it work accordingly. This is not a trivial task and you’ll need three levels of nested functions to achieve that.</p>
+
+<p>Before doing that let’s cook up a trivial example of how you can define decorators with parameters.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="s">"""This repeats the output of a callable."""</span>
+
+    <span class="k">def</span> <span class="nf">outer_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">inner_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_times</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">val</span>
+
+        <span class="k">return</span> <span class="n">inner_wrapper</span>
+
+    <span class="k">return</span> <span class="n">outer_wrapper</span>
+
+
+<span class="o">@</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Hello {name}!"</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Greetings {name}!"</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">repeat</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">goodbye</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Goodbye {name}!"</span><span class="p">)</span>
+
+
+<span class="n">hello</span><span class="p">(</span><span class="s">"Nafi"</span><span class="p">)</span>
+<span class="n">greet</span><span class="p">(</span><span class="s">"Redowan"</span><span class="p">)</span>
+<span class="n">goodbye</span><span class="p">(</span><span class="s">"Delowar"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Hello Nafi!
+    Hello Nafi!
+    Greetings Redowan!
+    Greetings Redowan!
+    Greetings Redowan!
+    Greetings Redowan!
+    Greetings Redowan!
+    Goodbye Delowar!
+    Goodbye Delowar!
+    Goodbye Delowar!
+    Goodbye Delowar!
+</code></pre></div></div>
+
+<p>The decorator <code class="highlighter-rouge">repeat</code> takes a parameter <code class="highlighter-rouge">n_times</code> and just repeats the output of the decorated function that many times. The three layer nested definition looks scary but we’ll get to that in a moment. Notice how you can use the decorator with different parameters. In the above example, I’ve defined three different functions to demonstrate the usage of <code class="highlighter-rouge">repeat</code>. It’s important to note that in case of a decorator that takes parameters, you’ll always need to pass something to it and even if you don’t want to pass any parameter (run with the default), you’ll still need to decorate your function with <code class="highlighter-rouge">deco()</code> instead of <code class="highlighter-rouge">deco</code>. Try changing the decorator on the <code class="highlighter-rouge">goodbye</code> function from <code class="highlighter-rouge">repeat()</code> to <code class="highlighter-rouge">repeat</code> and see what happens.</p>
+
+<p>Typically, a decorator creates and returns an inner wrapper function but here in the <code class="highlighter-rouge">repeat</code> decorator, there is an inner function within another inner function. This almost looks like a <em>dream within a dream</em> from the movie Inception.</p>
+
+<p>There are a few subtle things happening in the <code class="highlighter-rouge">repeat()</code> function:</p>
+
+<ul>
+  <li>
+    <p>Defining <code class="highlighter-rouge">outer_wrapper()</code> as an inner function means that <code class="highlighter-rouge">repeat()</code> will refer to a function object <code class="highlighter-rouge">outer_wrapper</code>.</p>
+  </li>
+  <li>
+    <p>The <code class="highlighter-rouge">n_times</code> argument is seemingly not used in <code class="highlighter-rouge">repeat()</code> itself. But by passing <code class="highlighter-rouge">n_times</code> a closure is created where the value of <code class="highlighter-rouge">n_times</code> is stored until it will be used later by <code class="highlighter-rouge">inner_wrapper()</code></p>
+  </li>
+</ul>
+
+<h2 id="decorators-with--without-arguments">
+<a class="anchor" href="#decorators-with--without-arguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Decorators with &amp; without Arguments</h2>
+
+<p>You saw earlier that a decorator specifically designed to take parameters can’t be used without parameters. But what if we want to design one that can used both with and without arguments. Let’s redefine the <code class="highlighter-rouge">retry</code> decorator so that you can use it with parameters or just like an ordinary parameter-less decorator that we’ve seen before.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="n">_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">n_times</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="s">"""This repeats the output of a callable."""</span>
+
+    <span class="k">def</span> <span class="nf">outer_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">inner_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_times</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">val</span>
+
+        <span class="k">return</span> <span class="n">inner_wrapper</span>
+
+    <span class="c1"># This part enables your decorator to be used with/ without params
+</span>    <span class="k">if</span> <span class="n">_func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">outer_wrapper</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">outer_wrapper</span><span class="p">(</span><span class="n">_func</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">repeat</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">f</span><span class="s">"Hello {name}!"</span>
+
+<span class="o">@</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span> <span class="n">f</span><span class="s">"Greetings {name}!"</span><span class="p">)</span>
+
+
+<span class="n">hello</span><span class="p">(</span><span class="s">"Nafi"</span><span class="p">)</span>
+<span class="n">greet</span><span class="p">(</span><span class="s">"Redowan"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Hello Nafi!
+    Hello Nafi!
+    Hello Nafi!
+    Hello Nafi!
+    Greetings Redowan!
+    Greetings Redowan!
+</code></pre></div></div>
+
+<p>Here, the <code class="highlighter-rouge">_func</code> argument acts as a marker, noting whether the decorator has been called with arguments or not:</p>
+
+<p>If <code class="highlighter-rouge">repeat</code> has been called without arguments, the decorated function will be passed in as <code class="highlighter-rouge">_func</code>. If it has been called with arguments, then <code class="highlighter-rouge">_func</code> will be None. The * in the argument list means that the remaining arguments can’t be called as positional arguments. This time you can use the <code class="highlighter-rouge">repeat</code> with or without arguments and function <code class="highlighter-rouge">hello</code> and <code class="highlighter-rouge">greet</code> above demonstrate that.</p>
+
+<h2 id="a-generalized-pattern">
+<a class="anchor" href="#a-generalized-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Generalized Pattern</h2>
+
+<p>Personally, I find it cumbersome how you need three layers of nested functions to define a generalized decorator that can be used with or without arguments. <a href="https://www.dabeaz.com/">David Beazly</a> in his book <a href="https://realpython.com/asins/1449340377/">Python Cookbook</a> shows an excellent way to define generalized decorators without writing three levels of nested functions. It uses the built in <code class="highlighter-rouge">functools.partial</code> function to achieve that. The following is a pattern you can use to define generalized decorators in a more elegant way:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="s">"spam"</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">decorator</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="n">foo</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Do something with `func` and `foo`, if you're so inclined
+</span>        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="c1"># Applying decorator without any parameter
+</span><span class="o">@</span><span class="n">decorator</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="c1"># Applying decorator with extra parameter
+</span><span class="o">@</span><span class="n">decorator</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="s">"buzz"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>Let’s redefine our <code class="highlighter-rouge">retry</code> decorator using this pattern.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">retry</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_tries</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">retry</span><span class="p">,</span> <span class="n">n_tries</span><span class="o">=</span><span class="n">n_tries</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span> <span class="ow">or</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span> <span class="ow">and</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="n">n_tries</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"retrying... ({tries})"</span><span class="p">)</span>
+                <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+            <span class="k">break</span>
+        <span class="k">return</span> <span class="n">resp</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="o">@</span><span class="n">retry</span>
+<span class="k">def</span> <span class="nf">getdata</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resp</span>
+
+
+<span class="o">@</span><span class="n">retry</span><span class="p">(</span><span class="n">n_tries</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">getdata_</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resp</span>
+
+
+<span class="n">resp1</span> <span class="o">=</span> <span class="n">getdata</span><span class="p">(</span><span class="s">"https://httpbin.org/get/1"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"-----------------------"</span><span class="p">)</span>
+<span class="n">resp2</span> <span class="o">=</span> <span class="n">getdata_</span><span class="p">(</span><span class="s">"https://httpbin.org/get/1"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; retrying... (0)
+    retrying... (1)
+    retrying... (2)
+    retrying... (3)
+    -----------------------
+    retrying... (0)
+    retrying... (1)
+</code></pre></div></div>
+
+<p>In this case, you do not have to write three level nested functions and the <code class="highlighter-rouge">functools.partial</code> takes care of that. Partials can be used to make new derived functions that have some input parameters pre-assigned.Roughly <code class="highlighter-rouge">partial</code> does the following:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">part_args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">extra_args</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">part_args</span><span class="p">)</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">extra_args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>This eliminates the need to write multiple layers of nested factory function get a generalized decorator.</p>
+
+<h2 id="defining-decorators-with-classes">
+<a class="anchor" href="#defining-decorators-with-classes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining Decorators with Classes</h2>
+
+<p>Let’s write a stateful decorator named <code class="highlighter-rouge">Calls</code> that will remember and print out how many times the decorated function has been called. This time, I’ll be using classes to write decorators. Classes are better for writing stateful decorators and you’ll see why.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">class</span> <span class="nc">Calls</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="n">functools</span><span class="o">.</span><span class="n">update_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_calls</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_calls</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Call {self.num_calls} of {self.func.__name__!r}"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">Calls</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Hello {name}!"</span><span class="p">)</span>
+
+
+<span class="n">hello</span><span class="p">(</span><span class="s">"Nafi"</span><span class="p">)</span>
+<span class="n">hello</span><span class="p">(</span><span class="s">"Redowan"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Call 1 of 'hello'
+    Hello Nafi!
+    Call 2 of 'hello'
+    Hello Redowan!
+</code></pre></div></div>
+
+<p>The <strong>init</strong>() method stores a reference to the function num_calls and can do other necessary initialization. The <strong>call</strong>() method will be called instead of the decorated function. It does essentially the same thing as the wrapper() function in our earlier examples. Note that you need to use the functools.update_wrapper() function instead of @functools.wraps.</p>
+
+<h2 id="more-decorator-examples">
+<a class="anchor" href="#more-decorator-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>More Decorator Examples</h2>
+
+<h3 id="caching-return-values">
+<a class="anchor" href="#caching-return-values" aria-hidden="true"><span class="octicon octicon-link"></span></a>Caching Return Values</h3>
+
+<p>Decorators can provide an elegant way of memoizing function return values. Imagine you have an expensive API and you’d like call that as few times as possible. The idea is to save and cache values returned by the API for particular arguments, so that if those arguments appear again, you can serve the results from the cache instead of calling the API again. This can dramatically improve your applications’ performance. Here I’ve simulated an expensive API call and provided caching with a decorator.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="k">def</span> <span class="nf">api</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="s">"""API takes an integer and returns the square value of it.
+    To simulate a time consuming process, I've added some time delay to it."""</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">"The API has been called..."</span><span class="p">)</span>
+
+    <span class="c1"># This will delay 3 seconds
+</span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span>
+
+
+<span class="n">api</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; The API has been called...
+    9
+</code></pre></div></div>
+
+<p>You’ll see that running this function takes roughly 3 seconds. To cache the result , we can use Python’s built in functools.lru_cache to save the result against an argument in a dictionary and serve that when it encounters the same argument again. The only drawback here is, all the arguments need to be hashable.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">api</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="s">"""API takes an integer and returns the square value of it.
+    To simulate a time consuming process, I've added some time delay to it."""</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">"The API has been called..."</span><span class="p">)</span>
+
+    <span class="c1"># This will delay 3 seconds
+</span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span>
+
+
+<span class="n">api</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 9
+</code></pre></div></div>
+
+<p>Least Recently Used (LRU) Cache organizes items in order of use, allowing you to quickly identify which item hasn’t been used for the longest amount of time. In the above case, the parameter <code class="highlighter-rouge">max_size</code> refers to the maximum numbers of responses to be saved up before it starts deleting the earliest ones. While you run the decorated function, you’ll see first time it’ll take roughly 3 seconds to return the result. But if you rerun the function again with the same parameter it’ll spit the result from the cache almost instantly.</p>
+
+<h2 id="unit-conversion">
+<a class="anchor" href="#unit-conversion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Unit Conversion</h2>
+
+<p>The following decorator converts length from SI units to multiple other units without polluting your target function with conversion logics.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">convert_to</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">"""This converts value from meter to others."""</span>
+
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">convert</span><span class="p">,</span> <span class="n">convert_to</span><span class="o">=</span><span class="n">convert_to</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Conversion unit: {convert_to}"</span><span class="p">)</span>
+
+        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Adding conversion rules
+</span>        <span class="k">if</span> <span class="n">convert_to</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">val</span>
+
+        <span class="k">elif</span> <span class="n">convert_to</span> <span class="o">==</span> <span class="s">"km"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">val</span> <span class="o">/</span> <span class="mi">1000</span>
+
+        <span class="k">elif</span> <span class="n">convert_to</span> <span class="o">==</span> <span class="s">"mile"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">val</span> <span class="o">*</span> <span class="mf">0.000621371</span>
+
+        <span class="k">elif</span> <span class="n">convert_to</span> <span class="o">==</span> <span class="s">"cm"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">val</span> <span class="o">*</span> <span class="mi">100</span>
+
+        <span class="k">elif</span> <span class="n">convert_to</span> <span class="o">==</span> <span class="s">"mm"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">val</span> <span class="o">*</span> <span class="mi">1000</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">"Conversion unit is not supported."</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></div>
+
+<p>Let’s use that on a function that returns the area of a rectangle.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">convert</span><span class="p">(</span><span class="n">convert_to</span><span class="o">=</span><span class="s">"mile"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">area</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+
+
+<span class="n">area</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Conversion unit: mile
+    0.001242742
+</code></pre></div></div>
+
+<p>Using the convert decorator on the area function shows how it prints out the transformation unit before returning the desired result. Experiment with other conversion units and see what happens.</p>
+
+<h3 id="function-registration">
+<a class="anchor" href="#function-registration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Function Registration</h3>
+
+<p>The following is an example of registering logger function in Flask framework. The decorator <code class="highlighter-rouge">register_logger</code> doesn’t make any change to the decorated <code class="highlighter-rouge">logger</code> function. Rather it takes the function and registers it in a list called <code class="highlighter-rouge">logger_list</code> everytime it’s invoked.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">logger_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="k">def</span> <span class="nf">register_logger</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="n">logger_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">func</span>
+
+
+<span class="k">def</span> <span class="nf">run_loggers</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">logger</span> <span class="ow">in</span> <span class="n">logger_list</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">register_logger</span>
+<span class="k">def</span> <span class="nf">logger</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+
+<span class="o">@</span><span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="n">run_loggers</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">"Hello World!"</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">"localhost"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="s">"5000"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>If you run the server and hit the ` http://localhost:5000/<code class="highlighter-rouge"> url, it'll greet you with a </code>Hello World!<code class="highlighter-rouge"> message. Also you'll able to see the printed </code>method<code class="highlighter-rouge"> and </code>path<code class="highlighter-rouge"> of your http request on the terminal. Moreover, if you inspect the </code>logger_list`, you’ll find the registered logger there. You’ll find a lot more real life usage of decorators in the Flask framework.</p>
+
+<h2 id="remarks">
+<a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
+
+<p>All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.</p>
+
+<h2 id="references">
+<a class="anchor" href="#references" aria-hidden="true"><span class="octicon octicon-link"></span></a>References</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">*</span> <span class="p">[</span><span class="n">Primer</span> <span class="n">on</span> <span class="n">Python</span> <span class="n">Decorator</span> <span class="o">-</span> <span class="n">Real</span> <span class="n">Python</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">realpython</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">primer</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">decorators</span><span class="o">/</span><span class="p">)</span>
+<span class="o">*</span> <span class="p">[</span><span class="n">Decorators</span> <span class="ow">in</span> <span class="n">Python</span> <span class="o">-</span> <span class="n">DataCamp</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">datacamp</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">community</span><span class="o">/</span><span class="n">tutorials</span><span class="o">/</span><span class="n">decorators</span><span class="o">-</span><span class="n">python</span><span class="p">)</span>
+<span class="o">*</span> <span class="p">[</span><span class="mi">5</span> <span class="n">Reasons</span> <span class="n">You</span> <span class="n">Need</span> <span class="n">to</span> <span class="n">Write</span> <span class="n">Python</span> <span class="n">Decorators</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">oreilly</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="mi">5</span><span class="o">-</span><span class="n">reasons</span><span class="o">-</span><span class="n">you</span><span class="o">-</span><span class="n">need</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">learn</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">write</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">decorators</span><span class="o">/</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="rednafi/digressions"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/digressions/python/2020/05/13/python-decorators.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/digressions/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/digressions/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/digressions/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Sporadic cogitations on software, tech &amp; personal beliefs</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
