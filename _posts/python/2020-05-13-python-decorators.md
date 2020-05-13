@@ -105,7 +105,7 @@ You saw examples of inner functions at work in the previous section. Nested func
 
 ```python
 def burger(name):
-    def ingrediants():
+    def ingredients():
         if name == "deli":
             return ("steak", "pastrami", "emmental")
         elif name == "smashed":
@@ -113,7 +113,7 @@ def burger(name):
         else:
             return None
 
-    return ingrediants
+    return ingredients
 ```
 
 Now run the function,
