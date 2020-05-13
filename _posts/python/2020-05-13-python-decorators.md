@@ -1019,7 +1019,7 @@ Using the convert decorator on the area function shows how it prints out the tra
 
 ### Function Registration
 
-The following is an example of registering logger function in Flask framework. The decorator `register_logger` doesn't make any change to the decorated `logger` function. Rather it takes the function and registers it in a list called `logger_list` everytime it's invoked.
+The following is an example of registering logger function in Flask framework. The decorator `register_logger` doesn't make any change to the decorated `logger` function. Rather it takes the function and registers it in a list called `logger_list` every time it's invoked.
 
 ```python
 from flask import Flask, request
@@ -1053,7 +1053,7 @@ if __name__ == "__main__":
     app.run(host="localhost", port="5000")
 ```
 
-If you run the server and hit the ` http://localhost:5000/` url, it'll greet you with a `Hello World!` message. Also you'll able to see the printed `method` and `path` of your http request on the terminal. Moreover, if you inspect the `logger_list`, you'll find the registered logger there. You'll find a lot more real life usage of decorators in the Flask framework.
+If you run the server and hit the `http://localhost:5000/` url, it'll greet you with a `Hello World!` message. Also you'll able to see the printed `method` and `path` of your http request on the terminal. Moreover, if you inspect the `logger_list`, you'll find the registered logger there. You'll find a lot more real life usage of decorators in the Flask framework.
 
 ## Remarks
 
