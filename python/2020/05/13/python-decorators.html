@@ -1116,7 +1116,7 @@ window.onload = wrap_img;
 <h3 id="function-registration">
 <a class="anchor" href="#function-registration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Function Registration</h3>
 
-<p>The following is an example of registering logger function in Flask framework. The decorator <code class="highlighter-rouge">register_logger</code> doesn’t make any change to the decorated <code class="highlighter-rouge">logger</code> function. Rather it takes the function and registers it in a list called <code class="highlighter-rouge">logger_list</code> everytime it’s invoked.</p>
+<p>The following is an example of registering logger function in Flask framework. The decorator <code class="highlighter-rouge">register_logger</code> doesn’t make any change to the decorated <code class="highlighter-rouge">logger</code> function. Rather it takes the function and registers it in a list called <code class="highlighter-rouge">logger_list</code> every time it’s invoked.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
 
@@ -1149,7 +1149,7 @@ window.onload = wrap_img;
     <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">"localhost"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="s">"5000"</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>If you run the server and hit the ` http://localhost:5000/<code class="highlighter-rouge"> url, it'll greet you with a </code>Hello World!<code class="highlighter-rouge"> message. Also you'll able to see the printed </code>method<code class="highlighter-rouge"> and </code>path<code class="highlighter-rouge"> of your http request on the terminal. Moreover, if you inspect the </code>logger_list`, you’ll find the registered logger there. You’ll find a lot more real life usage of decorators in the Flask framework.</p>
+<p>If you run the server and hit the <code class="highlighter-rouge">http://localhost:5000/</code> url, it’ll greet you with a <code class="highlighter-rouge">Hello World!</code> message. Also you’ll able to see the printed <code class="highlighter-rouge">method</code> and <code class="highlighter-rouge">path</code> of your http request on the terminal. Moreover, if you inspect the <code class="highlighter-rouge">logger_list</code>, you’ll find the registered logger there. You’ll find a lot more real life usage of decorators in the Flask framework.</p>
 
 <h2 id="remarks">
 <a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
