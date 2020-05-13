@@ -1065,5 +1065,4 @@ All the pieces of codes in the blog were written and tested with python 3.8 on a
 * [Primer on Python Decorator - Real Python](https://realpython.com/primer-on-python-decorators/)
 * [Decorators in Python - DataCamp](https://www.datacamp.com/community/tutorials/decorators-python)
 * [5 Reasons You Need to Write Python Decorators](https://www.oreilly.com/content/5-reasons-you-need-to-learn-to-write-python-decorators/)
-
 ```
