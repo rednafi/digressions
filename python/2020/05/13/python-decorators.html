@@ -283,7 +283,7 @@ window.onload = wrap_img;
 
 <p>The <code class="highlighter-rouge">burger</code> function was called with the string <code class="highlighter-rouge">deli</code> and the returned function was bound to the name <code class="highlighter-rouge">ingr</code>. On calling <code class="highlighter-rouge">ingr()</code>, the message was still remembered and used to derive the outcome although the outer function <code class="highlighter-rouge">burger</code> had already finished its execution.</p>
 
-<p>This technique by which some data (“deli”) gets attached to the code is called closure in Python. This value in the enclosing scope is remembered even when the variable goes out of scope or the function itself is removed from the current namespace. Decorators uses the idea of non-local variables multiple times and soon you’ll see how.</p>
+<p>This technique by which some data (“deli”) gets attached to the code is called closure in Python. The value in the enclosing scope is remembered even when the variable goes out of scope or the function itself is removed from the current namespace. Decorators uses the idea of non-local variables multiple times and soon you’ll see how.</p>
 
 <h2 id="creating-decorators">
 <a class="anchor" href="#creating-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating Decorators</h2>
@@ -316,7 +316,7 @@ window.onload = wrap_img;
     This will get printed after the function is called.
 </code></pre></div></div>
 
-<p>In the above two lines, you can see a very simple decorator in action. Our <code class="highlighter-rouge">deco</code> function takes in a target function, manipulates the target function inside the <code class="highlighter-rouge">wrapper</code> function and then returns the <code class="highlighter-rouge">wrapper</code> function. Running the function returned by the decorator, you will get your modified result. To put it simply, decorators wraps a function and modifies its behavior.</p>
+<p>In the above two lines, you can see a very simple decorator in action. Our <code class="highlighter-rouge">deco</code> function takes in a target function, manipulates the target function inside a <code class="highlighter-rouge">wrapper</code> function and then returns the <code class="highlighter-rouge">wrapper</code> function. Running the function returned by the decorator, you will get your modified result. To put it simply, decorators wraps a function and modifies its behavior.</p>
 
 <blockquote>
   <p>The decorator function runs at the time the decorated function is imported/defined, not when it is called.</p>
@@ -351,10 +351,12 @@ window.onload = wrap_img;
     42
 </code></pre></div></div>
 
+<p>Can you guess why the return value of the decorated function appeared in the last line instead of in the middle like before?</p>
+
 <h2 id="the--syntactic-sugar">
 <a class="anchor" href="#the--syntactic-sugar" aria-hidden="true"><span class="octicon octicon-link"></span></a>The @ Syntactic Sugar</h2>
 
-<p>The way you previously used decorator feels a little clunky. First, you have to type the name <code class="highlighter-rouge">ans</code> three times to call and use the decorator. Also, it becomes harder to tell apart where the decorator is actually working. So Python allows you to use decorator with the special syntax <code class="highlighter-rouge">@</code>. You can apply your decorators while defining your functions, like this:</p>
+<p>The way you’ve used decorator in the last section might feel a little clunky. First, you have to type the name <code class="highlighter-rouge">ans</code> three times to call and use the decorator. Also, it becomes harder to tell apart where the decorator is actually working. So Python allows you to use decorator with the special syntax <code class="highlighter-rouge">@</code>. You can apply your decorators while defining your functions, like this:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">deco</span>
 <span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
@@ -370,7 +372,7 @@ window.onload = wrap_img;
 <h2 id="decorating-functions-with-arguments">
 <a class="anchor" href="#decorating-functions-with-arguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Decorating Functions with Arguments</h2>
 
-<p>The naive decorator that we’ve implemented above will only work for functions that take no arguments. It’ll fail and raise <code class="highlighter-rouge">TypeError</code> if your try to decorate a function with arguments with <code class="highlighter-rouge">deco</code>. Now let’s create another decorator called <code class="highlighter-rouge">yell</code> which will take in a function that returns a string value and transform that string value to uppercase.</p>
+<p>The naive decorator that we’ve implemented above will only work for functions that take no arguments. It’ll fail and raise <code class="highlighter-rouge">TypeError</code> if your try to decorate a function having arguments with <code class="highlighter-rouge">deco</code>. Now let’s create another decorator called <code class="highlighter-rouge">yell</code> which will take in a function that returns a string value and transform that string value to uppercase.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">yell</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -399,7 +401,7 @@ window.onload = wrap_img;
 <h2 id="lost-identity">
 <a class="anchor" href="#lost-identity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lost Identity</h2>
 
-<p>In Python, you can introspect any object and its properties via the interactive shell. A function knows its identity, docstring etc. For instance, you can inspect the built in <code class="highlighter-rouge">abs</code> function in the following ways:</p>
+<p>In Python, you can introspect any object and its properties via the interactive shell. A function knows its identity, docstring etc. For instance, you can inspect the built in <code class="highlighter-rouge">print</code> function in the following ways:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span>
 </code></pre></div></div>
@@ -450,7 +452,7 @@ window.onload = wrap_img;
     wrapper(*args, **kwargs)
 </code></pre></div></div>
 
-<p>Now what’s going on there. The decorator <code class="highlighter-rouge">yell</code> has made the function <code class="highlighter-rouge">hello</code> confused about its identity. Instead of reporting its own name, it takes the identity of the inner function <code class="highlighter-rouge">wrapper</code>. This can be confusing while doing debugging. You can fix this using builtin <code class="highlighter-rouge">functools.wraps</code> decorator. This will make sure that the original identity of the decorated function gets preserved.</p>
+<p>Now what’s going on there. The decorator <code class="highlighter-rouge">yell</code> has made the function <code class="highlighter-rouge">hello</code> confused about its identity. Instead of reporting its own name, it takes the identity of the inner function <code class="highlighter-rouge">wrapper</code>. This can be confusing while doing debugging. You can fix this using builtin <code class="highlighter-rouge">functools.wraps</code> decorator. This will make sure that the original identity of the decorated function stays preserved.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
 
@@ -477,7 +479,7 @@ window.onload = wrap_img;
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; 'HELLO GALAXY!'
 </code></pre></div></div>
 
-<p>Introspecting the <code class="highlighter-rouge">hello</code> function decorated with modified decorator will give us our desired result.</p>
+<p>Introspecting the <code class="highlighter-rouge">hello</code> function decorated with modified decorator will give you the desired result.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hello</span><span class="o">.</span><span class="n">__name__</span>
 </code></pre></div></div>
@@ -516,7 +518,7 @@ window.onload = wrap_img;
 <h3 id="timer">
 <a class="anchor" href="#timer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Timer</h3>
 
-<p>Timer decorator will help you time your callables in a non-intrusive way. It helps you while debugging and profiling your functions.</p>
+<p>Timer decorator will help you time your callables in a non-intrusive way. It can help you while debugging and profiling your functions.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">functools</span>
@@ -555,7 +557,7 @@ window.onload = wrap_img;
 <h3 id="exception-logger">
 <a class="anchor" href="#exception-logger" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exception Logger</h3>
 
-<p>Just like the <code class="highlighter-rouge">timer</code> decorator, we can define a logger decorator that will log the state of a callable. For this demonstration, I’ll be defining a exception logger that will show additional information like timestamp, argument names when an exception occurs in the decorated callable.</p>
+<p>Just like the <code class="highlighter-rouge">timer</code> decorator, we can define a logger decorator that will log the state of a callable. For this demonstration, I’ll be defining a exception logger that will show additional information like timestamp, argument names when an exception occurs inside of the decorated callable.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
@@ -655,7 +657,7 @@ window.onload = wrap_img;
 <h3 id="retry">
 <a class="anchor" href="#retry" aria-hidden="true"><span class="octicon octicon-link"></span></a>Retry</h3>
 
-<p>Imagine a situation where your defined callable fails due to some I/O related issues and you’d like to retry that again. Decorator can help you to achieve that in a reusable manner. Let’s define a <code class="highlighter-rouge">retry</code> decorator that will rerun the decorated function multiple times if http error occurs.</p>
+<p>Imagine a situation where your defined callable fails due to some I/O related issues and you’d like to retry that again. Decorator can help you to achieve that in a reusable manner. Let’s define a <code class="highlighter-rouge">retry</code> decorator that will rerun the decorated function multiple times if an http error occurs.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">requests</span>
@@ -745,7 +747,7 @@ window.onload = wrap_img;
 <h2 id="decorators-with-arguments">
 <a class="anchor" href="#decorators-with-arguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Decorators with Arguments</h2>
 
-<p>While defining the <code class="highlighter-rouge">retry</code> decorator in the previous section, you may have noticed that I’ve hard coded the number of times I’d like the function to retry if an http error occurs. It’d be handy if you could inject the number of tries as a parameter into the decorator and make it work accordingly. This is not a trivial task and you’ll need three levels of nested functions to achieve that.</p>
+<p>While defining the <code class="highlighter-rouge">retry</code> decorator in the previous section, you may have noticed that I’ve hard coded the number of times I’d like the function to retry if an error occurs. It’d be handy if you could inject the number of tries as a parameter into the decorator and make it work accordingly. This is not a trivial task and you’ll need three levels of nested functions to achieve that.</p>
 
 <p>Before doing that let’s cook up a trivial example of how you can define decorators with parameters.</p>
 
