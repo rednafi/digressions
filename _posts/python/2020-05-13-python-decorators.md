@@ -885,6 +885,7 @@ Let's use the above template to write a decorator named `Emphasis` that will add
 ```python
 import functools
 
+
 class Emphasis:
     def __init__(self, func):
         functools.update_wrapper(self, func)
@@ -892,7 +893,8 @@ class Emphasis:
 
     def __call__(self, *args, **kwargs):
         val = self.func(*args, **kwargs)
-        return "<b>"+val+"</b>"
+        return "<b>" + val + "</b>"
+
 
 @Emphasis
 def hello(name):
@@ -923,7 +925,6 @@ class Tally:
         self.tally = {}
         self.n_calls = 0
 
-
     def __call__(self, *args, **kwargs):
         self.n_calls += 1
         self.tally[self.func.__name__] = self.n_calls
@@ -935,7 +936,6 @@ class Tally:
 @Tally
 def hello(name):
     return f"Hello {name}!"
-
 
 
 print(hello("Redowan"))
