@@ -862,7 +862,7 @@ This eliminates the need to write multiple layers of nested factory function get
 
 ## Defining Decorators with Classes
 
-This time, I'll be using a class to compose a decorator. Classes can be handy to avoid nested architecture while writing decorators. Also, it can be helpful to use a class while writing stateful decorators. You can use the following template to write decorators with classes.
+This time, I'll be using a class to compose a decorator. Classes can be handy to avoid nested architecture while writing decorators. Also, it can be helpful to use a class while writing stateful decorators. You can follow the pattern below to compose decorators with classes.
 
 ```python
 class ClassDeco:
@@ -873,9 +873,7 @@ class ClassDeco:
     def __call__(self, *args, **kwargs):
 
         # You can add some code before the function call
-
         val = self.func(*args, **kwargs)
-
         # You can also add some code after the function call
 
         return val
