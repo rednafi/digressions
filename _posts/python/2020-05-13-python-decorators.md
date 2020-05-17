@@ -910,7 +910,7 @@ print(hello("Redowan"))
 
 The __init__() method stores a reference to the function num_calls and can do other necessary initialization. The __call__() method will be called instead of the decorated function. It does essentially the same thing as the `wrapper()` function in our earlier examples. Note that you need to use the `functools.update_wrapper()` function instead of `@functools.wraps`.
 
-Before moving on, let's write another decorator using classes. This time, I'm defining a decorator called `Tally` which will keep track of the number of times decorated functions are called using a dictionary. The key of the dictionary will hold the names of the functions and the corresponding values will hold the call count.
+Before moving on, let's write a stateful decorator using classes. Stateful decorators can remember the state of their previous run. Here's a stateful decorator called `Tally` that will keep track of the number of times decorated functions are called in a dictionary. The keys of the dictionary will hold the names of the functions and the corresponding values will hold the call count.
 
 ```python
 import functools
