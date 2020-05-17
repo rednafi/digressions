@@ -157,7 +157,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#applying-multiple-decorators">Applying Multiple Decorators</a></li>
 <li class="toc-entry toc-h2"><a href="#decorators-with-arguments">Decorators with Arguments</a></li>
 <li class="toc-entry toc-h2"><a href="#decorators-with--without-arguments">Decorators with &amp; without Arguments</a></li>
-<li class="toc-entry toc-h2"><a href="#a-generalized-pattern">A Generalized Pattern</a></li>
+<li class="toc-entry toc-h2"><a href="#a-generic-pattern">A Generic Pattern</a></li>
 <li class="toc-entry toc-h2"><a href="#defining-decorators-with-classes">Defining Decorators with Classes</a></li>
 <li class="toc-entry toc-h2"><a href="#a-few-more-examples">A Few More Examples</a>
 <ul>
@@ -863,8 +863,8 @@ window.onload = wrap_img;
 
 <p>If <code class="highlighter-rouge">repeat</code> has been called without arguments, the decorated function will be passed in as <code class="highlighter-rouge">_func</code>. If it has been called with arguments, then <code class="highlighter-rouge">_func</code> will be None. The * in the argument list means that the remaining arguments can’t be called as positional arguments. This time you can use the <code class="highlighter-rouge">repeat</code> with or without arguments and function <code class="highlighter-rouge">hello</code> and <code class="highlighter-rouge">greet</code> above demonstrate that.</p>
 
-<h2 id="a-generalized-pattern">
-<a class="anchor" href="#a-generalized-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Generalized Pattern</h2>
+<h2 id="a-generic-pattern">
+<a class="anchor" href="#a-generic-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Generic Pattern</h2>
 
 <p>Personally, I find it cumbersome how you need three layers of nested functions to define a generalized decorator that can be used with or without arguments. <a href="https://www.dabeaz.com/">David Beazly</a> in his book <a href="https://realpython.com/asins/1449340377/">Python Cookbook</a> shows an excellent way to define generalized decorators without writing three levels of nested functions. It uses the built in <code class="highlighter-rouge">functools.partial</code> function to achieve that. The following is a pattern you can use to define generalized decorators in a more elegant way:</p>
 
