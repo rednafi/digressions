@@ -762,7 +762,7 @@ Here, the `_func` argument acts as a marker, noting whether the decorator has be
 
 If `repeat` has been called without arguments, the decorated function will be passed in as `_func`. If it has been called with arguments, then `_func` will be None. The * in the argument list means that the remaining arguments can’t be called as positional arguments. This time you can use the `repeat` with or without arguments and function `hello` and `greet` above demonstrate that.
 
-## A Generalized Pattern
+## A Generic Pattern
 
 Personally, I find it cumbersome how you need three layers of nested functions to define a generalized decorator that can be used with or without arguments. [David Beazly](https://www.dabeaz.com/) in his book [Python Cookbook](https://realpython.com/asins/1449340377/) shows an excellent way to define generalized decorators without writing three levels of nested functions. It uses the built in `functools.partial` function to achieve that. The following is a pattern you can use to define generalized decorators in a more elegant way:
 
