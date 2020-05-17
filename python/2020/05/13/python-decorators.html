@@ -961,7 +961,7 @@ window.onload = wrap_img;
 <h2 id="defining-decorators-with-classes">
 <a class="anchor" href="#defining-decorators-with-classes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining Decorators with Classes</h2>
 
-<p>This time, I’ll be using a class to compose a decorator. Classes can be handy to avoid nested architecture while writing decorators. Also, it can be helpful to use a class while writing stateful decorators. You can use the following template to write decorators with classes.</p>
+<p>This time, I’ll be using a class to compose a decorator. Classes can be handy to avoid nested architecture while writing decorators. Also, it can be helpful to use a class while writing stateful decorators. You can follow the pattern below to compose decorators with classes.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClassDeco</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">):</span>
@@ -971,9 +971,7 @@ window.onload = wrap_img;
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="c1"># You can add some code before the function call
-</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
+</span>        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># You can also add some code after the function call
 </span>
         <span class="k">return</span> <span class="n">val</span>
