@@ -133,7 +133,7 @@ The `burger` function was called with the string `deli` and the returned functio
 
 This technique by which some data ("deli") gets attached to the code is called closure in Python. The value in the enclosing scope is remembered even when the variable goes out of scope or the function itself is removed from the current namespace. Decorators uses the idea of non-local variables multiple times and soon you'll see how.
 
-## Creating Decorators
+## Writing a Basic Decorator
 
 With these prerequisites out of the way, let's go ahead and create your first simple decorator.
 
@@ -257,7 +257,7 @@ hello("redowan")
 
 Function `hello` takes a `name:string` as parameter and returns a message as string. Look how the `yell` decorator is modifying the original return string, transforming that to uppercase and adding an extra `!` sign without directly changing any code in the `hello` function.
 
-## Lost Identity
+## Solving Identity Crisis
 
 In Python, you can introspect any object and its properties via the interactive shell. A function knows its identity, docstring etc. For instance, you can inspect the built in `print` function in the following ways:
 
@@ -324,7 +324,7 @@ help(hello)
 ```
 
 
-Now what's going on there. The decorator `yell` has made the function `hello` confused about its identity. Instead of reporting its own name, it takes the identity of the inner function `wrapper`. This can be confusing while doing debugging. You can fix this using builtin `functools.wraps` decorator. This will make sure that the original identity of the decorated function stays preserved.
+Now what's going on there. The decorator `yell` has made the function `hello` confused about its own identity. Instead of reporting its own name, it takes the identity of the inner function `wrapper`. This can be confusing while doing debugging. You can fix this using builtin `functools.wraps` decorator. This will make sure that the original identity of the decorated function stays preserved.
 
 ```python
 import functools
@@ -376,7 +376,7 @@ help(hello)
         Hello from the other side.
 ```
 
-## Real World Decorators
+## Decorators in the Wild
 
 Before moving on to the next section let's see a few real world examples of decorators. To define all the decorators, we'll be using the following template that we've perfected so far.
 
@@ -593,7 +593,7 @@ resp.text
 ```
 
 
-## Stacking Decorators
+## Applying Multiple Decorators
 
 You can apply multiple decorators to a function by stacking them on top of each other. Let's define two simple decorators and use them both on a function.
 
@@ -898,7 +898,7 @@ hello("Redowan")
 
 The __init__() method stores a reference to the function num_calls and can do other necessary initialization. The __call__() method will be called instead of the decorated function. It does essentially the same thing as the wrapper() function in our earlier examples. Note that you need to use the functools.update_wrapper() function instead of @functools.wraps.
 
-## More Decorator Examples
+## A Few More Examples
 
 ### Caching Return Values
 
@@ -1064,4 +1064,3 @@ All the pieces of codes in the blog were written and tested with python 3.8 on a
 * [Primer on Python Decorator - Real Python](https://realpython.com/primer-on-python-decorators/)
 * [Decorators in Python - DataCamp](https://www.datacamp.com/community/tutorials/decorators-python)
 * [5 Reasons You Need to Write Python Decorators](https://www.oreilly.com/content/5-reasons-you-need-to-learn-to-write-python-decorators/)
-
