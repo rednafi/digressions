@@ -908,7 +908,48 @@ print(hello("Redowan"))
     <b>Hello Redowan</b>
 ```
 
-The __init__() method stores a reference to the function num_calls and can do other necessary initialization. The __call__() method will be called instead of the decorated function. It does essentially the same thing as the wrapper() function in our earlier examples. Note that you need to use the functools.update_wrapper() function instead of @functools.wraps.
+The __init__() method stores a reference to the function num_calls and can do other necessary initialization. The __call__() method will be called instead of the decorated function. It does essentially the same thing as the `wrapper()` function in our earlier examples. Note that you need to use the `functools.update_wrapper()` function instead of `@functools.wraps`.
+
+Before moving on, let's write another decorator using classes. This time, I'm defining a decorator called `Tally` which will keep track of the number of times decorated functions are called using a dictionary. The key of the dictionary will hold the names of the functions and the corresponding values will hold the call count.
+
+```python
+import functools
+
+
+class Tally:
+    def __init__(self, func):
+        functools.update_wrapper(self, func)
+        self.func = func
+        self.tally = {}
+        self.n_calls = 0
+
+
+    def __call__(self, *args, **kwargs):
+        self.n_calls += 1
+        self.tally[self.func.__name__] = self.n_calls
+
+        print("Callable Tally:", self.tally)
+        return self.func(*args, **kwargs)
+
+
+@Tally
+def hello(name):
+    return f"Hello {name}!"
+
+
+
+print(hello("Redowan"))
+print(hello("Nafi"))
+```
+
+```
+>>> Callable Tally: {'hello': 1}
+    Hello Redowan!
+    Callable Tally: {'hello': 2}
+    Hello Nafi!
+```
+
+
 
 ## A Few More Examples
 
