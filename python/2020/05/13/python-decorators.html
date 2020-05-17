@@ -142,11 +142,11 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#first-class-objects">First Class Objects</a></li>
 <li class="toc-entry toc-h2"><a href="#higher-order-functions">Higher Order Functions</a></li>
 <li class="toc-entry toc-h2"><a href="#closures">Closures</a></li>
-<li class="toc-entry toc-h2"><a href="#creating-decorators">Creating Decorators</a></li>
+<li class="toc-entry toc-h2"><a href="#writing-a-basic-decorator">Writing a Basic Decorator</a></li>
 <li class="toc-entry toc-h2"><a href="#the--syntactic-sugar">The @ Syntactic Sugar</a></li>
 <li class="toc-entry toc-h2"><a href="#decorating-functions-with-arguments">Decorating Functions with Arguments</a></li>
-<li class="toc-entry toc-h2"><a href="#lost-identity">Lost Identity</a></li>
-<li class="toc-entry toc-h2"><a href="#real-world-decorators">Real World Decorators</a>
+<li class="toc-entry toc-h2"><a href="#solving-identity-crisis">Solving Identity Crisis</a></li>
+<li class="toc-entry toc-h2"><a href="#decorators-in-the-wild">Decorators in the Wild</a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#timer">Timer</a></li>
 <li class="toc-entry toc-h3"><a href="#exception-logger">Exception Logger</a></li>
@@ -154,12 +154,12 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#retry">Retry</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#stacking-decorators">Stacking Decorators</a></li>
+<li class="toc-entry toc-h2"><a href="#applying-multiple-decorators">Applying Multiple Decorators</a></li>
 <li class="toc-entry toc-h2"><a href="#decorators-with-arguments">Decorators with Arguments</a></li>
 <li class="toc-entry toc-h2"><a href="#decorators-with--without-arguments">Decorators with &amp; without Arguments</a></li>
 <li class="toc-entry toc-h2"><a href="#a-generalized-pattern">A Generalized Pattern</a></li>
 <li class="toc-entry toc-h2"><a href="#defining-decorators-with-classes">Defining Decorators with Classes</a></li>
-<li class="toc-entry toc-h2"><a href="#more-decorator-examples">More Decorator Examples</a>
+<li class="toc-entry toc-h2"><a href="#a-few-more-examples">A Few More Examples</a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#caching-return-values">Caching Return Values</a></li>
 <li class="toc-entry toc-h3"><a href="#unit-conversion">Unit Conversion</a></li>
@@ -282,8 +282,8 @@ window.onload = wrap_img;
 
 <p>This technique by which some data (“deli”) gets attached to the code is called closure in Python. The value in the enclosing scope is remembered even when the variable goes out of scope or the function itself is removed from the current namespace. Decorators uses the idea of non-local variables multiple times and soon you’ll see how.</p>
 
-<h2 id="creating-decorators">
-<a class="anchor" href="#creating-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating Decorators</h2>
+<h2 id="writing-a-basic-decorator">
+<a class="anchor" href="#writing-a-basic-decorator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Writing a Basic Decorator</h2>
 
 <p>With these prerequisites out of the way, let’s go ahead and create your first simple decorator.</p>
 
@@ -395,8 +395,8 @@ window.onload = wrap_img;
 
 <p>Function <code class="highlighter-rouge">hello</code> takes a <code class="highlighter-rouge">name:string</code> as parameter and returns a message as string. Look how the <code class="highlighter-rouge">yell</code> decorator is modifying the original return string, transforming that to uppercase and adding an extra <code class="highlighter-rouge">!</code> sign without directly changing any code in the <code class="highlighter-rouge">hello</code> function.</p>
 
-<h2 id="lost-identity">
-<a class="anchor" href="#lost-identity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lost Identity</h2>
+<h2 id="solving-identity-crisis">
+<a class="anchor" href="#solving-identity-crisis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solving Identity Crisis</h2>
 
 <p>In Python, you can introspect any object and its properties via the interactive shell. A function knows its identity, docstring etc. For instance, you can inspect the built in <code class="highlighter-rouge">print</code> function in the following ways:</p>
 
@@ -449,7 +449,7 @@ window.onload = wrap_img;
     wrapper(*args, **kwargs)
 </code></pre></div></div>
 
-<p>Now what’s going on there. The decorator <code class="highlighter-rouge">yell</code> has made the function <code class="highlighter-rouge">hello</code> confused about its identity. Instead of reporting its own name, it takes the identity of the inner function <code class="highlighter-rouge">wrapper</code>. This can be confusing while doing debugging. You can fix this using builtin <code class="highlighter-rouge">functools.wraps</code> decorator. This will make sure that the original identity of the decorated function stays preserved.</p>
+<p>Now what’s going on there. The decorator <code class="highlighter-rouge">yell</code> has made the function <code class="highlighter-rouge">hello</code> confused about its own identity. Instead of reporting its own name, it takes the identity of the inner function <code class="highlighter-rouge">wrapper</code>. This can be confusing while doing debugging. You can fix this using builtin <code class="highlighter-rouge">functools.wraps</code> decorator. This will make sure that the original identity of the decorated function stays preserved.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
 
@@ -493,8 +493,8 @@ window.onload = wrap_img;
         Hello from the other side.
 </code></pre></div></div>
 
-<h2 id="real-world-decorators">
-<a class="anchor" href="#real-world-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Real World Decorators</h2>
+<h2 id="decorators-in-the-wild">
+<a class="anchor" href="#decorators-in-the-wild" aria-hidden="true"><span class="octicon octicon-link"></span></a>Decorators in the Wild</h2>
 
 <p>Before moving on to the next section let’s see a few real world examples of decorators. To define all the decorators, we’ll be using the following template that we’ve perfected so far.</p>
 
@@ -697,8 +697,8 @@ window.onload = wrap_img;
     '&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"&gt;\n&lt;title&gt;404 Not Found&lt;/title&gt;\n&lt;h1&gt;Not Found&lt;/h1&gt;\n&lt;p&gt;The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.&lt;/p&gt;\n'
 </code></pre></div></div>
 
-<h2 id="stacking-decorators">
-<a class="anchor" href="#stacking-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stacking Decorators</h2>
+<h2 id="applying-multiple-decorators">
+<a class="anchor" href="#applying-multiple-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applying Multiple Decorators</h2>
 
 <p>You can apply multiple decorators to a function by stacking them on top of each other. Let’s define two simple decorators and use them both on a function.</p>
 
@@ -995,8 +995,8 @@ window.onload = wrap_img;
 
 <p>The <strong>init</strong>() method stores a reference to the function num_calls and can do other necessary initialization. The <strong>call</strong>() method will be called instead of the decorated function. It does essentially the same thing as the wrapper() function in our earlier examples. Note that you need to use the functools.update_wrapper() function instead of @functools.wraps.</p>
 
-<h2 id="more-decorator-examples">
-<a class="anchor" href="#more-decorator-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>More Decorator Examples</h2>
+<h2 id="a-few-more-examples">
+<a class="anchor" href="#a-few-more-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Few More Examples</h2>
 
 <h3 id="caching-return-values">
 <a class="anchor" href="#caching-return-values" aria-hidden="true"><span class="octicon octicon-link"></span></a>Caching Return Values</h3>
@@ -1161,7 +1161,6 @@ window.onload = wrap_img;
   <li><a href="https://www.datacamp.com/community/tutorials/decorators-python">Decorators in Python - DataCamp</a></li>
   <li><a href="https://www.oreilly.com/content/5-reasons-you-need-to-learn-to-write-python-decorators/">5 Reasons You Need to Write Python Decorators</a></li>
 </ul>
-
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
