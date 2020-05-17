@@ -862,38 +862,52 @@ This eliminates the need to write multiple layers of nested factory function get
 
 ## Defining Decorators with Classes
 
-Let's write a stateful decorator named `Calls` that will remember and print out how many times the decorated function has been called. This time, I'll be using classes to write decorators. Classes are better for writing stateful decorators and you'll see why.
+This time, I'll be using a class to compose a decorator. Classes can be handy to avoid nested architecture while writing decorators. Also, it can be helpful to use a class while writing stateful decorators. You can use the following template to write decorators with classes.
+
+```python
+class ClassDeco:
+    def __init__(self, function):
+        functools.update_wrapper(self, func)
+        self.func = func
+
+    def __call__(self, *args, **kwargs):
+
+        # You can add some code before the function call
+
+        val = self.func(*args, **kwargs)
+
+        # You can also add some code after the function call
+
+        return val
+```
+
+
+Let's use the above template to write a decorator named `Emphasis` that will add bold tags `<b></b>`to the string output of a function.
 
 ```python
 import functools
 
-
-class Calls:
+class Emphasis:
     def __init__(self, func):
         functools.update_wrapper(self, func)
         self.func = func
-        self.num_calls = 0
 
     def __call__(self, *args, **kwargs):
-        self.num_calls += 1
-        print(f"Call {self.num_calls} of {self.func.__name__!r}")
-        return self.func(*args, **kwargs)
+        val = self.func(*args, **kwargs)
+        return "<b>"+val+"</b>"
 
-
-@Calls
+@Emphasis
 def hello(name):
-    print(f"Hello {name}!")
+    return f"Hello {name}"
 
 
-hello("Nafi")
-hello("Redowan")
+print(hello("Nafi"))
+print(hello("Redowan"))
 ```
 
 ```
->>> Call 1 of 'hello'
-    Hello Nafi!
-    Call 2 of 'hello'
-    Hello Redowan!
+>>> <b>Hello Nafi</b>
+    <b>Hello Redowan</b>
 ```
 
 The __init__() method stores a reference to the function num_calls and can do other necessary initialization. The __call__() method will be called instead of the decorated function. It does essentially the same thing as the wrapper() function in our earlier examples. Note that you need to use the functools.update_wrapper() function instead of @functools.wraps.
