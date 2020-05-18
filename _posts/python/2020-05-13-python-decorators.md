@@ -650,14 +650,17 @@ Before doing that let's cook up a trivial example of how you can define decorato
 import functools
 
 
-def repeat(n_times=4):
-    """This repeats the output of a callable."""
+def joinby(delimiter=" "):
+    """This decorator splits the string output of the
+    decorated function by a single space and then joins
+    them using a user specified delimiter."""
 
     def outer_wrapper(func):
         @functools.wraps(func)
         def inner_wrapper(*args, **kwargs):
-            for _ in range(n_times):
-                val = func(*args, **kwargs)
+            val = func(*args, **kwargs)
+            val = val.split(" ")
+            val = delimiter.join(val)
             return val
 
         return inner_wrapper
@@ -665,49 +668,41 @@ def repeat(n_times=4):
     return outer_wrapper
 
 
-@repeat(n_times=2)
+@joinby(delimiter=",")
 def hello(name):
-    print(f"Hello {name}!")
+    return f"Hello {name}!"
 
 
-@repeat(n_times=5)
+@joinby(delimiter=">")
 def greet(name):
-    print(f"Greetings {name}!")
+    return f"Greetings {name}!"
 
 
-@repeat()
+@joinby()
 def goodbye(name):
-    print(f"Goodbye {name}!")
+    return f"Goodbye {name}!"
 
 
-hello("Nafi")
-greet("Redowan")
-goodbye("Delowar")
+print(hello("Nafi"))
+print(greet("Redowan"))
+print(goodbye("Delowar"))
 ```
 
 ```
->>> Hello Nafi!
-    Hello Nafi!
-    Greetings Redowan!
-    Greetings Redowan!
-    Greetings Redowan!
-    Greetings Redowan!
-    Greetings Redowan!
-    Goodbye Delowar!
-    Goodbye Delowar!
-    Goodbye Delowar!
+>>> Hello,Nafi!
+    Greetings>Redowan!
     Goodbye Delowar!
 ```
 
-The decorator `repeat` takes a parameter `n_times` and just repeats the output of the decorated function that many times. The three layer nested definition looks scary but we'll get to that in a moment. Notice how you can use the decorator with different parameters. In the above example, I've defined three different functions to demonstrate the usage of `repeat`. It's important to note that in case of a decorator that takes parameters, you'll always need to pass something to it and even if you don't want to pass any parameter (run with the default), you'll still need to decorate your function with `deco()` instead of `deco`. Try changing the decorator on the `goodbye` function from `repeat()` to `repeat` and see what happens.
+The decorator `joinby` takes a single parameter called `delimiter`. It splits the string output of the decorated function by a single space and then joins them using the user defined delimiter specified in the `delimiter` argument. The three layer nested definition looks scary but we'll get to that in a moment. Notice how you can use the decorator with different parameters. In the above example, I've defined three different functions to demonstrate the usage of `joinby`. It's important to note that in case of a decorator that takes parameters, you'll always need to pass something to it and even if you don't want to pass any parameter (run with the default), you'll still need to decorate your function with `deco()` instead of `deco`. Try changing the decorator on the `goodbye` function from `joinby()` to `joinby` and see what happens.
 
 Typically, a decorator creates and returns an inner wrapper function but here in the `repeat` decorator, there is an inner function within another inner function. This almost looks like a *dream within a dream* from the movie Inception.
 
-There are a few subtle things happening in the `repeat()` function:
+There are a few subtle things happening in the `joinby()` function:
 
 * Defining `outer_wrapper()` as an inner function means that `repeat()` will refer to a function object `outer_wrapper`.
 
-* The `n_times` argument is seemingly not used in `repeat()` itself. But by passing `n_times` a closure is created where the value of `n_times` is stored until it will be used later by `inner_wrapper()`
+* The `delimiter` argument is seemingly not used in `joinby()` itself. But by passing `delimiter` a closure is created where the value of `delimiter` is stored until it will be used later by `inner_wrapper()`
 
 
 ## Decorators with & without Arguments
