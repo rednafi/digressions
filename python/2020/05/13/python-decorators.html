@@ -121,7 +121,7 @@ window.onload = wrap_img;
       • <span class="read-time" title="Estimated read time">
     
     
-      23 min read
+      24 min read
     
 </span></p>
 
@@ -751,14 +751,17 @@ window.onload = wrap_img;
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
 
 
-<span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
-    <span class="s">"""This repeats the output of a callable."""</span>
+<span class="k">def</span> <span class="nf">joinby</span><span class="p">(</span><span class="n">delimiter</span><span class="o">=</span><span class="s">" "</span><span class="p">):</span>
+    <span class="s">"""This decorator splits the string output of the
+    decorated function by a single space and then joins
+    them using a user specified delimiter."""</span>
 
     <span class="k">def</span> <span class="nf">outer_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">inner_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_times</span><span class="p">):</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">val</span>
 
         <span class="k">return</span> <span class="n">inner_wrapper</span>
@@ -766,51 +769,43 @@ window.onload = wrap_img;
     <span class="k">return</span> <span class="n">outer_wrapper</span>
 
 
-<span class="o">@</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">@</span><span class="n">joinby</span><span class="p">(</span><span class="n">delimiter</span><span class="o">=</span><span class="s">","</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Hello {name}!"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"Hello {name}!"</span>
 
 
-<span class="o">@</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="o">@</span><span class="n">joinby</span><span class="p">(</span><span class="n">delimiter</span><span class="o">=</span><span class="s">"&gt;"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Greetings {name}!"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"Greetings {name}!"</span>
 
 
-<span class="o">@</span><span class="n">repeat</span><span class="p">()</span>
+<span class="o">@</span><span class="n">joinby</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">goodbye</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Goodbye {name}!"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"Goodbye {name}!"</span>
 
 
-<span class="n">hello</span><span class="p">(</span><span class="s">"Nafi"</span><span class="p">)</span>
-<span class="n">greet</span><span class="p">(</span><span class="s">"Redowan"</span><span class="p">)</span>
-<span class="n">goodbye</span><span class="p">(</span><span class="s">"Delowar"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">hello</span><span class="p">(</span><span class="s">"Nafi"</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">greet</span><span class="p">(</span><span class="s">"Redowan"</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">goodbye</span><span class="p">(</span><span class="s">"Delowar"</span><span class="p">))</span>
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Hello Nafi!
-    Hello Nafi!
-    Greetings Redowan!
-    Greetings Redowan!
-    Greetings Redowan!
-    Greetings Redowan!
-    Greetings Redowan!
-    Goodbye Delowar!
-    Goodbye Delowar!
-    Goodbye Delowar!
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Hello,Nafi!
+    Greetings&gt;Redowan!
     Goodbye Delowar!
 </code></pre></div></div>
 
-<p>The decorator <code class="highlighter-rouge">repeat</code> takes a parameter <code class="highlighter-rouge">n_times</code> and just repeats the output of the decorated function that many times. The three layer nested definition looks scary but we’ll get to that in a moment. Notice how you can use the decorator with different parameters. In the above example, I’ve defined three different functions to demonstrate the usage of <code class="highlighter-rouge">repeat</code>. It’s important to note that in case of a decorator that takes parameters, you’ll always need to pass something to it and even if you don’t want to pass any parameter (run with the default), you’ll still need to decorate your function with <code class="highlighter-rouge">deco()</code> instead of <code class="highlighter-rouge">deco</code>. Try changing the decorator on the <code class="highlighter-rouge">goodbye</code> function from <code class="highlighter-rouge">repeat()</code> to <code class="highlighter-rouge">repeat</code> and see what happens.</p>
+<p>The decorator <code class="highlighter-rouge">joinby</code> takes a single parameter called <code class="highlighter-rouge">delimiter</code>. It splits the string output of the decorated function by a single space and then joins them using the user defined delimiter specified in the <code class="highlighter-rouge">delimiter</code> argument. The three layer nested definition looks scary but we’ll get to that in a moment. Notice how you can use the decorator with different parameters. In the above example, I’ve defined three different functions to demonstrate the usage of <code class="highlighter-rouge">joinby</code>. It’s important to note that in case of a decorator that takes parameters, you’ll always need to pass something to it and even if you don’t want to pass any parameter (run with the default), you’ll still need to decorate your function with <code class="highlighter-rouge">deco()</code> instead of <code class="highlighter-rouge">deco</code>. Try changing the decorator on the <code class="highlighter-rouge">goodbye</code> function from <code class="highlighter-rouge">joinby()</code> to <code class="highlighter-rouge">joinby</code> and see what happens.</p>
 
 <p>Typically, a decorator creates and returns an inner wrapper function but here in the <code class="highlighter-rouge">repeat</code> decorator, there is an inner function within another inner function. This almost looks like a <em>dream within a dream</em> from the movie Inception.</p>
 
-<p>There are a few subtle things happening in the <code class="highlighter-rouge">repeat()</code> function:</p>
+<p>There are a few subtle things happening in the <code class="highlighter-rouge">joinby()</code> function:</p>
 
 <ul>
   <li>
     <p>Defining <code class="highlighter-rouge">outer_wrapper()</code> as an inner function means that <code class="highlighter-rouge">repeat()</code> will refer to a function object <code class="highlighter-rouge">outer_wrapper</code>.</p>
   </li>
   <li>
-    <p>The <code class="highlighter-rouge">n_times</code> argument is seemingly not used in <code class="highlighter-rouge">repeat()</code> itself. But by passing <code class="highlighter-rouge">n_times</code> a closure is created where the value of <code class="highlighter-rouge">n_times</code> is stored until it will be used later by <code class="highlighter-rouge">inner_wrapper()</code></p>
+    <p>The <code class="highlighter-rouge">delimiter</code> argument is seemingly not used in <code class="highlighter-rouge">joinby()</code> itself. But by passing <code class="highlighter-rouge">delimiter</code> a closure is created where the value of <code class="highlighter-rouge">delimiter</code> is stored until it will be used later by <code class="highlighter-rouge">inner_wrapper()</code></p>
   </li>
 </ul>
 
