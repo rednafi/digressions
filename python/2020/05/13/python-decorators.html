@@ -812,51 +812,53 @@ window.onload = wrap_img;
 <h2 id="decorators-with--without-arguments">
 <a class="anchor" href="#decorators-with--without-arguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Decorators with &amp; without Arguments</h2>
 
-<p>You saw earlier that a decorator specifically designed to take parameters can’t be used without parameters. But what if we want to design one that can used both with and without arguments. Let’s redefine the <code class="highlighter-rouge">retry</code> decorator so that you can use it with parameters or just like an ordinary parameter-less decorator that we’ve seen before.</p>
+<p>You saw earlier that a decorator specifically designed to take parameters can’t be used without parameters; you need to at least apply parenthesis after the decorator <code class="highlighter-rouge">deco()</code> to use it without explicitly providing the arguments. But what if you want to design one that can used both with and without arguments. Let’s redefine the <code class="highlighter-rouge">joinby</code> decorator so that you can use it with parameters or just like an ordinary parameter-less decorator that we’ve seen before.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="n">_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">n_times</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
-    <span class="s">"""This repeats the output of a callable."""</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+
+
+<span class="k">def</span> <span class="nf">joinby</span><span class="p">(</span><span class="n">_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">" "</span><span class="p">):</span>
+    <span class="s">"""This decorator splits the string output
+    of a function by a single space and then joins that
+    using a user specified delimiter."""</span>
 
     <span class="k">def</span> <span class="nf">outer_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">inner_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_times</span><span class="p">):</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">val</span>
 
         <span class="k">return</span> <span class="n">inner_wrapper</span>
 
-    <span class="c1"># This part enables your decorator to be used with/ without params
-</span>    <span class="k">if</span> <span class="n">_func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">outer_wrapper</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">outer_wrapper</span><span class="p">(</span><span class="n">_func</span><span class="p">)</span>
-</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">repeat</span>
+
+<span class="o">@</span><span class="n">joinby</span><span class="p">(</span><span class="n">delimiter</span><span class="o">=</span><span class="s">","</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">print</span> <span class="p">(</span><span class="n">f</span><span class="s">"Hello {name}!"</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"Hello {name}!"</span>
 
-<span class="o">@</span><span class="n">repeat</span><span class="p">(</span><span class="n">n_times</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="o">@</span><span class="n">joinby</span>
 <span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span> <span class="n">f</span><span class="s">"Greetings {name}!"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s">"Greetings {name}!"</span>
 
 
-<span class="n">hello</span><span class="p">(</span><span class="s">"Nafi"</span><span class="p">)</span>
-<span class="n">greet</span><span class="p">(</span><span class="s">"Redowan"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">hello</span><span class="p">(</span><span class="s">"Nafi"</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">greet</span><span class="p">(</span><span class="s">"Redowan"</span><span class="p">))</span>
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Hello Nafi!
-    Hello Nafi!
-    Hello Nafi!
-    Hello Nafi!
-    Greetings Redowan!
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Hello,Nafi!
     Greetings Redowan!
 </code></pre></div></div>
 
 <p>Here, the <code class="highlighter-rouge">_func</code> argument acts as a marker, noting whether the decorator has been called with arguments or not:</p>
 
-<p>If <code class="highlighter-rouge">repeat</code> has been called without arguments, the decorated function will be passed in as <code class="highlighter-rouge">_func</code>. If it has been called with arguments, then <code class="highlighter-rouge">_func</code> will be None. The * in the argument list means that the remaining arguments can’t be called as positional arguments. This time you can use the <code class="highlighter-rouge">repeat</code> with or without arguments and function <code class="highlighter-rouge">hello</code> and <code class="highlighter-rouge">greet</code> above demonstrate that.</p>
+<p>If <code class="highlighter-rouge">joinby</code> has been called without arguments, the decorated function will be passed in as <code class="highlighter-rouge">_func</code>. If it has been called with arguments, then <code class="highlighter-rouge">_func</code> will be None. The * in the argument list means that the remaining arguments can’t be called as positional arguments. This time you can use <code class="highlighter-rouge">joinby</code> with or without arguments and function <code class="highlighter-rouge">hello</code> and <code class="highlighter-rouge">greet</code> above demonstrate that.</p>
 
 <h2 id="a-generic-pattern">
 <a class="anchor" href="#a-generic-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Generic Pattern</h2>
