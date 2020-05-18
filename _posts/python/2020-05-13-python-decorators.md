@@ -707,55 +707,56 @@ There are a few subtle things happening in the `joinby()` function:
 
 ## Decorators with & without Arguments
 
-You saw earlier that a decorator specifically designed to take parameters can't be used without parameters. But what if we want to design one that can used both with and without arguments. Let's redefine the `retry` decorator so that you can use it with parameters or just like an ordinary parameter-less decorator that we've seen before.
+You saw earlier that a decorator specifically designed to take parameters can't be used without parameters; you need to at least apply parenthesis after the decorator `deco()` to use it without explicitly providing the arguments. But what if you want to design one that can used both with and without arguments. Let's redefine the `joinby` decorator so that you can use it with parameters or just like an ordinary parameter-less decorator that we've seen before.
 
 ```python
-def repeat(_func=None, *, n_times=4):
-    """This repeats the output of a callable."""
+import functools
+
+
+def joinby(_func=None, *, delimiter=" "):
+    """This decorator splits the string output
+    of a function by a single space and then joins that
+    using a user specified delimiter."""
 
     def outer_wrapper(func):
         @functools.wraps(func)
         def inner_wrapper(*args, **kwargs):
-            for _ in range(n_times):
-                val = func(*args, **kwargs)
+            val = func(*args, **kwargs)
+            val = val.split(" ")
+            val = delimiter.join(val)
             return val
 
         return inner_wrapper
 
-    # This part enables your decorator to be used with/ without params
     if _func is None:
         return outer_wrapper
     else:
         return outer_wrapper(_func)
-```
 
 
-```python
-@repeat
+@joinby(delimiter=",")
 def hello(name):
-    print (f"Hello {name}!"
+    return f"Hello {name}!"
 
-@repeat(n_times=2)
+
+@joinby
 def greet(name):
-    print( f"Greetings {name}!")
+    return f"Greetings {name}!"
 
 
-hello("Nafi")
-greet("Redowan")
+print(hello("Nafi"))
+print(greet("Redowan"))
 ```
 
+
 ```
->>> Hello Nafi!
-    Hello Nafi!
-    Hello Nafi!
-    Hello Nafi!
-    Greetings Redowan!
+>>> Hello,Nafi!
     Greetings Redowan!
 ```
 
 Here, the `_func` argument acts as a marker, noting whether the decorator has been called with arguments or not:
 
-If `repeat` has been called without arguments, the decorated function will be passed in as `_func`. If it has been called with arguments, then `_func` will be None. The * in the argument list means that the remaining arguments can’t be called as positional arguments. This time you can use the `repeat` with or without arguments and function `hello` and `greet` above demonstrate that.
+If `joinby` has been called without arguments, the decorated function will be passed in as `_func`. If it has been called with arguments, then `_func` will be None. The * in the argument list means that the remaining arguments can’t be called as positional arguments. This time you can use `joinby` with or without arguments and function `hello` and `greet` above demonstrate that.
 
 ## A Generic Pattern
 
