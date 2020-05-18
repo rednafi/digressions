@@ -832,7 +832,8 @@ window.onload = wrap_img;
 
         <span class="k">return</span> <span class="n">inner_wrapper</span>
 
-    <span class="k">if</span> <span class="n">_func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="c1"># This part enables you to use the decorator with/without arguments
+</span>    <span class="k">if</span> <span class="n">_func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">outer_wrapper</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">outer_wrapper</span><span class="p">(</span><span class="n">_func</span><span class="p">)</span>
