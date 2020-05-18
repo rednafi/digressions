@@ -728,6 +728,7 @@ def joinby(_func=None, *, delimiter=" "):
 
         return inner_wrapper
 
+    # This part enables you to use the decorator with/without arguments
     if _func is None:
         return outer_wrapper
     else:
