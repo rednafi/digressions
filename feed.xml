@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-05-18T05:32:25-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Red’s Digressions</title><subtitle>Sporadic cogitations on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Untangling Python Decorators</title><link href="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html" rel="alternate" type="text/html" title="Untangling Python Decorators" /><published>2020-05-13T00:00:00-05:00</published><updated>2020-05-13T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/python/2020/05/13/python-decorators</id><content type="html" xml:base="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html">&lt;p&gt;When I first learned about Python decorators, using them felt like doing voodoo magic. Decorators can give you the ability to add new functionalities to any callable without actually touching or changing the code inside it. This can typically yield better encapsulation and help you write cleaner and more understandable code. However, &lt;em&gt;decorator&lt;/em&gt; is considered as a fairly advanced topic in Python since understanding and writing it requires you to have command over multiple additional concepts like first class objects, higher order functions, closures etc. First, I’ll try to introduce these concepts as necessary and then unravel the core concept of decorator layer by layer. So let’s dive in.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-05-19T01:16:38-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Red’s Digressions</title><subtitle>Sporadic cogitations on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Untangling Python Decorators</title><link href="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html" rel="alternate" type="text/html" title="Untangling Python Decorators" /><published>2020-05-13T00:00:00-05:00</published><updated>2020-05-13T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/python/2020/05/13/python-decorators</id><content type="html" xml:base="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html">&lt;p&gt;When I first learned about Python decorators, using them felt like doing voodoo magic. Decorators can give you the ability to add new functionalities to any callable without actually touching or changing the code inside it. This can typically yield better encapsulation and help you write cleaner and more understandable code. However, &lt;em&gt;decorator&lt;/em&gt; is considered as a fairly advanced topic in Python since understanding and writing it requires you to have command over multiple additional concepts like first class objects, higher order functions, closures etc. First, I’ll try to introduce these concepts as necessary and then unravel the core concept of decorator layer by layer. So let’s dive in.&lt;/p&gt;
 
 &lt;h2 id=&quot;first-class-objects&quot;&gt;First Class Objects&lt;/h2&gt;
 
@@ -2208,10 +2208,7 @@
 
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/psf/black&quot;&gt;Black&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;Black&lt;/code&gt; is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/asottile/reorder_python_imports&quot;&gt;Reorder Python Imports&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;reorder-python-import&lt;/code&gt; is a Python utility to sort &lt;em&gt;imports&lt;/em&gt; alphabetically, and automatically separated into sections and by type. It’s basically a fork of the widely used &lt;a href=&quot;https://github.com/timothycrosley/isort&quot;&gt;isort&lt;/a&gt; tool.&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/timothycrosley/isort&quot;&gt;Isort&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;Isort&lt;/code&gt; is a Python utility to sort &lt;em&gt;imports&lt;/em&gt; alphabetically, and automatically separate them by sections and type.&lt;/p&gt;
 
     &lt;p&gt;It parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:&lt;/p&gt;
 
@@ -2226,6 +2223,9 @@
     &lt;/ul&gt;
 
     &lt;p&gt;Inside each section, the imports are sorted alphabetically. This also automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/psf/black&quot;&gt;Black&lt;/a&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;Black&lt;/code&gt; is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/PyCQA/flake8&quot;&gt;Flake8&lt;/a&gt;&lt;/strong&gt;: &lt;em&gt;Flake8&lt;/em&gt; is a wrapper around &lt;em&gt;PyFlakes&lt;/em&gt;, &lt;em&gt;pycodestyle&lt;/em&gt;, Ned Batchelder’s &lt;a href=&quot;https://github.com/PyCQA/mccabe&quot;&gt;McCabe script&lt;/a&gt;. The combination of these three linters makes sure that your code is compliant with &lt;a href=&quot;https://www.python.org/dev/peps/pep-0008/&quot;&gt;PEP 8&lt;/a&gt; and free of some obvious code smells.&lt;/p&gt;
@@ -2311,13 +2311,15 @@
 
 &lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# .pre-commit-config.yaml&lt;/span&gt;
 
-
-&lt;span class=&quot;c1&quot;&gt;# reorder imports&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/asottile/reorder_python_imports&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v2.2.0&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# isort&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/asottile/seed-isort-config&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1.9.3&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;hooks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;reorder-python-imports&lt;/span&gt;
-
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;seed-isort-config&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/pre-commit/mirrors-isort&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;rev&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v4.3.21&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;hooks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;isort&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;# black&lt;/span&gt;
 &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;repo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://github.com/ambv/black&lt;/span&gt;

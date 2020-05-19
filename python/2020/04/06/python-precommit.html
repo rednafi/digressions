@@ -150,10 +150,7 @@ window.onload = wrap_img;
 
 <ul>
   <li>
-    <p><strong><a href="https://github.com/psf/black">Black</a></strong>: <code class="highlighter-rouge">Black</code> is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.</p>
-  </li>
-  <li>
-    <p><strong><a href="https://github.com/asottile/reorder_python_imports">Reorder Python Imports</a></strong>: <code class="highlighter-rouge">reorder-python-import</code> is a Python utility to sort <em>imports</em> alphabetically, and automatically separated into sections and by type. It’s basically a fork of the widely used <a href="https://github.com/timothycrosley/isort">isort</a> tool.</p>
+    <p><strong><a href="https://github.com/timothycrosley/isort">Isort</a></strong>: <code class="highlighter-rouge">Isort</code> is a Python utility to sort <em>imports</em> alphabetically, and automatically separate them by sections and type.</p>
 
     <p>It parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:</p>
 
@@ -168,6 +165,9 @@ window.onload = wrap_img;
     </ul>
 
     <p>Inside each section, the imports are sorted alphabetically. This also automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/psf/black">Black</a></strong>: <code class="highlighter-rouge">Black</code> is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you’re reading.</p>
   </li>
   <li>
     <p><strong><a href="https://github.com/PyCQA/flake8">Flake8</a></strong>: <em>Flake8</em> is a wrapper around <em>PyFlakes</em>, <em>pycodestyle</em>, Ned Batchelder’s <a href="https://github.com/PyCQA/mccabe">McCabe script</a>. The combination of these three linters makes sure that your code is compliant with <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> and free of some obvious code smells.</p>
@@ -260,13 +260,15 @@ window.onload = wrap_img;
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .pre-commit-config.yaml</span>
 
-
-<span class="c1"># reorder imports</span>
-<span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/asottile/reorder_python_imports</span>
-  <span class="na">rev</span><span class="pi">:</span> <span class="s">v2.2.0</span>
+<span class="c1"># isort</span>
+<span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/asottile/seed-isort-config</span>
+  <span class="na">rev</span><span class="pi">:</span> <span class="s">v1.9.3</span>
   <span class="na">hooks</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">reorder-python-imports</span>
-
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">seed-isort-config</span>
+<span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/pre-commit/mirrors-isort</span>
+  <span class="na">rev</span><span class="pi">:</span> <span class="s">v4.3.21</span>
+  <span class="na">hooks</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">isort</span>
 
 <span class="c1"># black</span>
 <span class="pi">-</span> <span class="na">repo</span><span class="pi">:</span> <span class="s">https://github.com/ambv/black</span>
