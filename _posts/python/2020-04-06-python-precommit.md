@@ -11,9 +11,8 @@ categories: [Python]
 
 To keep my sanity, I only use three linters in all of my python projects:
 
-* **[Black](https://github.com/psf/black)**: `Black` is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you're reading.
 
-* **[Reorder Python Imports](https://github.com/asottile/reorder_python_imports)**: `reorder-python-import` is a Python utility to sort *imports* alphabetically, and automatically separated into sections and by type. It's basically a fork of the widely used [isort](https://github.com/timothycrosley/isort) tool.
+* **[Isort](https://github.com/timothycrosley/isort)**: `Isort` is a Python utility to sort *imports* alphabetically, and automatically separate them by sections and type.
 
     It parses specified files for global level import lines and puts them all at the top of the file grouped together by the type of import:
 
@@ -26,6 +25,8 @@ To keep my sanity, I only use three linters in all of my python projects:
     - Custom Sections (Defined by `sections` list in configuration file)
 
     Inside each section, the imports are sorted alphabetically. This also automatically removes duplicate python imports, and wraps long from imports to the specified line length (defaults to 79).
+
+* **[Black](https://github.com/psf/black)**: `Black` is the uncompromising Python code formatter. It uses consistent rules to format your python code and makes sure that they look the same regardless of the project you're reading.
 
 * **[Flake8](https://github.com/PyCQA/flake8)**: *Flake8* is a wrapper around *PyFlakes*, *pycodestyle*, Ned Batchelder's [McCabe script](https://github.com/PyCQA/mccabe). The combination of these three linters makes sure that your code is compliant with [PEP 8](https://www.python.org/dev/peps/pep-0008/) and free of some obvious code smells.
 
@@ -106,13 +107,15 @@ The following one is an example of how you can define your `.pre-commit-config.y
 ```yaml
 # .pre-commit-config.yaml
 
-
-# reorder imports
-- repo: https://github.com/asottile/reorder_python_imports
-  rev: v2.2.0
+# isort
+- repo: https://github.com/asottile/seed-isort-config
+  rev: v1.9.3
   hooks:
-    - id: reorder-python-imports
-
+  - id: seed-isort-config
+- repo: https://github.com/pre-commit/mirrors-isort
+  rev: v4.3.21
+  hooks:
+  - id: isort
 
 # black
 - repo: https://github.com/ambv/black
