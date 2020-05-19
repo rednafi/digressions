@@ -121,7 +121,7 @@ window.onload = wrap_img;
       • <span class="read-time" title="Estimated read time">
     
     
-      17 min read
+      19 min read
     
 </span></p>
 
@@ -310,6 +310,7 @@ window.onload = wrap_img;
         <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{method.__name__} =&gt; {(end_time-start_time)*1000} ms"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span>
+
     <span class="k">return</span> <span class="n">wrapper</span>
 </code></pre></div></div>
 
@@ -445,11 +446,82 @@ window.onload = wrap_img;
 ... Finished downloading f1040sb.pdf
 </code></pre></div></div>
 
-<p>The concurrent version of the code takes only about 1/4 th the time of it’s sequential counterpart. Notice in this concurrent version, the <code class="highlighter-rouge">download_one</code> function is the same as before but in the <code class="highlighter-rouge">download_all</code> function, a <code class="highlighter-rouge">ThreadPoolExecutor</code> context manager wraps the <code class="highlighter-rouge">execute.map()</code> method. The <code class="highlighter-rouge">download_one</code> function is passed into the <code class="highlighter-rouge">map</code> along with the iterable containing the URLs. The <code class="highlighter-rouge">timeout</code> parameter determines how long a thread will spend before giving up on a single task in the pipeline. The <code class="highlighter-rouge">max_workers</code> means how many worker you want to deploy to spawn and manage the threads. A general rule of thumb is using <code class="highlighter-rouge">2 * multiprocessing.cpu_count() + 1</code>. My machine has 6 physical cores with 12 threads. So 13 is the value I chose.</p>
+<p>The concurrent version of the code takes only about 1/4 th the time of it’s sequential counterpart. Notice in this concurrent version, the <code class="highlighter-rouge">download_one</code> function is the same as before but in the <code class="highlighter-rouge">download_all</code> function, a <code class="highlighter-rouge">ThreadPoolExecutor</code> context manager wraps the <code class="highlighter-rouge">executor.map()</code> method. The <code class="highlighter-rouge">download_one</code> function is passed into the <code class="highlighter-rouge">map</code> along with the iterable containing the URLs. The <code class="highlighter-rouge">timeout</code> parameter determines how long a thread will spend before giving up on a single task in the pipeline. The <code class="highlighter-rouge">max_workers</code> means how many worker you want to deploy to spawn and manage the threads. A general rule of thumb is using <code class="highlighter-rouge">2 * multiprocessing.cpu_count() + 1</code>. My machine has 6 physical cores with 12 threads. So 13 is the value I chose.</p>
 
 <blockquote>
   <p>Note: You can also try running the above functions with <code class="highlighter-rouge">ProcessPoolExecutor</code> via the same interface and notice that the threaded version performs slightly better than due to the nature of the task.</p>
 </blockquote>
+
+<p>There is one small problem with the example above. The <code class="highlighter-rouge">executor.map()</code> method returns a generator which allows to iterate through the results once ready. That means if any error occurs inside <code class="highlighter-rouge">map</code>, it’s not possible to handle that and resume the generator after the exception occurs. From <a href="https://www.python.org/dev/peps/pep-0255/#specification-generators-and-exception-propagation">PEP255</a>:</p>
+
+<blockquote>
+  <p>If an unhandled exception– including, but not limited to, StopIteration –is raised by, or passes through, a generator function, then the exception is passed on to the caller in the usual way, and subsequent attempts to resume the generator function raise StopIteration. In other words, an unhandled exception terminates a generator’s useful life.</p>
+</blockquote>
+
+<p>To get around that, you can use the <code class="highlighter-rouge">executor.submit()</code> method to create futures, accumulated the futures in a list, iterate through the futures and handle the exceptions manually. See the following example:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">download_one</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="s">"""
+    Downloads the specified URL and saves it to disk
+    """</span>
+
+    <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">fullpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">fullpath</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">fullpath</span><span class="o">.</span><span class="n">suffix</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">RuntimeError</span><span class="p">(</span><span class="s">"URL does not contain an extension"</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s">"Finished downloading {fname}"</span>
+    <span class="k">return</span> <span class="n">msg</span>
+
+
+<span class="o">@</span><span class="n">timeit</span>
+<span class="k">def</span> <span class="nf">download_all</span><span class="p">(</span><span class="n">urls</span><span class="p">):</span>
+    <span class="s">"""
+    Create a thread pool and download specified urls
+    """</span>
+
+    <span class="n">futures_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">download_one</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+            <span class="n">futures_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures_list</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">"http://www.irs.gov/pub/irs-pdf/f1040.pdf"</span><span class="p">,</span>
+        <span class="s">"http://www.irs.gov/pub/irs-pdf/f1040a.pdf"</span><span class="p">,</span>
+        <span class="s">"http://www.irs.gov/pub/irs-pdf/f1040ez.pdf"</span><span class="p">,</span>
+        <span class="s">"http://www.irs.gov/pub/irs-pdf/f1040es.pdf"</span><span class="p">,</span>
+        <span class="s">"http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="n">download_all</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The above snippet should print out similar messages as before.</p>
 
 <h3 id="running-multiple-cpu-bound-subroutines-with-multi-processing">
 <a class="anchor" href="#running-multiple-cpu-bound-subroutines-with-multi-processing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running Multiple CPU Bound Subroutines with Multi-processing</h3>
