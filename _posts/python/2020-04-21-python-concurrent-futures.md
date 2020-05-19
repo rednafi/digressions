@@ -153,6 +153,7 @@ def timeit(method):
         print(f"{method.__name__} => {(end_time-start_time)*1000} ms")
 
         return result
+
     return wrapper
 ```
 
@@ -294,9 +295,79 @@ if __name__ == "__main__":
 ... Finished downloading f1040sb.pdf
 ```
 
-The concurrent version of the code takes only about 1/4 th the time of it's sequential counterpart. Notice in this concurrent version, the `download_one` function is the same as before but in the `download_all` function, a `ThreadPoolExecutor` context manager wraps the `execute.map()` method. The `download_one` function is passed into the `map` along with the iterable containing the URLs. The `timeout` parameter determines how long a thread will spend before giving up on a single task in the pipeline. The `max_workers` means how many worker you want to deploy to spawn and manage the threads. A general rule of thumb is using `2 * multiprocessing.cpu_count() + 1`. My machine has 6 physical cores with 12 threads. So 13 is the value I chose.
+The concurrent version of the code takes only about 1/4 th the time of it's sequential counterpart. Notice in this concurrent version, the `download_one` function is the same as before but in the `download_all` function, a `ThreadPoolExecutor` context manager wraps the `executor.map()` method. The `download_one` function is passed into the `map` along with the iterable containing the URLs. The `timeout` parameter determines how long a thread will spend before giving up on a single task in the pipeline. The `max_workers` means how many worker you want to deploy to spawn and manage the threads. A general rule of thumb is using `2 * multiprocessing.cpu_count() + 1`. My machine has 6 physical cores with 12 threads. So 13 is the value I chose.
 
 > Note: You can also try running the above functions with `ProcessPoolExecutor` via the same interface and notice that the threaded version performs slightly better than due to the nature of the task.
+
+There is one small problem with the example above. The `executor.map()` method returns a generator which allows to iterate through the results once ready. That means if any error occurs inside `map`, it's not possible to handle that and resume the generator after the exception occurs. From [PEP255](https://www.python.org/dev/peps/pep-0255/#specification-generators-and-exception-propagation):
+
+> If an unhandled exception-- including, but not limited to, StopIteration --is raised by, or passes through, a generator function, then the exception is passed on to the caller in the usual way, and subsequent attempts to resume the generator function raise StopIteration. In other words, an unhandled exception terminates a generator's useful life.
+
+To get around that, you can use the `executor.submit()` method to create futures, accumulated the futures in a list, iterate through the futures and handle the exceptions manually. See the following example:
+
+```python
+def download_one(url):
+    """
+    Downloads the specified URL and saves it to disk
+    """
+
+    req = urllib.request.urlopen(url)
+    fullpath = Path(url)
+    fname = fullpath.name
+    ext = fullpath.suffix
+
+    if not ext:
+        raise RuntimeError("URL does not contain an extension")
+
+    with open(fname, "wb") as handle:
+        while True:
+            chunk = req.read(1024)
+            if not chunk:
+                break
+            handle.write(chunk)
+
+    msg = f"Finished downloading {fname}"
+    return msg
+
+
+@timeit
+def download_all(urls):
+    """
+    Create a thread pool and download specified urls
+    """
+
+    futures_list = []
+    results = []
+
+    with ThreadPoolExecutor(max_workers=13) as executor:
+        for url in urls:
+            futures = executor.submit(download_one, url)
+            futures_list.append(futures)
+
+        for future in futures_list:
+            try:
+                result = future.result(timeout=60)
+                results.append(result)
+            except Exception:
+                results.append(None)
+    return results
+
+
+if __name__ == "__main__":
+    urls = (
+        "http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+        "http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+        "http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+        "http://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+        "http://www.irs.gov/pub/irs-pdf/f1040sb.pdf",
+    )
+
+    results = download_all(urls)
+    for result in results:
+        print(result)
+```
+
+The above snippet should print out similar messages as before.
 
 ### Running Multiple CPU Bound Subroutines with Multi-processing
 
