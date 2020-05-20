@@ -118,7 +118,7 @@ Notice the variable `futures` where the original tasks are mapped with their cor
 
 ### Running Tasks with Executor.map
 
-Another way the results can be collected in the same order they're scheduled is via using `execuror.map()` method.
+Another way the results can be collected in the same order they're scheduled is via using `executor.map()` method.
 
 
 ```python
@@ -645,6 +645,6 @@ All the pieces of codes in the blog were written and tested with python 3.8 on a
 
 ## References
 
-1. [concurrent.fututures- the official documentation](https://docs.python.org/3/library/concurrent.futures.html)
+1. [concurrent.futures- the official documentation](https://docs.python.org/3/library/concurrent.futures.html)
 2. [Easy Concurrency in Python](http://pljung.de/posts/easy-concurrency-in-python/)
 3. [Adventures in Python with concurrent.futures](https://alexwlchan.net/2019/10/adventures-with-concurrent-futures/)
