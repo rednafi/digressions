@@ -98,7 +98,7 @@ with concurrent.futures.Executor() as executor:
 
 Here you start by creating an Executor, which manages all the tasks that are running – either in separate processes or threads. Using the with statement creates a context manager, which ensures any stray threads or processes get cleaned up via calling the `executor.shutdown()` method implicitly when you’re done.
 
-In real code, you'd would need to replace the `Executor` with `ThreadPoolExecutor` or a `ProcessPoolExecutor` depending on the nature of the callables. Then a  set comprehension has been used here to start all the tasks. The `executor.submit()` method schedules each task. This creates a Future object, which represents the task to be done. Once all the tasks have been scheduled, the method `concurrent.futures_as_completed()` is called, which yields the futures as they’re done – that is, as each task completes. The `executor.result()` method gives you the return value of `perform(task)`, or throws an exception in case of failure.
+In real code, you'd would need to replace the `Executor` with `ThreadPoolExecutor` or a `ProcessPoolExecutor` depending on the nature of the callables. Then a  set comprehension has been used here to start all the tasks. The `executor.submit()` method schedules each task. This creates a Future object, which represents the task to be done. Once all the tasks have been scheduled, the method `concurrent.futures_as_completed()` is called, which yields the futures as they’re done – that is, as each task completes. The `fut.result()` method gives you the return value of `perform(task)`, or throws an exception in case of failure.
 
 The `executor.submit()` method schedules the tasks asynchronously and doesn't hold any contexts regarding the original tasks. So if you want to map the results with the original tasks, you need to track those yourself.
 
@@ -498,7 +498,7 @@ with ThreadPoolExecutor(max_workers=1) as executor:
     print(future.result())
 ```
 
-The above situation usually happens when a subroutine produces nested `Future` object and runs runs on a single thread. In the function `wait_on_future`, the `executor.submit(pow, 5, 2)` creates another `Future` object. Since I'm running the entire thing using a single thread, the internal future object is blocking the thread and the external `executor.submit()` method inside the context manager can not use any threads. This situation can be avoided using multiple threads but in general, this is a bad design itself.
+The above situation usually happens when a subroutine produces nested `Future` object and runs on a single thread. In the function `wait_on_future`, the `executor.submit(pow, 5, 2)` creates another `Future` object. Since I'm running the entire thing using a single thread, the internal future object is blocking the thread and the external `executor.submit()` method inside the context manager can not use any threads. This situation can be avoided using multiple threads but in general, this is a bad design itself.
 
 Then there're situations when you might be getting lower performance with concurrent code than its sequential counterpart. This could happen for multiple reasons.
 
