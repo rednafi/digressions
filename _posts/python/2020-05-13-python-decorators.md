@@ -863,7 +863,7 @@ This time, I'll be using a class to compose a decorator. Classes can be handy to
 
 ```python
 class ClassDeco:
-    def __init__(self, function):
+    def __init__(self, func):
         functools.update_wrapper(self, func)
         self.func = func
 
