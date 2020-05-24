@@ -487,65 +487,69 @@ pip <span class="nb">install </span>redis httpx
 <p>This should return a response with the coordinates of the optimized route.</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-</span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ok"</span><span class="p">,</span><span class="w">
-</span><span class="nl">"waypoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-</span><span class="p">{</span><span class="w">
-</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mf">26.041809241776583</span><span class="p">,</span><span class="w">
-</span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-</span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-</span><span class="mf">90.386855</span><span class="p">,</span><span class="w">
-</span><span class="mf">23.718213</span><span class="w">
-</span><span class="p">],</span><span class="w">
-</span><span class="nl">"waypoint_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-</span><span class="nl">"trips_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-</span><span class="p">},</span><span class="w">
-</span><span class="p">{</span><span class="w">
-</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mf">6.286653078791968</span><span class="p">,</span><span class="w">
-</span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-</span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-</span><span class="mf">90.374253</span><span class="p">,</span><span class="w">
-</span><span class="mf">23.746129</span><span class="w">
-</span><span class="p">],</span><span class="w">
-</span><span class="nl">"waypoint_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-</span><span class="nl">"trips_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span><span class="p">],</span><span class="w">
-</span><span class="nl">"trips"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-</span><span class="p">{</span><span class="w">
-</span><span class="nl">"geometry"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span><span class="nl">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-</span><span class="p">[</span><span class="w">
-</span><span class="mf">90.386855</span><span class="p">,</span><span class="w">
-</span><span class="mf">23.718213</span><span class="w">
-</span><span class="p">],</span><span class="w">
-</span><span class="err">...</span><span class="w">
-</span><span class="err">...</span><span class="w">
-</span><span class="p">],</span><span class="w">
-</span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LineString"</span><span class="w">
-</span><span class="p">},</span><span class="w">
-</span><span class="nl">"legs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-</span><span class="p">{</span><span class="w">
-</span><span class="nl">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-</span><span class="nl">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">3303.1</span><span class="p">,</span><span class="w">
-</span><span class="nl">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mf">2842.8</span><span class="p">,</span><span class="w">
-</span><span class="nl">"steps"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mf">5250.2</span><span class="w">
-</span><span class="p">},</span><span class="w">
-</span><span class="p">{</span><span class="w">
-</span><span class="nl">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-</span><span class="nl">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">2536.5</span><span class="p">,</span><span class="w">
-</span><span class="nl">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">2297</span><span class="p">,</span><span class="w">
-</span><span class="nl">"steps"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mf">4554.8</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span><span class="p">],</span><span class="w">
-</span><span class="nl">"weight_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"routability"</span><span class="p">,</span><span class="w">
-</span><span class="nl">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">5839.6</span><span class="p">,</span><span class="w">
-</span><span class="nl">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mf">5139.8</span><span class="p">,</span><span class="w">
-</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mi">9805</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span><span class="p">],</span><span class="w">
-</span><span class="nl">"cache"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+   </span><span class="nl">"code"</span><span class="p">:</span><span class="s2">"Ok"</span><span class="p">,</span><span class="w">
+   </span><span class="nl">"waypoints"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nl">"distance"</span><span class="p">:</span><span class="mf">26.041809241776583</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"location"</span><span class="p">:[</span><span class="w">
+            </span><span class="mf">90.386855</span><span class="p">,</span><span class="w">
+            </span><span class="mf">23.718213</span><span class="w">
+         </span><span class="p">],</span><span class="w">
+         </span><span class="nl">"waypoint_index"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"trips_index"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nl">"distance"</span><span class="p">:</span><span class="mf">6.286653078791968</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"location"</span><span class="p">:[</span><span class="w">
+            </span><span class="mf">90.374253</span><span class="p">,</span><span class="w">
+            </span><span class="mf">23.746129</span><span class="w">
+         </span><span class="p">],</span><span class="w">
+         </span><span class="nl">"waypoint_index"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"trips_index"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nl">"trips"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+         </span><span class="nl">"geometry"</span><span class="p">:{</span><span class="w">
+            </span><span class="nl">"coordinates"</span><span class="p">:[</span><span class="w">
+               </span><span class="p">[</span><span class="w">
+                  </span><span class="mf">90.386855</span><span class="p">,</span><span class="w">
+                  </span><span class="mf">23.718213</span><span class="w">
+               </span><span class="p">],</span><span class="w">
+               </span><span class="s2">"...
+..."</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"LineString"</span><span class="w">
+         </span><span class="p">},</span><span class="w">
+         </span><span class="nl">"legs"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nl">"summary"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+               </span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">3303.1</span><span class="p">,</span><span class="w">
+               </span><span class="nl">"duration"</span><span class="p">:</span><span class="mf">2842.8</span><span class="p">,</span><span class="w">
+               </span><span class="nl">"steps"</span><span class="p">:[</span><span class="w">
+
+               </span><span class="p">],</span><span class="w">
+               </span><span class="nl">"distance"</span><span class="p">:</span><span class="mf">5250.2</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+               </span><span class="nl">"summary"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+               </span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">2536.5</span><span class="p">,</span><span class="w">
+               </span><span class="nl">"duration"</span><span class="p">:</span><span class="mi">2297</span><span class="p">,</span><span class="w">
+               </span><span class="nl">"steps"</span><span class="p">:[</span><span class="w">
+
+               </span><span class="p">],</span><span class="w">
+               </span><span class="nl">"distance"</span><span class="p">:</span><span class="mf">4554.8</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+         </span><span class="p">],</span><span class="w">
+         </span><span class="nl">"weight_name"</span><span class="p">:</span><span class="s2">"routability"</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">5839.6</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"duration"</span><span class="p">:</span><span class="mf">5139.8</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"distance"</span><span class="p">:</span><span class="mi">9805</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">],</span><span class="w">
+   </span><span class="nl">"cache"</span><span class="p">:</span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
