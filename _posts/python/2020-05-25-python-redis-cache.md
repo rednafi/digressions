@@ -347,65 +347,69 @@ This should return a response with the coordinates of the optimized route.
 
 ```json
 {
-"code": "Ok",
-"waypoints": [
-{
-"distance": 26.041809241776583,
-"name": "",
-"location": [
-90.386855,
-23.718213
-],
-"waypoint_index": 0,
-"trips_index": 0
-},
-{
-"distance": 6.286653078791968,
-"name": "",
-"location": [
-90.374253,
-23.746129
-],
-"waypoint_index": 1,
-"trips_index": 0
-}
-],
-"trips": [
-{
-"geometry": {
-"coordinates": [
-[
-90.386855,
-23.718213
-],
-...
-...
-],
-"type": "LineString"
-},
-"legs": [
-{
-"summary": "",
-"weight": 3303.1,
-"duration": 2842.8,
-"steps": [],
-"distance": 5250.2
-},
-{
-"summary": "",
-"weight": 2536.5,
-"duration": 2297,
-"steps": [],
-"distance": 4554.8
-}
-],
-"weight_name": "routability",
-"weight": 5839.6,
-"duration": 5139.8,
-"distance": 9805
-}
-],
-"cache": false
+   "code":"Ok",
+   "waypoints":[
+      {
+         "distance":26.041809241776583,
+         "name":"",
+         "location":[
+            90.386855,
+            23.718213
+         ],
+         "waypoint_index":0,
+         "trips_index":0
+      },
+      {
+         "distance":6.286653078791968,
+         "name":"",
+         "location":[
+            90.374253,
+            23.746129
+         ],
+         "waypoint_index":1,
+         "trips_index":0
+      }
+   ],
+   "trips":[
+      {
+         "geometry":{
+            "coordinates":[
+               [
+                  90.386855,
+                  23.718213
+               ],
+               "...
+..."
+            ],
+            "type":"LineString"
+         },
+         "legs":[
+            {
+               "summary":"",
+               "weight":3303.1,
+               "duration":2842.8,
+               "steps":[
+
+               ],
+               "distance":5250.2
+            },
+            {
+               "summary":"",
+               "weight":2536.5,
+               "duration":2297,
+               "steps":[
+
+               ],
+               "distance":4554.8
+            }
+         ],
+         "weight_name":"routability",
+         "weight":5839.6,
+         "duration":5139.8,
+         "distance":9805
+      }
+   ],
+   "cache":false
 }
 ```
 
