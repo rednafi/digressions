@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Effortless API Request Caching with Redis &amp; Python | Red’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Effortless API Request Caching with Redis &amp; Python" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Caching MapBox API requests with Python &amp; Redis" />
+<meta property="og:description" content="Caching MapBox API requests with Python &amp; Redis" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/05/25/python-redis-cache.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/05/25/python-redis-cache.html" />
+<meta property="og:site_name" content="Red’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-25T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-05-25T00:00:00-05:00","headline":"Effortless API Request Caching with Redis &amp; Python","description":"Caching MapBox API requests with Python &amp; Redis","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/05/25/python-redis-cache.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/05/25/python-redis-cache.html","dateModified":"2020-05-25T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Red's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Effortless API Request Caching with Redis &amp; Python | Red’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Effortless API Request Caching with Redis &amp; Python" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Caching MapBox API requests with Python &amp; Redis" />
+<meta property="og:description" content="Caching MapBox API requests with Python &amp; Redis" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/05/25/python-redis-cache.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/05/25/python-redis-cache.html" />
+<meta property="og:site_name" content="Red’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-25T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-05-25T00:00:00-05:00","headline":"Effortless API Request Caching with Redis &amp; Python","description":"Caching MapBox API requests with Python &amp; Redis","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/05/25/python-redis-cache.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/05/25/python-redis-cache.html","dateModified":"2020-05-25T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Red's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/digressions/">Red&#39;s Digressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/digressions/about/">About Me</a><a class="page-link" href="/digressions/search/">Search</a><a class="page-link" href="/digressions/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Effortless API Request Caching with Redis &amp; Python
+    </h1><p class="page-description">Caching MapBox API requests with Python &amp; Redis</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-25T00:00:00-05:00"
+        itemprop="datePublished">
+        May 25, 2020
+      </time>
+      • <span class="read-time" title="Estimated read time">
+    
+    
+      10 min read
+    
+</span></p>
+
+    
+    <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i>
+      
+      <a class="category-tags-link"
+        href="/digressions/categories/#Python">Python</a>
+      
+      
+    </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#setting-up-redis--redisinsight">Setting Up Redis &amp; RedisInsight</a></li>
+<li class="toc-entry toc-h2"><a href="#preparing-python-environment">Preparing Python Environment</a></li>
+<li class="toc-entry toc-h2"><a href="#workflow">Workflow</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#connecting-python-client-to-redis">Connecting Python Client to Redis</a></li>
+<li class="toc-entry toc-h3"><a href="#getting-route-data-from-mapbox-api">Getting Route Data From MapBox API</a></li>
+<li class="toc-entry toc-h3"><a href="#setting--retrieving-data-to--from-redis-database">Setting &amp; Retrieving Data to &amp; from Redis Database</a></li>
+<li class="toc-entry toc-h3"><a href="#the-central-orchestration">The Central Orchestration</a></li>
+<li class="toc-entry toc-h3"><a href="#exposing-as-an-api">Exposing As an API</a></li>
+<li class="toc-entry toc-h3"><a href="#putting-it-all-together">Putting It All Together</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#inspection">Inspection</a></li>
+<li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
+<li class="toc-entry toc-h2"><a href="#disclaimer">Disclaimer</a></li>
+<li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
+</ul><p>Recently, I was working with <a href="https://www.mapbox.com/">MapBox</a>’s <a href="https://docs.mapbox.com/api/navigation/#optimization">Route Optimization API</a>. Basically, it tries to solve the <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">traveling salesman problem</a> where you provide the API with coordinates of multiple places and it returns a duration-optimized route between those locations. This is a perfect usecase where <a href="https://redis.io/">Redis</a> caching can come handy. Redis is an blazing fast, lightweight in-memory database with additional persistence options; making it a perfect candidate for the task at hand. Here, caching can save you from making redundant API requests and also, it can dramatically improve the response time as well.</p>
+
+<p>I found that in my country, the optimized routes returned by the API do not change dramatically for at least for a couple of hours. So the workflow will look something like this:</p>
+
+<ul>
+  <li>Caching the API response in Redis using the key-value data structure. Here the requested coordinate-string will be the key and the response will be the corresponding value</li>
+  <li>Setting a timeout on the records</li>
+  <li>Serving new requests from cache if the records exist</li>
+  <li>Only send a new request to MapBox API if the response is not cached and then add that response to cache</li>
+</ul>
+
+<h2 id="setting-up-redis--redisinsight">
+<a class="anchor" href="#setting-up-redis--redisinsight" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting Up Redis &amp; RedisInsight</h2>
+
+<p>To proceed with the above workflow, you’ll need to install and setup Redis database on your system. For monitoring the database, I’ll be using  <a href="https://redislabs.com/redisinsight/">RedisInsight</a>. The easiest way to setup Redis and RedisInsight is through <a href="https://www.docker.com/">docker</a> and <a href="https://docs.docker.com/compose/">docker-compose</a>. Here’s a docker-compose that you can use to setup everything with a single command.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.yml</span>
+
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.2"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">redis</span><span class="pi">:</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">redis-cont</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s2">"</span><span class="s">redis:alpine"</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">redis-server --requirepass ubuntu</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">REDIS_PASSWORD=ubuntu</span>
+      <span class="pi">-</span> <span class="s">REDIS_REPLICATION_MODE=master</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">6379:6379"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="c1"># save redisearch data to your current working directory</span>
+      <span class="pi">-</span> <span class="s">./redis-data:/data</span>
+    <span class="na">command</span><span class="pi">:</span>
+      <span class="c1"># Save if 100 keys are added in every 10 seconds</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--save</span><span class="nv"> </span><span class="s">10</span><span class="nv"> </span><span class="s">100"</span>
+      <span class="c1"># Set password</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--requirepass</span><span class="nv"> </span><span class="s">ubuntu"</span>
+
+  <span class="na">redisinsight</span><span class="pi">:</span> <span class="c1"># redis db visualization dashboard</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">redisinsight-cont</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">redislabs/redisinsight</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">8001:8001</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">redisinsight:/db</span>
+
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">redis-data</span><span class="pi">:</span>
+  <span class="na">redisinsight</span><span class="pi">:</span>
+</code></pre></div></div>
+
+<p>The above <code class="highlighter-rouge">docker-compose</code> file has two services, <code class="highlighter-rouge">redis</code> and <code class="highlighter-rouge">redisinsight</code>. I’ve set up the database with a dummy password <code class="highlighter-rouge">ubuntu</code> and made it persistent using a folder named <code class="highlighter-rouge">redis-data</code> in the current working directory. The database listens in localhost’s port <code class="highlighter-rouge">6379</code>. You can monitor the database using <code class="highlighter-rouge">redisinsight</code> in port 8000. To spin up Redis and RedisInsight containers, run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker-compose up -d
+</code></pre></div></div>
+
+<p>This command will start the database and monitor accordingly. You can go to this <code class="highlighter-rouge">localhost:8000</code> link using your browser and connect redisinsight to your database. After connecting your database, you should see a dashboard like this in your redisinsight panel:</p>
+
+<p><img src="https://user-images.githubusercontent.com/30027932/82731781-f30b1b00-9d2a-11ea-8c72-62a4753bc5f9.png" alt="Screenshot from 2020-05-23 19-23-21"></p>
+
+<h2 id="preparing-python-environment">
+<a class="anchor" href="#preparing-python-environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Preparing Python Environment</h2>
+
+<p>For local development, you can set up your python environment and install the dependencies using pip. Here, I’m on a Linux machine and using virtual environment for isolation. The following commands will work if you’re on a *nix based system and have <code class="highlighter-rouge">python 3.8</code> installed on your system. This will install the necessary dependencies in a virtual environment:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3.8 <span class="nt">-m</span> venv venv
+<span class="nb">source </span>venv/bin/activate
+pip <span class="nb">install </span>redis httpx
+</code></pre></div></div>
+
+<h2 id="workflow">
+<a class="anchor" href="#workflow" aria-hidden="true"><span class="octicon octicon-link"></span></a>Workflow</h2>
+
+<h3 id="connecting-python-client-to-redis">
+<a class="anchor" href="#connecting-python-client-to-redis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connecting Python Client to Redis</h3>
+
+<p>Assuming the database server is running and you’ve installed the dependencies, the following snippet connects <code class="highlighter-rouge">redis-py</code> client to the database.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">def</span> <span class="nf">redis_connect</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">redis</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Redis</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="s">"localhost"</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="mi">6379</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s">"ubuntu"</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">socket_timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ping</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ping</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">client</span>
+    <span class="k">except</span> <span class="n">redis</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"AuthenticationError"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">redis_connect</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The above excerpt tries to connect to the <code class="highlighter-rouge">Redis</code> database server using the port <code class="highlighter-rouge">6379</code>. Notice, how I’m providing the password <code class="highlighter-rouge">ubuntu</code> via the <code class="highlighter-rouge">password</code> argument. Here, <code class="highlighter-rouge">client.ping()</code> helps you determine if a connection has been established successfully. It returns <code class="highlighter-rouge">True</code> if a successful connection can be established or raises specific errors in case of failures. The above function handles <code class="highlighter-rouge">AuthenticationError</code> and prints out an error message if the error occurs. If everything goes well, running the <code class="highlighter-rouge">redis_connect()</code> function will return an instance of the <code class="highlighter-rouge">redis.client.Redis</code> class. This instance will be used later to set and retrieve data to and from the redis database.</p>
+
+<h3 id="getting-route-data-from-mapbox-api">
+<a class="anchor" href="#getting-route-data-from-mapbox-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Route Data From MapBox API</h3>
+
+<p>The following function strikes the MapBox Route Optimization API and collects route data.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">httpx</span>
+
+
+<span class="k">def</span> <span class="nf">get_routes_from_api</span><span class="p">(</span><span class="n">coordinates</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="s">"""Data from mapbox api."""</span>
+
+    <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">base_url</span> <span class="o">=</span> <span class="s">"https://api.mapbox.com/optimized-trips/v1/mapbox/driving"</span>
+
+        <span class="n">geometries</span> <span class="o">=</span> <span class="s">"geojson"</span>
+        <span class="n">access_token</span> <span class="o">=</span> <span class="s">"Your-MapBox-API-token"</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="n">f</span><span class="s">"{base_url}/{coordinates}?geometries={geometries}&amp;access_token={access_token}"</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The above code uses Python’s <a href="https://github.com/encode/httpx">httpx</a> library to make the get request. Httpx is almost a drop-in replacement for the ubiquitous <a href="https://github.com/psf/requests">Requests</a> library but way faster and has async support. Here, I’ve used context manager <code class="highlighter-rouge">httpx.Client()</code> for better resource management while making the <code class="highlighter-rouge">get</code> request. You can read more about context managers and how to use them for hassle free resource management <a href="https://rednafi.github.io/digressions/python/2020/03/26/python-contextmanager.html">here</a>.</p>
+
+<p>The <code class="highlighter-rouge">base_url</code> is the base url of the route optimization API and the you’ll need to provide your own access token in the <code class="highlighter-rouge">access_token</code> field. Notice, how the <code class="highlighter-rouge">url</code> variable builds up the final request url. The <code class="highlighter-rouge">coordinates</code> are provided using the <code class="highlighter-rouge">lat0,lon0;lat1,lon1;lat2,lon2...</code> format. Rest of the function sends the http requests and converts the response into a native dictionary object using the <code class="highlighter-rouge">response.json()</code> method.</p>
+
+<h3 id="setting--retrieving-data-to--from-redis-database">
+<a class="anchor" href="#setting--retrieving-data-to--from-redis-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting &amp; Retrieving Data to &amp; from Redis Database</h3>
+
+<p>The following two functions retrieves data from and sets data to redis database respectively.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
+
+
+<span class="k">def</span> <span class="nf">get_routes_from_cache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="s">"""Get data from redis."""</span>
+
+    <span class="n">val</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">val</span>
+
+
+<span class="k">def</span> <span class="nf">set_routes_to_cache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="s">"""Set data to redis."""</span>
+
+    <span class="n">state</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">setex</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">state</span>
+</code></pre></div></div>
+
+<p>Here, both the keys and the values are strings. In the second function, <code class="highlighter-rouge">set_routes_to_cache</code>, the <code class="highlighter-rouge">client.setex()</code> method sets a timeout of 1 hour on the key. After that the key and its associated value get deleted automatically.</p>
+
+<h3 id="the-central-orchestration">
+<a class="anchor" href="#the-central-orchestration" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Central Orchestration</h3>
+
+<p>The <code class="highlighter-rouge">route_optima</code> function is the primary agent that orchestrates and executes the caching and returning of responses against requests. It roughly follows the execution flow shown below.</p>
+
+<p><img src="https://user-images.githubusercontent.com/30027932/82735908-1ba10e00-9d47-11ea-9e86-ac1fbc63628f.png" alt="redis-cache"></p>
+
+<p>When a new request arrives, the function first checks if the return-value exists in the Redis cache. If the value exists, it shows the cached value, otherwise, it sends a new request to the MapBox API, cache that value and then shows the result.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">route_optima</span><span class="p">(</span><span class="n">coordinates</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+
+    <span class="c1"># First it looks for the data in redis cache
+</span>    <span class="n">data</span> <span class="o">=</span> <span class="n">get_routes_from_cache</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">coordinates</span><span class="p">)</span>
+
+    <span class="c1"># If cache is found then serves the data from cache
+</span>    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">"cache"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># If cache is not found then sends request to the MapBox API
+</span>        <span class="n">data</span> <span class="o">=</span> <span class="n">get_routes_from_api</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
+
+        <span class="c1"># This block sets saves the respose to redis and serves it directly
+</span>        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">"code"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Ok"</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">"cache"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">set_routes_to_cache</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+</code></pre></div></div>
+
+<h3 id="exposing-as-an-api">
+<a class="anchor" href="#exposing-as-an-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exposing As an API</h3>
+
+<p>This part of the code wraps the original Route Optimization API and exposes that as a new endpoint. I’ve used <a href="https://fastapi.tiangolo.com/">fastAPI</a> to build the wrapper API. Doing this also hides the underlying details of authentication and the actual endpoint of the MapBox API.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+
+<span class="o">@</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/route-optima/{coordinates}"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="n">coordinates</span><span class="p">):</span>
+    <span class="s">"""This will wrap our original route optimization API and
+    incorporate Redis Caching. You'll only expose this API to
+    the end user. """</span>
+
+    <span class="c1"># coordinates = "90.3866,23.7182;90.3742,23.7461"
+</span>
+    <span class="k">return</span> <span class="n">route_optima</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="putting-it-all-together">
+<a class="anchor" href="#putting-it-all-together" aria-hidden="true"><span class="octicon octicon-link"></span></a>Putting It All Together</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app.py
+</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
+
+<span class="kn">import</span> <span class="nn">httpx</span>
+<span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+
+
+
+<span class="k">def</span> <span class="nf">redis_connect</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">redis</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Redis</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="s">"localhost"</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="mi">6379</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s">"ubuntu"</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">socket_timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ping</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ping</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">client</span>
+    <span class="k">except</span> <span class="n">redis</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"AuthenticationError"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">redis_connect</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">get_routes_from_api</span><span class="p">(</span><span class="n">coordinates</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="s">"""Data from mapbox api."""</span>
+
+    <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">base_url</span> <span class="o">=</span> <span class="s">"https://api.mapbox.com/optimized-trips/v1/mapbox/driving"</span>
+
+        <span class="n">geometries</span> <span class="o">=</span> <span class="s">"geojson"</span>
+        <span class="n">access_token</span> <span class="o">=</span> <span class="s">"Your-MapBox-API-token"</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="n">f</span><span class="s">"{base_url}/{coordinates}?geometries={geometries}&amp;access_token={access_token}"</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">get_routes_from_cache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="s">"""Data from redis."""</span>
+
+    <span class="n">val</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">val</span>
+
+
+<span class="k">def</span> <span class="nf">set_routes_to_cache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="s">"""Data to redis."""</span>
+
+    <span class="n">state</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">setex</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">state</span>
+
+
+<span class="k">def</span> <span class="nf">route_optima</span><span class="p">(</span><span class="n">coordinates</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+
+    <span class="c1"># First it looks for the data in redis cache
+</span>    <span class="n">data</span> <span class="o">=</span> <span class="n">get_routes_from_cache</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">coordinates</span><span class="p">)</span>
+
+    <span class="c1"># If cache is found then serves the data from cache
+</span>    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">"cache"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># If cache is not found then sends request to the MapBox API
+</span>        <span class="n">data</span> <span class="o">=</span> <span class="n">get_routes_from_api</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
+
+        <span class="c1"># This block sets saves the respose to redis and serves it directly
+</span>        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">"code"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Ok"</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">"cache"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">set_routes_to_cache</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+
+<span class="o">@</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/route-optima/{coordinates}"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="n">coordinates</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="s">"""This will wrap our original route optimization API and
+    incorporate Redis Caching. You'll only expose this API to
+    the end user. """</span>
+
+    <span class="c1"># coordinates = "90.3866,23.7182;90.3742,23.7461"
+</span>
+    <span class="k">return</span> <span class="n">route_optima</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>You can copy the complete code to a file named <code class="highlighter-rouge">app.py</code> and run the app using the command below (assuming redis, redisinsight is running and you’ve installed the dependencies beforehand):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uvicorn app.app:app --host 0.0.0.0 --port 5000 --reload
+</code></pre></div></div>
+
+<p>This will run a local server where you can send new request with coordinates.</p>
+
+<p>Go to your browser and hit the endpoint with a set of new coordinates. For example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:5000/route-optima/90.3866,23.7182;90.3742,23.7461
+</code></pre></div></div>
+
+<p>This should return a response with the coordinates of the optimized route.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+</span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ok"</span><span class="p">,</span><span class="w">
+</span><span class="nl">"waypoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="w">
+</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mf">26.041809241776583</span><span class="p">,</span><span class="w">
+</span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+</span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="mf">90.386855</span><span class="p">,</span><span class="w">
+</span><span class="mf">23.718213</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nl">"waypoint_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+</span><span class="nl">"trips_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="w">
+</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mf">6.286653078791968</span><span class="p">,</span><span class="w">
+</span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+</span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="mf">90.374253</span><span class="p">,</span><span class="w">
+</span><span class="mf">23.746129</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nl">"waypoint_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+</span><span class="nl">"trips_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nl">"trips"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="w">
+</span><span class="nl">"geometry"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nl">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">[</span><span class="w">
+</span><span class="mf">90.386855</span><span class="p">,</span><span class="w">
+</span><span class="mf">23.718213</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="err">...</span><span class="w">
+</span><span class="err">...</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LineString"</span><span class="w">
+</span><span class="p">},</span><span class="w">
+</span><span class="nl">"legs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="w">
+</span><span class="nl">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+</span><span class="nl">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">3303.1</span><span class="p">,</span><span class="w">
+</span><span class="nl">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mf">2842.8</span><span class="p">,</span><span class="w">
+</span><span class="nl">"steps"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mf">5250.2</span><span class="w">
+</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="w">
+</span><span class="nl">"summary"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+</span><span class="nl">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">2536.5</span><span class="p">,</span><span class="w">
+</span><span class="nl">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">2297</span><span class="p">,</span><span class="w">
+</span><span class="nl">"steps"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mf">4554.8</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nl">"weight_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"routability"</span><span class="p">,</span><span class="w">
+</span><span class="nl">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">5839.6</span><span class="p">,</span><span class="w">
+</span><span class="nl">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mf">5139.8</span><span class="p">,</span><span class="w">
+</span><span class="nl">"distance"</span><span class="p">:</span><span class="w"> </span><span class="mi">9805</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nl">"cache"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>If you’ve hit the above URL for the first time, the <code class="highlighter-rouge">cache</code> attribute of the json response should show <code class="highlighter-rouge">false</code>. This means that the response is being served from the original MapBox API. However, hitting the same URL with the same coordinates again will show the cached response and this time the <code class="highlighter-rouge">cache</code> attribute should show <code class="highlighter-rouge">true</code>.</p>
+
+<h2 id="inspection">
+<a class="anchor" href="#inspection" aria-hidden="true"><span class="octicon octicon-link"></span></a>Inspection</h2>
+
+<p>Once you’ve got everything up and running you can inspect the cache via redis insight. To do so, go to the link below while your app server is running:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:8000/
+</code></pre></div></div>
+
+<p>Select the <code class="highlighter-rouge">Browser</code> panel from the left menu and click on a key of your cached data. It should show something like this:</p>
+
+<p><img src="https://user-images.githubusercontent.com/30027932/82763854-6a74a380-9e2c-11ea-998d-066d25461eca.png" alt="Screenshot from 2020-05-25 02-06-24"></p>
+
+<p>Also you can play around with the API in the swagger UI. To do so, go to the following link:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:5000/docs
+</code></pre></div></div>
+
+<p>This will take you to the swagger dashboard. Here you can make requests using the interactive UI. Go ahead and inspect how the caching works for new coordinates.</p>
+
+<p><img src="https://user-images.githubusercontent.com/30027932/82763965-2f26a480-9e2d-11ea-906b-63c1d25c08a8.png" alt="swagger"></p>
+
+<h2 id="remarks">
+<a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
+
+<p>All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04. You can find the complete source code of the app <a href="https://github.com/rednafi/redis-request-caching">here</a>.</p>
+
+<h2 id="disclaimer">
+<a class="anchor" href="#disclaimer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disclaimer</h2>
+
+<p>This app has been made for demonstration purpose only. So it might not reflect the best practices of production ready applications. Using APIs without authentication like this is not recommended.</p>
+
+<h2 id="resources">
+<a class="anchor" href="#resources" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources</h2>
+
+<ul>
+  <li><a href="https://github.com/rednafi/redis-request-caching">Http Request Caching with Redis</a></li>
+  <li><a href="https://github.com/encode/httpx/">Httpx</a></li>
+  <li><a href="https://redis.io/">Redis</a></li>
+  <li><a href="https://redislabs.com/redisinsight/">RedisInsight</a></li>
+  <li><a href="https://github.com/tiangolo/fastapi">FastAPI</a></li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="rednafi/digressions"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/digressions/python/2020/05/25/python-redis-cache.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/digressions/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/digressions/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/digressions/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Sporadic cogitations on software, tech &amp; personal beliefs</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
