@@ -1,5 +1,5 @@
 ---
-title: Effortless API Request Caching with Redis & Python
+title: Effortless API Request Caching with Python & Redis
 toc: true
 comments: true
 layout: post
