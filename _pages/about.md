@@ -4,7 +4,7 @@ title: About Me
 permalink: /about/
 ---
 
-Building stuff at @helloShopUp. 
+Building stuff at [@helloShopUp](https://mobile.twitter.com/helloshopup).
 Writing & talking about — Statistics, Machine Learning, System Arch, APIs, Redis, Docker, Python, Golang etc.
 
 Contact
