@@ -4,9 +4,8 @@ title: About Me
 permalink: /about/
 ---
 
-Redowan Delowar is currently working as a junior Data Scientist for ShopUp (~2 years).
-
-Redowan primarily focuses on Computational Statistics, Representation Learning and Software development. He is an avid Machine Learning evangelist, researcher, practitioner and Open Source developer. He is also available for on-site teaching, presentations and certain types of short term contract works. 
+Building stuff at @helloShopUp. 
+Writing & talking about — Statistics, Machine Learning, System Arch, APIs, Redis, Docker, Python, Golang etc.
 
 Contact
 --------
