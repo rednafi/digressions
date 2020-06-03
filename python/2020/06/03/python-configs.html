@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Pedantic Configuration Management with Pydantic | Red’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Pedantic Configuration Management with Pydantic" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Mitigating the configuration madness via Pydantic" />
+<meta property="og:description" content="Mitigating the configuration madness via Pydantic" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/06/03/python-configs.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/06/03/python-configs.html" />
+<meta property="og:site_name" content="Red’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-03T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-06-03T00:00:00-05:00","headline":"Pedantic Configuration Management with Pydantic","description":"Mitigating the configuration madness via Pydantic","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/06/03/python-configs.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/06/03/python-configs.html","dateModified":"2020-06-03T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/digressions/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Red's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/digressions/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Pedantic Configuration Management with Pydantic | Red’s Digressions</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Pedantic Configuration Management with Pydantic" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Mitigating the configuration madness via Pydantic" />
+<meta property="og:description" content="Mitigating the configuration madness via Pydantic" />
+<link rel="canonical" href="https://rednafi.github.io/digressions/python/2020/06/03/python-configs.html" />
+<meta property="og:url" content="https://rednafi.github.io/digressions/python/2020/06/03/python-configs.html" />
+<meta property="og:site_name" content="Red’s Digressions" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-03T00:00:00-05:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-06-03T00:00:00-05:00","headline":"Pedantic Configuration Management with Pydantic","description":"Mitigating the configuration madness via Pydantic","mainEntityOfPage":{"@type":"WebPage","@id":"https://rednafi.github.io/digressions/python/2020/06/03/python-configs.html"},"@type":"BlogPosting","url":"https://rednafi.github.io/digressions/python/2020/06/03/python-configs.html","dateModified":"2020-06-03T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://rednafi.github.io/digressions/feed.xml" title="Red's Digressions" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-160409032-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/digressions/">Red&#39;s Digressions</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/digressions/about/">About Me</a><a class="page-link" href="/digressions/search/">Search</a><a class="page-link" href="/digressions/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Pedantic Configuration Management with Pydantic
+    </h1><p class="page-description">Mitigating the configuration madness via Pydantic</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-03T00:00:00-05:00"
+        itemprop="datePublished">
+        Jun 3, 2020
+      </time>
+      • <span class="read-time" title="Estimated read time">
+    
+    
+      11 min read
+    
+</span></p>
+
+    
+    <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i>
+      
+      <a class="category-tags-link"
+        href="/digressions/categories/#Python">Python</a>
+      
+      
+    </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#few-ineffective-approaches">Few Ineffective Approaches</a></li>
+<li class="toc-entry toc-h2"><a href="#a-pragmatic-wishlist">A Pragmatic Wishlist</a></li>
+<li class="toc-entry toc-h2"><a href="#building-the-config-management-pipeline">Building the Config Management Pipeline</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#preparation">Preparation</a></li>
+<li class="toc-entry toc-h3"><a href="#introduction-to-pydantic">Introduction to Pydantic</a></li>
+<li class="toc-entry toc-h3"><a href="#the-orchestration">The Orchestration</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#appconfig">AppConfig</a></li>
+<li class="toc-entry toc-h4"><a href="#globalconfig">GlobalConfig</a></li>
+<li class="toc-entry toc-h4"><a href="#devconfig">DevConfig</a></li>
+<li class="toc-entry toc-h4"><a href="#prodconfig">ProdConfig</a></li>
+<li class="toc-entry toc-h4"><a href="#factoryconfig">FactoryConfig</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#accessing-the-configs">Accessing the Configs</a></li>
+<li class="toc-entry toc-h2"><a href="#extending-the-pipeline">Extending the Pipeline</a></li>
+<li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
+<li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
+</ul><p>Managing configurations in your Python applications isn’t something you think about much often, until complexity starts to seep in and forces you to re-architect your initial approach. Ideally, your config management flow shouldn’t change across different applications or as your application begins to grow in size and complexity. Even if you’re writing a library, there should be a consistent config management process that scales up properly. Since I primarily spend my time writing data-analytics, data-science applications and expose them using <a href="https://github.com/pallets/flask">Flask</a> or <a href="https://github.com/tiangolo/fastapi">FastAPI</a> framework, I’ll be tacking config management from an application development perspective.</p>
+
+<h2 id="few-ineffective-approaches">
+<a class="anchor" href="#few-ineffective-approaches" aria-hidden="true"><span class="octicon octicon-link"></span></a>Few Ineffective Approaches</h2>
+
+<p>In the past, while exposing APIs with Flask, I used to use <code class="highlighter-rouge">.env</code>, <code class="highlighter-rouge">.flaskenv</code> and <code class="highlighter-rouge">Config</code> class approach to manage configs which is pretty much a standard in the Flask realm. However, it quickly became cumbersome to maintain and juggle between configs depending on development, staging or production environments. There were additional application specific global constants to deal with too. So I tried using <code class="highlighter-rouge">*.json</code>, <code class="highlighter-rouge">*.yaml</code> or <code class="highlighter-rouge">*.toml</code> based config management approaches but those too, quickly turned into a tangled mess. I was constantly accessing variables buried into 3-4 levels of nested toml data structure and it wasn’t pretty. Then there are config management libraries like <a href="https://github.com/rochacbruno/dynaconf">Dynaconf</a> or <a href="https://github.com/hynek/environ-config">environ-config</a> that aim to ameliorate the issue. While these are all amazing tools but they also introduce their own custom workflow that can feel over-engineered while dealing with maintenance and extension.</p>
+
+<h2 id="a-pragmatic-wishlist">
+<a class="anchor" href="#a-pragmatic-wishlist" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Pragmatic Wishlist</h2>
+
+<p>I wanted to take a declarative approach while designing a config management pipleline that will be <strong>modular</strong>, <strong>scalable</strong> and easy to <strong>maintain</strong>. To meet my requirements, the system should be able to:</p>
+
+<ul>
+  <li>Read configs from <code class="highlighter-rouge">.env</code> files and <em>shell environment</em> at the same time.</li>
+  <li>Handle dependency injection for introducing <em>passwords</em> or <em>secrets</em>.</li>
+  <li>Convert variable types automatically in the appropriate cases, e.g. string to integer conversion.</li>
+  <li>Keep <em>development</em>, <em>staging</em> and <em>production</em> configs separate.</li>
+  <li>Switch between the different environments e.g development, staging effortlessly.</li>
+  <li>Inspect the <em>active</em> config values</li>
+  <li>Create arbitrarily nested config structure if required (Not encouraged though. Constraints fosters creativity, remember?)</li>
+</ul>
+
+<h2 id="building-the-config-management-pipeline">
+<a class="anchor" href="#building-the-config-management-pipeline" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building the Config Management Pipeline</h2>
+
+<h3 id="preparation">
+<a class="anchor" href="#preparation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Preparation</h3>
+
+<p>The code block that appears in this section is self contained. It should run without any modifications. If you want to play along, then just spin up a Python virtual environment and install <code class="highlighter-rouge">Pydantic</code> and <code class="highlighter-rouge">python-dotenv</code>. The following commands works on any <em>*nix</em> based system:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3.8 <span class="nt">-m</span> venv venv
+<span class="nb">source </span>venv/bin/activate
+pip <span class="nb">install </span>pydantic python-dotenv
+</code></pre></div></div>
+
+<p>Make sure you have fairly a recent version of <code class="highlighter-rouge">Python 3</code> installed, preferably <code class="highlighter-rouge">Python 3.8</code>. You might need to install <code class="highlighter-rouge">python3.8 venv</code>. If you’re on Ubuntu Linux, you can do so with <code class="highlighter-rouge">sudo apt install python3.8-venv</code> command.</p>
+
+<h3 id="introduction-to-pydantic">
+<a class="anchor" href="#introduction-to-pydantic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction to Pydantic</h3>
+
+<p>To check off all the boxes of the wishlist above, I made a custom config management flow using <a href="https://github.com/samuelcolvin/pydantic">Pydantic</a>, <a href="https://github.com/theskumar/python-dotenv">python-dotenv</a> and the <code class="highlighter-rouge">.env</code> file. Pydantic is a fantastic data validation library that can be used for validating and implicitly converting data types using Python’s type hints. Type hinting is a formal solution to statically indicate the type of a value within your Python code. It was specified in <a href="https://www.python.org/dev/peps/pep-0484/">PEP 484</a> and introduced in Python 3.5. Let’s define and validate the attributes of a class named <code class="highlighter-rouge">User</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Redowan Delowar"</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">"rednafi"</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This will give you:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; User(name='Redowan Delowar', username='rednafi', password='123')
+</code></pre></div></div>
+
+<p>In the above example, I defined a simple class named <code class="highlighter-rouge">User</code> and used Pydantic for data validation. Pydantic will make sure that the data you assign to the class attributes conform with the types you’ve annotated. Notice, how I’ve assigned an integer type data in the <code class="highlighter-rouge">password</code> field and Pydantic converted it to string type without complaining. That’s because the corresponding type annotation suggests that the <code class="highlighter-rouge">password</code> attribute of the <code class="highlighter-rouge">User</code> class should be a string. When implicit conversion is not possible or the hinted value of an attribute doesn’t conform to its assigned type, Pydantic will throw a <code class="highlighter-rouge">ValidationError</code>.</p>
+
+<h3 id="the-orchestration">
+<a class="anchor" href="#the-orchestration" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Orchestration</h3>
+
+<p>Now let’s see how you can orchestrate your config management flow with the tools mentioned above. For simplicity, let’s say you’ve  3 sets of configurations.</p>
+
+<ol>
+  <li>Configs of your app’s internal logic</li>
+  <li>Development environment configs</li>
+  <li>Production environment configs</li>
+</ol>
+
+<p>In this case, other than the first set of configs, all should go into the <code class="highlighter-rouge">.env</code> file.</p>
+
+<p>I’ll be using this <code class="highlighter-rouge">.env</code> file for demonstration. If you’re following along, then go ahead, create an empty <code class="highlighter-rouge">.env</code> file there and copy the variables mentioned below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#.env
+
+ENV_STATE="dev" # or prod
+
+DEV_REDIS_HOST="127.0.0.1"
+DEV_REDIS_PORT="4000"
+
+PROD_REDIS_HOST="127.0.0.2"
+PROD_REDIS_PORT="5000"
+</code></pre></div></div>
+
+<p>Notice how I’ve used the <code class="highlighter-rouge">DEV_</code> and <code class="highlighter-rouge">PROD_</code> prefixes before the environment specific configs. These help you discern between the variables designated for different environments.</p>
+
+<blockquote>
+  <p>Configs related to your application’s internal logic should either be explicitly mentioned in the same <code class="highlighter-rouge">configs.py</code> or imported from a different <code class="highlighter-rouge">app_configs.py</code> file. You shouldn’t pollute your <code class="highlighter-rouge">.env</code> files with the internal global variables necessitated by your application’s core logic.</p>
+</blockquote>
+
+<p>Now let’s dump the entire config orchestration and go though the building blocks one by one:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># configs.py
+</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">BaseModel</span>
+
+
+<span class="k">class</span> <span class="nc">AppConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="s">"""Application configurations."""</span>
+
+    <span class="n">VAR_A</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">VAR_B</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">22.0</span>
+
+
+<span class="k">class</span> <span class="nc">GlobalConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+    <span class="s">"""Global configurations."""</span>
+
+    <span class="c1"># This variable will be loaded from the .env file. However, if there is a
+</span>    <span class="c1"># shell environment variable having the same name, that will take precedence.
+</span>
+    <span class="n">ENV_STATE</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"ENV_STATE"</span><span class="p">)</span>
+    <span class="n">APP_CONFIG</span><span class="p">:</span> <span class="n">AppConfig</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="p">()</span>
+    <span class="n">REDIS_PASS</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"REDIS_PASS"</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="s">"""Loads the dotenv file."""</span>
+
+        <span class="n">env_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">".env"</span>
+
+
+<span class="k">class</span> <span class="nc">DevConfig</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">):</span>
+    <span class="s">"""Development configurations."""</span>
+
+    <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"DEV_REDIS_HOST"</span><span class="p">)</span>
+    <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"DEV_REDIS_PORT"</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ProdConfig</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">):</span>
+    <span class="s">"""Production configurations."""</span>
+
+    <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"PROD_REDIS_HOST"</span><span class="p">)</span>
+    <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"PROD_REDIS_PORT"</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">FactoryConfig</span><span class="p">:</span>
+    <span class="s">"""Returns a config instance dependending on the ENV_STATE variable."""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env_state</span> <span class="o">=</span> <span class="n">env_state</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_state</span> <span class="o">==</span> <span class="s">"dev"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DevConfig</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_state</span> <span class="o">==</span> <span class="s">"prod"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ProdConfig</span><span class="p">()</span>
+
+
+<span class="n">cnf</span> <span class="o">=</span> <span class="n">FactoryConfig</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">()</span><span class="o">.</span><span class="n">ENV_STATE</span><span class="p">)()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cnf</span><span class="o">.</span><span class="n">__repr__</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>The print statement of the last line in the above code block is to inspect the <strong>active configuration</strong> class. You’ll soon learn what I meant by the term <strong>active configuration</strong>. You can comment out the last line while using the code in production. Let’s explain what’s going on with each of the classes defined above.</p>
+
+<h4 id="appconfig">
+<a class="anchor" href="#appconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>AppConfig</h4>
+
+<p>The <code class="highlighter-rouge">AppConfig</code> class defines the config variables required for you API’s internal logic. In this case I’m not loading the variables from the <code class="highlighter-rouge">.env</code> file, rather defining them directly in the class. You can also define and import them from another <code class="highlighter-rouge">app_configs.py</code> file if necessary but they shouldn’t be placed in the <code class="highlighter-rouge">.env</code> file. For data validation to work, you’ve to inherit from Pydantic’s <code class="highlighter-rouge">BaseModel</code> and annotate the attributes using type hints while constructing the <code class="highlighter-rouge">AppConfig</code> class. Later, this class is called from the <code class="highlighter-rouge">GlobalConfig</code> class to build a nested data structure.</p>
+
+<h4 id="globalconfig">
+<a class="anchor" href="#globalconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>GlobalConfig</h4>
+
+<p><code class="highlighter-rouge">GlobalConfig</code> defines the variables that propagates through other environment classes and the attributes of this class are globally accessible from all other environments. In this class, the variables are loaded from the <code class="highlighter-rouge">.env</code> file. In the <code class="highlighter-rouge">.env</code> file, global variables don’t have any environment specific prefixes like <code class="highlighter-rouge">DEV_</code> or <code class="highlighter-rouge">PROD_</code> before them. The class <code class="highlighter-rouge">GlobalConfig</code> inherits from Pydantic’s <code class="highlighter-rouge">BaseSettings</code> which helps to load and read the variables from the <code class="highlighter-rouge">.env</code> file. The <code class="highlighter-rouge">.env</code> file itself is loaded in the nested <code class="highlighter-rouge">Config</code> class. Although the environment variables are loaded from the <code class="highlighter-rouge">.env</code> file, Pydantic also loads your actual shell environment variables at the same time. From Pydantic’s [documentation]:</p>
+
+<blockquote>
+  <p>Even when using a dotenv file, Pydantic will still read environment variables as well as the dotenv file, <strong>environment variables will always take priority over values loaded from a dotenv file</strong>.</p>
+</blockquote>
+
+<p>This means you can keep the sensitive variables in your <code class="highlighter-rouge">.bashrc</code> or <code class="highlighter-rouge">zshrc</code> and Pydantic will inject them during runtime. It’s a powerful feature, as it implies that you can easily keep the insensitive variables in your <code class="highlighter-rouge">.env</code> file and include that to the version control system. Meanwhile the sensitive information should be injected as a shell environment variable. For example, although I’ve defined an attribute called <code class="highlighter-rouge">REDIS_PASS</code> in the <code class="highlighter-rouge">GlobalConfig</code> class, there is no mention of any <code class="highlighter-rouge">REDIS_PASS</code> variable in the <code class="highlighter-rouge">.env</code> file. So normally, it returns <code class="highlighter-rouge">None</code> but you can easily inject a <em>password</em> into the <code class="highlighter-rouge">REDIS_PASS</code> variable from the shell. Assuming that you’ve set up your <code class="highlighter-rouge">venv</code> and installed the dependencies, you can test it by copying the contents of the above code snippet in file called <code class="highlighter-rouge">configs.py</code> and running the commands below:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">REDIS_PASS</span><span class="o">=</span>ubuntu
+python configs.py
+</code></pre></div></div>
+
+<p>This should printout:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; DevConfig(ENV_STATE='dev', APP_CONFIG=AppConfig(VAR_A=33, VAR_B=22.0), REDIS_PASS='ubuntu', REDIS_HOST='127.0.0.1', REDIS_PORT=4000)
+</code></pre></div></div>
+
+<p>Notice how your injected <code class="highlighter-rouge">REDIS_PASS</code> has appeared in the printed config class instance. To understand why it printed an instance of the <code class="highlighter-rouge">DevConfig</code> class, refer to the <a href="#factoryconfig">FactoryConfig</a> section.</p>
+
+<h4 id="devconfig">
+<a class="anchor" href="#devconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>DevConfig</h4>
+
+<p><code class="highlighter-rouge">DevConfig</code> class inherits from the <code class="highlighter-rouge">GlobalConfig</code> class and it defines additional variables specific to the development environment. It inherits all the variables defined in the <code class="highlighter-rouge">GlobalConfig</code> class.</p>
+
+<h4 id="prodconfig">
+<a class="anchor" href="#prodconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>ProdConfig</h4>
+
+<p><code class="highlighter-rouge">ProdConfig</code> class also inherits from the <code class="highlighter-rouge">GlobalConfig</code> class and it defines additional variables specific to the production environment. Like <code class="highlighter-rouge">DevConfig</code>, it also inherits all the variables defined in the <code class="highlighter-rouge">GlobalConfig</code> class.</p>
+
+<h4 id="factoryconfig">
+<a class="anchor" href="#factoryconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>FactoryConfig</h4>
+
+<p><code class="highlighter-rouge">FactoryConfig</code> is the controller class that dictates which config class should be activated based on the environment state defined as <code class="highlighter-rouge">ENV_STATE</code> in the <code class="highlighter-rouge">.env</code> file. If it finds <code class="highlighter-rouge">ENV_STATE="dev"</code> then the control flow statements in the <code class="highlighter-rouge">FactoryConfig</code> class will activate the development configs <em>(DevConfig)</em>. Similarly, if <code class="highlighter-rouge">ENV_STATE="prod"</code> is found then the control flow will activate the production configs <em>(ProdConfig)</em>. Since the current environment state is <code class="highlighter-rouge">ENV_STATE="dev"</code>, when you run the code, it prints an instance of the activated <code class="highlighter-rouge">DevConfig</code> class. This way, you can assign different values to the same variable based on different <em>environment contexts</em>.</p>
+
+<p>You can also dynamically change the environment by changing the value of <code class="highlighter-rouge">ENV_STATE</code> on your shell. Run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>EXPORT <span class="nv">ENV_STATE</span><span class="o">=</span><span class="s2">"prod"</span>
+python configs.py
+</code></pre></div></div>
+
+<p>This time the config instance should change and print the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ProdConfig(ENV_STATE='prod', APP_CONFIG=AppConfig(VAR_A=33, VAR_B=22.0), REDIS_PASS='ubuntu', REDIS_HOST='127.0.0.2', REDIS_PORT=5000)
+</code></pre></div></div>
+
+<h2 id="accessing-the-configs">
+<a class="anchor" href="#accessing-the-configs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Accessing the Configs</h2>
+
+<p>Using the config variables is easy. Suppose you want use the variables in file called <code class="highlighter-rouge">app.py</code>. You can easily do so as shown in the following code block:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app.py
+</span>
+<span class="kn">from</span> <span class="nn">configs</span> <span class="kn">import</span> <span class="n">cnf</span>
+
+
+<span class="n">APP_CONFIG</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">APP_CONFIG</span>
+<span class="n">VAR_A</span> <span class="o">=</span> <span class="n">APP_CONFIG</span><span class="o">.</span><span class="n">VAR_A</span>  <span class="c1"># this is a nested config
+</span><span class="n">VAR_B</span> <span class="o">=</span> <span class="n">APP_CONFIG</span><span class="o">.</span><span class="n">VAR_B</span>
+<span class="n">REDIS_HOST</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">REDIS_HOST</span>  <span class="c1"># this is a top-level config
+</span><span class="n">REDIS_PORT</span> <span class="o">=</span> <span class="n">cnf</span><span class="o">.</span><span class="n">REDIS_PORT</span>
+
+
+<span class="k">print</span><span class="p">(</span><span class="n">APP_CONFIG</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">VAR_A</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">VAR_B</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">REDIS_HOST</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">REDIS_PORT</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This should print out:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ProdConfig(ENV_STATE='prod', APP_CONFIG=AppConfig(VAR_A=33, VAR_B=22.0), REDIS_PASS='ubuntu', REDIS_HOST='127.0.0.2', REDIS_PORT=5000)
+VAR_A=33 VAR_B=22.0
+33
+22.0
+127.0.0.2
+5000
+</code></pre></div></div>
+
+<h2 id="extending-the-pipeline">
+<a class="anchor" href="#extending-the-pipeline" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extending the Pipeline</h2>
+
+<p>The modular design demonstrated above is easy to maintain and extend in my opinion. Previously, for simplicity, I’ve defined only two environment scopes; development and production. Let’s say you want to add the configs for your <em>staging environment</em>.</p>
+
+<ul>
+  <li>
+    <p>First you’ll need to add those <em>staging</em> variables to the <code class="highlighter-rouge">.env</code> file.</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>...
+
+STAGE_REDIS_HOST="127.0.0.3"
+STAGE_REDIS_PORT="6000"
+
+...
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Then you’ve to create a class named <code class="highlighter-rouge">StageConfig</code> that inherits from the <code class="highlighter-rouge">GlobalConfig</code> class. The architecture of the class is  similar to that of the <code class="highlighter-rouge">DevConfig</code> or <code class="highlighter-rouge">ProdConfig</code> class.</p>
+
+    <div class="language-python highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="c1"># configs.py
+</span>  <span class="o">...</span>
+
+
+  <span class="k">class</span> <span class="nc">StageConfig</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">):</span>
+      <span class="s">"""Staging configurations."""</span>
+
+      <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"STAGE_REDIS_HOST"</span><span class="p">)</span>
+      <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"STAGE_REDIS_PORT"</span><span class="p">)</span>
+
+
+  <span class="o">...</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Finally, you’ll need to insert an <code class="highlighter-rouge">ENV_STATE</code> logic into the control flow of the <code class="highlighter-rouge">FactoryConfig</code> class. See how I’ve appended another if-else block to the previous (prod) block.</p>
+
+    <div class="language-python highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="c1"># configs.py
+</span>  <span class="o">...</span>
+
+  <span class="k">class</span> <span class="nc">FactoryConfig</span><span class="p">:</span>
+      <span class="s">"""Returns a config instance depending on the ENV_STATE variable."""</span>
+
+      <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">env_state</span> <span class="o">=</span> <span class="n">env_state</span>
+
+      <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_state</span> <span class="o">==</span> <span class="s">"dev"</span><span class="p">:</span>
+              <span class="k">return</span> <span class="n">DevConfig</span><span class="p">()</span>
+
+          <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_state</span> <span class="o">==</span> <span class="s">"prod"</span><span class="p">:</span>
+              <span class="k">return</span> <span class="n">ProdConfig</span><span class="p">()</span>
+
+          <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_state</span> <span class="o">==</span> <span class="s">"stage"</span>
+              <span class="k">return</span> <span class="n">StageConfig</span><span class="p">()</span>
+  <span class="o">...</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>To see your new addition in action just change the <code class="highlighter-rouge">ENV_STATE</code> to “stage” in the <code class="highlighter-rouge">.env</code> file or export it to your shell environment.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export ENV_STATE="stage"
+python configs.py
+</code></pre></div></div>
+
+<p>This will print out an instance of the class <code class="highlighter-rouge">StageConfig</code>.</p>
+
+<h2 id="remarks">
+<a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
+
+<p>The above workflow works perfectly for my usage scenario. So subjectively, I feel like it’s an elegant solution to a very icky problem. Your mileage may vary. All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.</p>
+
+<h2 id="resources">
+<a class="anchor" href="#resources" aria-hidden="true"><span class="octicon octicon-link"></span></a>Resources</h2>
+
+<ul>
+  <li><a href="https://pydantic-docs.helpmanual.io/usage/settings/">Settings management with Pydantic</a></li>
+  <li><a href="https://flask.palletsprojects.com/en/1.1.x/config/">Flask config management</a></li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="rednafi/digressions"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/digressions/python/2020/06/03/python-configs.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/digressions/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/digressions/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/digressions/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Sporadic cogitations on software, tech &amp; personal beliefs</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/rednafi" title="rednafi"><svg class="svg-icon grey"><use xlink:href="/digressions/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
