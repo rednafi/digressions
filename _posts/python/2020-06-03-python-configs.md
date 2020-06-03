@@ -3,10 +3,10 @@ title: Pedantic Configuration Management with Pydantic
 toc: true
 comments: true
 layout: post
-description: Mitigating the configuration madness via Pydantic
+description: Mitigating Python's configuration madness with Pydantic
 categories: [Python]
-
 ---
+
 Managing configurations in your Python applications isn't something you think about much often, until complexity starts to seep in and forces you to re-architect your initial approach. Ideally, your config management flow shouldn't change across different applications or as your application begins to grow in size and complexity. Even if you're writing a library, there should be a consistent config management process that scales up properly. Since I primarily spend my time writing data-analytics, data-science applications and expose them using [Flask](https://github.com/pallets/flask) or [FastAPI](https://github.com/tiangolo/fastapi) framework, I'll be tacking config management from an application development perspective.
 
 ## Few Ineffective Approaches
