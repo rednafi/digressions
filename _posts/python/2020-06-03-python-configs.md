@@ -267,14 +267,12 @@ The modular design demonstrated above is easy to maintain and extend in my opini
     # configs.py
     ...
 
-
     class StageConfig(GlobalConfig):
         """Staging configurations."""
 
         REDIS_HOST: Optional[str] = Field(None, env="STAGE_REDIS_HOST")
         REDIS_PORT: Optional[str] = Field(None, env="STAGE_REDIS_PORT")
-
-
+        
     ...
     ```
 
