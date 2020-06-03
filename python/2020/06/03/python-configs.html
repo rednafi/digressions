@@ -433,14 +433,12 @@ STAGE_REDIS_PORT="6000"
 <div class="highlight"><pre class="highlight"><code>  <span class="c1"># configs.py
 </span>  <span class="o">...</span>
 
-
   <span class="k">class</span> <span class="nc">StageConfig</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">):</span>
       <span class="s">"""Staging configurations."""</span>
 
       <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"STAGE_REDIS_HOST"</span><span class="p">)</span>
       <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"STAGE_REDIS_PORT"</span><span class="p">)</span>
-
-
+        
   <span class="o">...</span>
 </code></pre></div>    </div>
   </li>
