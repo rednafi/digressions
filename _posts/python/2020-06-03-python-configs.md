@@ -257,7 +257,7 @@ The modular design demonstrated above is easy to maintain and extend in my opini
 
   STAGE_REDIS_HOST="127.0.0.3"
   STAGE_REDIS_PORT="6000"
-
+  
   ...
   ```
 
