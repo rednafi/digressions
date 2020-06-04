@@ -208,20 +208,20 @@ pip <span class="nb">install </span>pydantic python-dotenv
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">int</span>
 
 
-<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Redowan Delowar"</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">"rednafi"</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Redowan Delowar"</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">"rednafi"</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">"123"</span><span class="p">)</span>
 
 <span class="k">print</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>This will give you:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; User(name='Redowan Delowar', username='rednafi', password='123')
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; User(name='Redowan Delowar', username='rednafi', password=123)
 </code></pre></div></div>
 
-<p>In the above example, I defined a simple class named <code class="highlighter-rouge">User</code> and used Pydantic for data validation. Pydantic will make sure that the data you assign to the class attributes conform with the types you’ve annotated. Notice, how I’ve assigned an integer type data in the <code class="highlighter-rouge">password</code> field and Pydantic converted it to string type without complaining. That’s because the corresponding type annotation suggests that the <code class="highlighter-rouge">password</code> attribute of the <code class="highlighter-rouge">User</code> class should be a string. When implicit conversion is not possible or the hinted value of an attribute doesn’t conform to its assigned type, Pydantic will throw a <code class="highlighter-rouge">ValidationError</code>.</p>
+<p>In the above example, I defined a simple class named <code class="highlighter-rouge">User</code> and used Pydantic for data validation. Pydantic will make sure that the data you assign to the class attributes conform with the types you’ve annotated. Notice, how I’ve assigned a string type data in the <code class="highlighter-rouge">password</code> field and Pydantic converted it to integer type without complaining. That’s because the corresponding type annotation suggests that the <code class="highlighter-rouge">password</code> attribute of the <code class="highlighter-rouge">User</code> class should be an integer. When implicit conversion is not possible or the hinted value of an attribute doesn’t conform to its assigned type, Pydantic will throw a <code class="highlighter-rouge">ValidationError</code>.</p>
 
 <h3 id="the-orchestration">
 <a class="anchor" href="#the-orchestration" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Orchestration</h3>
@@ -438,7 +438,7 @@ STAGE_REDIS_PORT="6000"
 
       <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"STAGE_REDIS_HOST"</span><span class="p">)</span>
       <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"STAGE_REDIS_PORT"</span><span class="p">)</span>
-        
+
   <span class="o">...</span>
 </code></pre></div>    </div>
   </li>
