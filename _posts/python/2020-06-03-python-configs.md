@@ -50,10 +50,10 @@ from Pydantic import BaseModel
 class User(BaseModel):
     name: str
     username: str
-    password: str
+    password: int
 
 
-user = User(name="Redowan Delowar", username="rednafi", password=123)
+user = User(name="Redowan Delowar", username="rednafi", password="123")
 
 print(user)
 ```
@@ -61,10 +61,10 @@ print(user)
 This will give you:
 
 ```
->>> User(name='Redowan Delowar', username='rednafi', password='123')
+>>> User(name='Redowan Delowar', username='rednafi', password=123)
 ```
 
-In the above example, I defined a simple class named `User` and used Pydantic for data validation. Pydantic will make sure that the data you assign to the class attributes conform with the types you've annotated. Notice, how I've assigned an integer type data in the `password` field and Pydantic converted it to string type without complaining. That's because the corresponding type annotation suggests that the `password` attribute of the `User` class should be a string. When implicit conversion is not possible or the hinted value of an attribute doesn't conform to its assigned type, Pydantic will throw a `ValidationError`.
+In the above example, I defined a simple class named `User` and used Pydantic for data validation. Pydantic will make sure that the data you assign to the class attributes conform with the types you've annotated. Notice, how I've assigned a string type data in the `password` field and Pydantic converted it to integer type without complaining. That's because the corresponding type annotation suggests that the `password` attribute of the `User` class should be an integer. When implicit conversion is not possible or the hinted value of an attribute doesn't conform to its assigned type, Pydantic will throw a `ValidationError`.
 
 ### The Orchestration
 
@@ -272,7 +272,7 @@ The modular design demonstrated above is easy to maintain and extend in my opini
 
         REDIS_HOST: Optional[str] = Field(None, env="STAGE_REDIS_HOST")
         REDIS_PORT: Optional[str] = Field(None, env="STAGE_REDIS_PORT")
-        
+
     ...
     ```
 
