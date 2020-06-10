@@ -103,8 +103,6 @@ Now let's dump the entire config orchestration and go though the building blocks
 ```python
 # configs.py
 
-# configs.py
-
 from typing import Optional
 
 from pydantic import BaseSettings, Field, BaseModel
