@@ -5,7 +5,11 @@ comments: true
 layout: post
 description: Mitigating Python application's configuration madness with Pydantic
 categories: [Python]
+
 ---
+
+*Updated on 2020-06-10: Removed redundant repitions*
+
 
 Managing configurations in your Python applications isn't something you think about much often, until complexity starts to seep in and forces you to re-architect your initial approach. Ideally, your config management flow shouldn't change across different applications or as your application begins to grow in size and complexity. Even if you're writing a library, there should be a consistent config management process that scales up properly. Since I primarily spend my time writing data-analytics, data-science applications and expose them using [Flask](https://github.com/pallets/flask) or [FastAPI](https://github.com/tiangolo/fastapi) framework, I'll be tacking config management from an application development perspective.
 
@@ -99,6 +103,8 @@ Now let's dump the entire config orchestration and go though the building blocks
 ```python
 # configs.py
 
+# configs.py
+
 from typing import Optional
 
 from pydantic import BaseSettings, Field, BaseModel
@@ -117,9 +123,13 @@ class GlobalConfig(BaseSettings):
     # This variable will be loaded from the .env file. However, if there is a
     # shell environment variable having the same name, that will take precedence.
 
-    ENV_STATE: Optional[str] = Field(None, env="ENV_STATE")
     APP_CONFIG: AppConfig = AppConfig()
-    REDIS_PASS: Optional[str] = Field(None, env="REDIS_PASS")
+
+    ENV_STATE: Optional[str] = Field(None, env="ENV_STATE")
+
+    REDIS_HOST: Optional[str] = None
+    REDIS_PORT: Optional[int] = None
+    REDIS_PASS: Optional[str] = None
 
     class Config:
         """Loads the dotenv file."""
@@ -130,15 +140,15 @@ class GlobalConfig(BaseSettings):
 class DevConfig(GlobalConfig):
     """Development configurations."""
 
-    REDIS_HOST: Optional[str] = Field(None, env="DEV_REDIS_HOST")
-    REDIS_PORT: Optional[int] = Field(None, env="DEV_REDIS_PORT")
+    class Config:
+        env_prefix: str = "DEV_"
 
 
 class ProdConfig(GlobalConfig):
     """Production configurations."""
 
-    REDIS_HOST: Optional[str] = Field(None, env="PROD_REDIS_HOST")
-    REDIS_PORT: Optional[int] = Field(None, env="PROD_REDIS_PORT")
+    class Config:
+        env_prefix: str = "PROD_"
 
 
 class FactoryConfig:
@@ -174,7 +184,7 @@ The `AppConfig` class defines the config variables required for you API's intern
 This means you can keep the sensitive variables in your `.bashrc` or `zshrc` and Pydantic will inject them during runtime. It's a powerful feature, as it implies that you can easily keep the insensitive variables in your `.env` file and include that to the version control system. Meanwhile the sensitive information should be injected as a shell environment variable. For example, although I've defined an attribute called `REDIS_PASS` in the `GlobalConfig` class, there is no mention of any `REDIS_PASS` variable in the `.env` file. So normally, it returns `None` but you can easily inject a *password* into the `REDIS_PASS` variable from the shell. Assuming that you've set up your `venv` and installed the dependencies, you can test it by copying the contents of the above code snippet in file called `configs.py` and running the commands below:
 
 ```bash
-export REDIS_PASS=ubuntu
+export DEV_REDIS_PASS=ubuntu
 python configs.py
 ```
 
@@ -184,15 +194,19 @@ This should printout:
 >>> DevConfig(ENV_STATE='dev', APP_CONFIG=AppConfig(VAR_A=33, VAR_B=22.0), REDIS_PASS='ubuntu', REDIS_HOST='127.0.0.1', REDIS_PORT=4000)
 ```
 
-Notice how your injected `REDIS_PASS` has appeared in the printed config class instance. To understand why it printed an instance of the `DevConfig` class, refer to the [FactoryConfig](#factoryconfig) section.
+Notice how your injected `REDIS_PASS` has appeared in the printed config class instance. Although I injected `DEV_REDIS_PASS` into the environment variable, it appeared as `REDIS_PASS` inside the `DevConfig` instance. This is convenient because you won't need to change the name of the variables in your codebase when you change the environment. To understand why it printed an instance of the `DevConfig` class, refer to the [FactoryConfig](#factoryconfig) section.
 
 #### DevConfig
 
-`DevConfig` class inherits from the `GlobalConfig` class and it defines additional variables specific to the development environment. It inherits all the variables defined in the `GlobalConfig` class.
+`DevConfig` class inherits from the `GlobalConfig` class and it can define additional variables specific to the development environment. It inherits all the variables defined in the `GlobalConfig` class. In this case, the `DevConfig` class doesn't define any new variable.
+
+The nested `Config` class inside `DevConfig` defines an attribute `env_prefix` and assigns `DEV_` prefix to it. This helps Pydantic to read your prefixed variables like `DEV_REDIS_HOST`, `DEV_REDIS_PORT` etc without you having to explicitly mention them.
 
 #### ProdConfig
 
-`ProdConfig` class also inherits from the `GlobalConfig` class and it defines additional variables specific to the production environment. Like `DevConfig`, it also inherits all the variables defined in the `GlobalConfig` class.
+`ProdConfig` class also inherits from the `GlobalConfig` class and it can define additional variables specific to the production environment. It inherits all the variables defined in the `GlobalConfig` class. In this case, like `DevConfig` this class doesn't define any new variable.
+
+The nested `Config` class inside `ProdConfig` defines an attribute `env_prefix` and assigns `PROD_` prefix to it. This helps Pydantic to read your prefixed variables like `PROD_REDIS_HOST`, `PROD_REDIS_PORT` etc without you having to explicitly mention them.
 
 #### FactoryConfig
 
@@ -270,9 +284,8 @@ The modular design demonstrated above is easy to maintain and extend in my opini
     class StageConfig(GlobalConfig):
         """Staging configurations."""
 
-        REDIS_HOST: Optional[str] = Field(None, env="STAGE_REDIS_HOST")
-        REDIS_PORT: Optional[str] = Field(None, env="STAGE_REDIS_PORT")
-
+        class Config:
+            env_prefix : str = "STAGE_"
     ...
     ```
 
