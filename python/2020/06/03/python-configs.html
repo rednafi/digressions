@@ -160,7 +160,9 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#extending-the-pipeline">Extending the Pipeline</a></li>
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
-</ul><p>Managing configurations in your Python applications isn’t something you think about much often, until complexity starts to seep in and forces you to re-architect your initial approach. Ideally, your config management flow shouldn’t change across different applications or as your application begins to grow in size and complexity. Even if you’re writing a library, there should be a consistent config management process that scales up properly. Since I primarily spend my time writing data-analytics, data-science applications and expose them using <a href="https://github.com/pallets/flask">Flask</a> or <a href="https://github.com/tiangolo/fastapi">FastAPI</a> framework, I’ll be tacking config management from an application development perspective.</p>
+</ul><p><em>Updated on 2020-06-10: Removed redundant repitions</em></p>
+
+<p>Managing configurations in your Python applications isn’t something you think about much often, until complexity starts to seep in and forces you to re-architect your initial approach. Ideally, your config management flow shouldn’t change across different applications or as your application begins to grow in size and complexity. Even if you’re writing a library, there should be a consistent config management process that scales up properly. Since I primarily spend my time writing data-analytics, data-science applications and expose them using <a href="https://github.com/pallets/flask">Flask</a> or <a href="https://github.com/tiangolo/fastapi">FastAPI</a> framework, I’ll be tacking config management from an application development perspective.</p>
 
 <h2 id="few-ineffective-approaches">
 <a class="anchor" href="#few-ineffective-approaches" aria-hidden="true"><span class="octicon octicon-link"></span></a>Few Ineffective Approaches</h2>
@@ -259,6 +261,8 @@ PROD_REDIS_PORT="5000"
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># configs.py
 </span>
+<span class="c1"># configs.py
+</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">BaseModel</span>
@@ -277,9 +281,13 @@ PROD_REDIS_PORT="5000"
     <span class="c1"># This variable will be loaded from the .env file. However, if there is a
 </span>    <span class="c1"># shell environment variable having the same name, that will take precedence.
 </span>
-    <span class="n">ENV_STATE</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"ENV_STATE"</span><span class="p">)</span>
     <span class="n">APP_CONFIG</span><span class="p">:</span> <span class="n">AppConfig</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="p">()</span>
-    <span class="n">REDIS_PASS</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"REDIS_PASS"</span><span class="p">)</span>
+
+    <span class="n">ENV_STATE</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"ENV_STATE"</span><span class="p">)</span>
+
+    <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">REDIS_PASS</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
         <span class="s">"""Loads the dotenv file."""</span>
@@ -290,15 +298,15 @@ PROD_REDIS_PORT="5000"
 <span class="k">class</span> <span class="nc">DevConfig</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">):</span>
     <span class="s">"""Development configurations."""</span>
 
-    <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"DEV_REDIS_HOST"</span><span class="p">)</span>
-    <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"DEV_REDIS_PORT"</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">env_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"DEV_"</span>
 
 
 <span class="k">class</span> <span class="nc">ProdConfig</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">):</span>
     <span class="s">"""Production configurations."""</span>
 
-    <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"PROD_REDIS_HOST"</span><span class="p">)</span>
-    <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"PROD_REDIS_PORT"</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">env_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"PROD_"</span>
 
 
 <span class="k">class</span> <span class="nc">FactoryConfig</span><span class="p">:</span>
@@ -337,7 +345,7 @@ PROD_REDIS_PORT="5000"
 
 <p>This means you can keep the sensitive variables in your <code class="highlighter-rouge">.bashrc</code> or <code class="highlighter-rouge">zshrc</code> and Pydantic will inject them during runtime. It’s a powerful feature, as it implies that you can easily keep the insensitive variables in your <code class="highlighter-rouge">.env</code> file and include that to the version control system. Meanwhile the sensitive information should be injected as a shell environment variable. For example, although I’ve defined an attribute called <code class="highlighter-rouge">REDIS_PASS</code> in the <code class="highlighter-rouge">GlobalConfig</code> class, there is no mention of any <code class="highlighter-rouge">REDIS_PASS</code> variable in the <code class="highlighter-rouge">.env</code> file. So normally, it returns <code class="highlighter-rouge">None</code> but you can easily inject a <em>password</em> into the <code class="highlighter-rouge">REDIS_PASS</code> variable from the shell. Assuming that you’ve set up your <code class="highlighter-rouge">venv</code> and installed the dependencies, you can test it by copying the contents of the above code snippet in file called <code class="highlighter-rouge">configs.py</code> and running the commands below:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">REDIS_PASS</span><span class="o">=</span>ubuntu
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">DEV_REDIS_PASS</span><span class="o">=</span>ubuntu
 python configs.py
 </code></pre></div></div>
 
@@ -346,17 +354,21 @@ python configs.py
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; DevConfig(ENV_STATE='dev', APP_CONFIG=AppConfig(VAR_A=33, VAR_B=22.0), REDIS_PASS='ubuntu', REDIS_HOST='127.0.0.1', REDIS_PORT=4000)
 </code></pre></div></div>
 
-<p>Notice how your injected <code class="highlighter-rouge">REDIS_PASS</code> has appeared in the printed config class instance. To understand why it printed an instance of the <code class="highlighter-rouge">DevConfig</code> class, refer to the <a href="#factoryconfig">FactoryConfig</a> section.</p>
+<p>Notice how your injected <code class="highlighter-rouge">REDIS_PASS</code> has appeared in the printed config class instance. Although I injected <code class="highlighter-rouge">DEV_REDIS_PASS</code> into the environment variable, it appeared as <code class="highlighter-rouge">REDIS_PASS</code> inside the <code class="highlighter-rouge">DevConfig</code> instance. This is convenient because you won’t need to change the name of the variables in your codebase when you change the environment. To understand why it printed an instance of the <code class="highlighter-rouge">DevConfig</code> class, refer to the <a href="#factoryconfig">FactoryConfig</a> section.</p>
 
 <h4 id="devconfig">
 <a class="anchor" href="#devconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>DevConfig</h4>
 
-<p><code class="highlighter-rouge">DevConfig</code> class inherits from the <code class="highlighter-rouge">GlobalConfig</code> class and it defines additional variables specific to the development environment. It inherits all the variables defined in the <code class="highlighter-rouge">GlobalConfig</code> class.</p>
+<p><code class="highlighter-rouge">DevConfig</code> class inherits from the <code class="highlighter-rouge">GlobalConfig</code> class and it can define additional variables specific to the development environment. It inherits all the variables defined in the <code class="highlighter-rouge">GlobalConfig</code> class. In this case, the <code class="highlighter-rouge">DevConfig</code> class doesn’t define any new variable.</p>
+
+<p>The nested <code class="highlighter-rouge">Config</code> class inside <code class="highlighter-rouge">DevConfig</code> defines an attribute <code class="highlighter-rouge">env_prefix</code> and assigns <code class="highlighter-rouge">DEV_</code> prefix to it. This helps Pydantic to read your prefixed variables like <code class="highlighter-rouge">DEV_REDIS_HOST</code>, <code class="highlighter-rouge">DEV_REDIS_PORT</code> etc without you having to explicitly mention them.</p>
 
 <h4 id="prodconfig">
 <a class="anchor" href="#prodconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>ProdConfig</h4>
 
-<p><code class="highlighter-rouge">ProdConfig</code> class also inherits from the <code class="highlighter-rouge">GlobalConfig</code> class and it defines additional variables specific to the production environment. Like <code class="highlighter-rouge">DevConfig</code>, it also inherits all the variables defined in the <code class="highlighter-rouge">GlobalConfig</code> class.</p>
+<p><code class="highlighter-rouge">ProdConfig</code> class also inherits from the <code class="highlighter-rouge">GlobalConfig</code> class and it can define additional variables specific to the production environment. It inherits all the variables defined in the <code class="highlighter-rouge">GlobalConfig</code> class. In this case, like <code class="highlighter-rouge">DevConfig</code> this class doesn’t define any new variable.</p>
+
+<p>The nested <code class="highlighter-rouge">Config</code> class inside <code class="highlighter-rouge">ProdConfig</code> defines an attribute <code class="highlighter-rouge">env_prefix</code> and assigns <code class="highlighter-rouge">PROD_</code> prefix to it. This helps Pydantic to read your prefixed variables like <code class="highlighter-rouge">PROD_REDIS_HOST</code>, <code class="highlighter-rouge">PROD_REDIS_PORT</code> etc without you having to explicitly mention them.</p>
 
 <h4 id="factoryconfig">
 <a class="anchor" href="#factoryconfig" aria-hidden="true"><span class="octicon octicon-link"></span></a>FactoryConfig</h4>
@@ -436,9 +448,8 @@ STAGE_REDIS_PORT="6000"
   <span class="k">class</span> <span class="nc">StageConfig</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">):</span>
       <span class="s">"""Staging configurations."""</span>
 
-      <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"STAGE_REDIS_HOST"</span><span class="p">)</span>
-      <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"STAGE_REDIS_PORT"</span><span class="p">)</span>
-
+      <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+          <span class="n">env_prefix</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"STAGE_"</span>
   <span class="o">...</span>
 </code></pre></div>    </div>
   </li>
