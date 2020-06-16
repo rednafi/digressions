@@ -283,8 +283,8 @@ class FetchUrl(IFetchUrl):
 
 
 class ExcFetchUrl(IFetchUrl):
-    """This class can be swapped out with the FetchUrl class. It provides
-    additional exception handling and logging."""
+    """This class can be swapped out with the FetchUrl class.
+    It provides additional exception handling and logging."""
 
     def __init__(self) -> None:
         self._fetch_url = FetchUrl()
