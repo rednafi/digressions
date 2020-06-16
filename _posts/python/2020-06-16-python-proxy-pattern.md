@@ -4,7 +4,7 @@ title: Implementing Proxy Pattern in Python
 toc: true
 comments: true
 layout: post
-description: Dipping toes into the realm of structural design patterns with Python
+description: Dipping toes into the realm of structural design patterns
 categories: [Python]
 
 ---
