@@ -168,8 +168,8 @@ class Interface(ABC):
 
 class Concrete(Interface):
     """
-    This is the main job doer. External services like payment gateways can be a
-    good example.
+    This is the main job doer. External services like payment
+    gateways can be a good example.
     """
 
     def job_a(self, user: str) -> None:
