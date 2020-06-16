@@ -151,8 +151,7 @@ from abc import ABC, abstractmethod
 
 
 class Interface(ABC):
-    """
-    Interfaces of Interface, Concrete & Proxy should
+    """Interfaces of Interface, Concrete & Proxy should
     be the same, because the client should be able to use
     Concrete or Proxy without any change in their internals.
     """
@@ -167,9 +166,8 @@ class Interface(ABC):
 
 
 class Concrete(Interface):
-    """
-    This is the main job doer. External services like payment
-    gateways can be a good example.
+    """This is the main job doer. External services like
+    payment gateways can be a good example.
     """
 
     def job_a(self, user: str) -> None:
