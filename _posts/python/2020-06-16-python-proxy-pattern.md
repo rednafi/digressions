@@ -173,7 +173,7 @@ class Concrete(Interface):
     def job_a(self, user: str) -> None:
         print(f"I am doing the job_a for {user}")
 
-    def job_b(self, user):
+    def job_b(self, user: str) -> None:
         print(f"I am doing the job_b for {user}")
 
 
