@@ -74,7 +74,7 @@ from typing import Union
 logging.basicConfig(level=logging.INFO)
 
 
-def division(a: Union[int, float], b: [int, float]) -> float:
+def division(a: Union[int, float], b: Union[int, float]) -> float:
     try:
         result = a / b
         return result
