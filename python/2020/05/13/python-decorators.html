@@ -328,9 +328,9 @@ window.onload = wrap_img;
 
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">():</span>
         <span class="k">print</span><span class="p">(</span><span class="s">"This will get printed before the function is called."</span><span class="p">)</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
         <span class="k">print</span><span class="p">(</span><span class="s">"This will get printed after the function is called."</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">val</span>
+        <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 
@@ -375,9 +375,9 @@ window.onload = wrap_img;
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">yell</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">"!"</span>
-        <span class="k">return</span> <span class="n">val</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">"!"</span>
+        <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 </code></pre></div></div>
@@ -459,9 +459,9 @@ window.onload = wrap_img;
 <span class="k">def</span> <span class="nf">yell</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">"!"</span>
-        <span class="k">return</span> <span class="n">val</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">"!"</span>
+        <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 
@@ -507,9 +507,9 @@ window.onload = wrap_img;
     <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Do something before
-</span>        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span>        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># Do something after
-</span>        <span class="k">return</span> <span class="n">val</span>
+</span>        <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 </code></pre></div></div>
@@ -618,10 +618,10 @@ window.onload = wrap_img;
 <span class="k">def</span> <span class="nf">validate_summary</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">"summary"</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="s">"summary"</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
             <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">"Summary exceeds 30 character limit."</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 
@@ -712,8 +712,8 @@ window.onload = wrap_img;
 
     <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="n">val</span> <span class="o">+</span> <span class="s">"!"</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="n">ret</span> <span class="o">+</span> <span class="s">"!"</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 
@@ -723,8 +723,8 @@ window.onload = wrap_img;
 
     <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s">"🎉 "</span> <span class="o">+</span> <span class="n">val</span> <span class="o">+</span> <span class="s">" 🎉"</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"🎉 "</span> <span class="o">+</span> <span class="n">ret</span> <span class="o">+</span> <span class="s">" 🎉"</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 
@@ -761,10 +761,10 @@ window.onload = wrap_img;
     <span class="k">def</span> <span class="nf">outer_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">inner_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">val</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
 
         <span class="k">return</span> <span class="n">inner_wrapper</span>
 
@@ -827,10 +827,10 @@ window.onload = wrap_img;
     <span class="k">def</span> <span class="nf">outer_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">inner_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">val</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
 
         <span class="k">return</span> <span class="n">inner_wrapper</span>
 
@@ -908,13 +908,13 @@ window.onload = wrap_img;
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="n">resp</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span> <span class="ow">or</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span> <span class="ow">and</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="n">n_tries</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ret</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span> <span class="ow">or</span> <span class="n">ret</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span> <span class="ow">and</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="n">n_tries</span><span class="p">:</span>
                 <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"retrying... ({tries})"</span><span class="p">)</span>
                 <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">continue</span>
             <span class="k">break</span>
-        <span class="k">return</span> <span class="n">resp</span>
+        <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 
@@ -974,10 +974,10 @@ window.onload = wrap_img;
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="c1"># You can add some code before the function call
-</span>        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span>        <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># You can also add some code after the function call
 </span>
-        <span class="k">return</span> <span class="n">val</span>
+        <span class="k">return</span> <span class="n">ret</span>
 </code></pre></div></div>
 
 <p>Let’s use the above template to write a decorator named <code class="highlighter-rouge">Emphasis</code> that will add bold tags <code class="highlighter-rouge">&lt;b&gt;&lt;/b&gt;</code>to the string output of a function.</p>
@@ -991,8 +991,8 @@ window.onload = wrap_img;
         <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s">"&lt;b&gt;"</span> <span class="o">+</span> <span class="n">val</span> <span class="o">+</span> <span class="s">"&lt;/b&gt;"</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"&lt;b&gt;"</span> <span class="o">+</span> <span class="n">ret</span> <span class="o">+</span> <span class="s">"&lt;/b&gt;"</span>
 
 
 <span class="o">@</span><span class="n">Emphasis</span>
@@ -1119,23 +1119,23 @@ window.onload = wrap_img;
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Conversion unit: {convert_to}"</span><span class="p">)</span>
 
-        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># Adding conversion rules
 </span>        <span class="k">if</span> <span class="n">convert_to</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">val</span>
+            <span class="k">return</span> <span class="n">ret</span>
 
         <span class="k">elif</span> <span class="n">convert_to</span> <span class="o">==</span> <span class="s">"km"</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">val</span> <span class="o">/</span> <span class="mi">1000</span>
+            <span class="k">return</span> <span class="n">ret</span> <span class="o">/</span> <span class="mi">1000</span>
 
         <span class="k">elif</span> <span class="n">convert_to</span> <span class="o">==</span> <span class="s">"mile"</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">val</span> <span class="o">*</span> <span class="mf">0.000621371</span>
+            <span class="k">return</span> <span class="n">ret</span> <span class="o">*</span> <span class="mf">0.000621371</span>
 
         <span class="k">elif</span> <span class="n">convert_to</span> <span class="o">==</span> <span class="s">"cm"</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">val</span> <span class="o">*</span> <span class="mi">100</span>
+            <span class="k">return</span> <span class="n">ret</span> <span class="o">*</span> <span class="mi">100</span>
 
         <span class="k">elif</span> <span class="n">convert_to</span> <span class="o">==</span> <span class="s">"mm"</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">val</span> <span class="o">*</span> <span class="mi">1000</span>
+            <span class="k">return</span> <span class="n">ret</span> <span class="o">*</span> <span class="mi">1000</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">"Conversion unit is not supported."</span><span class="p">)</span>
