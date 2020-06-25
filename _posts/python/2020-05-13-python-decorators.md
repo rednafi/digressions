@@ -182,9 +182,9 @@ def deco(func):
 
     def wrapper():
         print("This will get printed before the function is called.")
-        val = func()
+        ret = func()
         print("This will get printed after the function is called.")
-        return val
+        return ret
 
     return wrapper
 
@@ -233,9 +233,9 @@ The naive decorator that we've implemented above will only work for functions th
 ```python
 def yell(func):
     def wrapper(*args, **kwargs):
-        val = func(*args, **kwargs)
-        val = val.upper() + "!"
-        return val
+        ret = func(*args, **kwargs)
+        ret = ret.upper() + "!"
+        return ret
 
     return wrapper
 ```
@@ -334,9 +334,9 @@ from functools import wraps
 def yell(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        val = func(*args, **kwargs)
-        val = val.upper() + "!"
-        return val
+        ret = func(*args, **kwargs)
+        ret = ret.upper() + "!"
+        return ret
 
     return wrapper
 
@@ -390,9 +390,9 @@ def decorator(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # Do something before
-        val = func(*args, **kwargs)
+        ret = func(*args, **kwargs)
         # Do something after
-        return val
+        return ret
 
     return wrapper
 ```
@@ -510,10 +510,10 @@ from functools import wraps
 def validate_summary(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        data = func(*args, **kwargs)
-        if len(data["summary"]) > 30:
+        ret = func(*args, **kwargs)
+        if len(ret["summary"]) > 30:
             raise ValueError("Summary exceeds 30 character limit.")
-        return data
+        return ret
 
     return wrapper
 
@@ -607,8 +607,8 @@ def greet(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        val = func(*args, **kwargs)
-        return "Hello " + val + "!"
+        ret = func(*args, **kwargs)
+        return "Hello " + ret + "!"
 
     return wrapper
 
@@ -618,8 +618,8 @@ def flare(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        val = func(*args, **kwargs)
-        return "🎉 " + val + " 🎉"
+        ret = func(*args, **kwargs)
+        return "🎉 " + ret + " 🎉"
 
     return wrapper
 
@@ -659,10 +659,10 @@ def joinby(delimiter=" "):
     def outer_wrapper(func):
         @wraps(func)
         def inner_wrapper(*args, **kwargs):
-            val = func(*args, **kwargs)
-            val = val.split(" ")
-            val = delimiter.join(val)
-            return val
+            ret = func(*args, **kwargs)
+            ret = ret.split(" ")
+            ret = delimiter.join(ret)
+            return ret
 
         return inner_wrapper
 
@@ -722,10 +722,10 @@ def joinby(_func=None, *, delimiter=" "):
     def outer_wrapper(func):
         @wraps(func)
         def inner_wrapper(*args, **kwargs):
-            val = func(*args, **kwargs)
-            val = val.split(" ")
-            val = delimiter.join(val)
-            return val
+            ret = func(*args, **kwargs)
+            ret = ret.split(" ")
+            ret = delimiter.join(ret)
+            return ret
 
         return inner_wrapper
 
@@ -806,13 +806,13 @@ def retry(func=None, n_tries=4):
     def wrapper(*args, **kwargs):
         tries = 0
         while True:
-            resp = func(*args, **kwargs)
-            if resp.status_code == 500 or resp.status_code == 404 and tries < n_tries:
+            ret = func(*args, **kwargs)
+            if ret.status_code == 500 or ret.status_code == 404 and tries < n_tries:
                 print(f"retrying... ({tries})")
                 tries += 1
                 continue
             break
-        return resp
+        return ret
 
     return wrapper
 
@@ -874,10 +874,10 @@ class ClassDeco:
     def __call__(self, *args, **kwargs):
 
         # You can add some code before the function call
-        val = self.func(*args, **kwargs)
+        ret = self.func(*args, **kwargs)
         # You can also add some code after the function call
 
-        return val
+        return ret
 ```
 
 
@@ -893,8 +893,8 @@ class Emphasis:
         self.func = func
 
     def __call__(self, *args, **kwargs):
-        val = self.func(*args, **kwargs)
-        return "<b>" + val + "</b>"
+        ret = self.func(*args, **kwargs)
+        return "<b>" + ret + "</b>"
 
 
 @Emphasis
@@ -1028,23 +1028,23 @@ def convert(func=None, convert_to=None):
     def wrapper(*args, **kwargs):
         print(f"Conversion unit: {convert_to}")
 
-        val = func(*args, **kwargs)
+        ret = func(*args, **kwargs)
 
         # Adding conversion rules
         if convert_to is None:
-            return val
+            return ret
 
         elif convert_to == "km":
-            return val / 1000
+            return ret / 1000
 
         elif convert_to == "mile":
-            return val * 0.000621371
+            return ret * 0.000621371
 
         elif convert_to == "cm":
-            return val * 100
+            return ret * 100
 
         elif convert_to == "mm":
-            return val * 1000
+            return ret * 1000
 
         else:
             raise ValueError("Conversion unit is not supported.")
