@@ -168,7 +168,9 @@ window.onload = wrap_img;
 </li>
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#references">References</a></li>
-</ul><p>When I first learned about Python decorators, using them felt like doing voodoo magic. Decorators can give you the ability to add new functionalities to any callable without actually touching or changing the code inside it. This can typically yield better encapsulation and help you write cleaner and more understandable code. However, <em>decorator</em> is considered as a fairly advanced topic in Python since understanding and writing it requires you to have command over multiple additional concepts like first class objects, higher order functions, closures etc. First, I’ll try to introduce these concepts as necessary and then unravel the core concept of decorator layer by layer. So let’s dive in.</p>
+</ul><p><strong><em>Updated on 2020-06-25</em></strong>: <em>Replaced time.time() with time.perf_counter()</em></p>
+
+<p>When I first learned about Python decorators, using them felt like doing voodoo magic. Decorators can give you the ability to add new functionalities to any callable without actually touching or changing the code inside it. This can typically yield better encapsulation and help you write cleaner and more understandable code. However, <em>decorator</em> is considered as a fairly advanced topic in Python since understanding and writing it requires you to have command over multiple additional concepts like first class objects, higher order functions, closures etc. First, I’ll try to introduce these concepts as necessary and then unravel the core concept of decorator layer by layer. So let’s dive in.</p>
 
 <h2 id="first-class-objects">
 <a class="anchor" href="#first-class-objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>First Class Objects</h2>
@@ -449,13 +451,13 @@ window.onload = wrap_img;
     wrapper(*args, **kwargs)
 </code></pre></div></div>
 
-<p>Now what’s going on there. The decorator <code class="highlighter-rouge">yell</code> has made the function <code class="highlighter-rouge">hello</code> confused about its own identity. Instead of reporting its own name, it takes the identity of the inner function <code class="highlighter-rouge">wrapper</code>. This can be confusing while doing debugging. You can fix this using builtin <code class="highlighter-rouge">functools.wraps</code> decorator. This will make sure that the original identity of the decorated function stays preserved.</p>
+<p>Now what’s going on there. The decorator <code class="highlighter-rouge">yell</code> has made the function <code class="highlighter-rouge">hello</code> confused about its own identity. Instead of reporting its own name, it takes the identity of the inner function <code class="highlighter-rouge">wrapper</code>. This can be confusing while doing debugging. You can fix this by using builtin <code class="highlighter-rouge">wraps</code> decorator from the <code class="highlighter-rouge">functools</code> module. This will make sure that the original identity of the decorated function stays preserved.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">yell</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">"!"</span>
@@ -498,11 +500,11 @@ window.onload = wrap_img;
 
 <p>Before moving on to the next section let’s see a few real world examples of decorators. To define all the decorators, we’ll be using the following template that we’ve perfected so far.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Do something before
 </span>        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -517,21 +519,21 @@ window.onload = wrap_img;
 
 <p>Timer decorator will help you time your callables in a non-intrusive way. It can help you while debugging and profiling your functions.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">perf_counter</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="s">"""This decorator prints out the execution time of a callable."""</span>
 
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">perf_counter</span><span class="p">()</span>
         <span class="n">run_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
         <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Finished running {func.__name__} in {run_time:.4f} seconds."</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">val</span>
+        <span class="k">return</span> <span class="n">ret</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
 
@@ -547,7 +549,7 @@ window.onload = wrap_img;
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dothings</span><span class="p">(</span><span class="mi">100_000</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Finished running dothings in 0.0231 seconds.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; Finished running dothings in 0.0353 seconds.
     24999500002500000000
 </code></pre></div></div>
 
@@ -556,12 +558,12 @@ window.onload = wrap_img;
 
 <p>Just like the <code class="highlighter-rouge">timer</code> decorator, we can define a logger decorator that will log the state of a callable. For this demonstration, I’ll be defining a exception logger that will show additional information like timestamp, argument names when an exception occurs inside of the decorated callable.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 
 <span class="k">def</span> <span class="nf">logexc</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="c1"># Stringify the arguments
@@ -610,11 +612,11 @@ window.onload = wrap_img;
 
 <p>Imagine this: you have a set of functions, each returning a dictionary, which (among other fields) includes a field called “summary.” The value of this summary must not be more than 30 characters long; if violated, that’s an error. Here is a decorator that raises a ValueError if that happens:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">validate_summary</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">"summary"</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
@@ -656,7 +658,7 @@ window.onload = wrap_img;
 
 <p>Imagine a situation where your defined callable fails due to some I/O related issues and you’d like to retry that again. Decorator can help you to achieve that in a reusable manner. Let’s define a <code class="highlighter-rouge">retry</code> decorator that will rerun the decorated function multiple times if an http error occurs.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 
 
@@ -664,7 +666,7 @@ window.onload = wrap_img;
     <span class="s">"""This will rerun the decorated callable 3 times if
     the callable encounters http 500/404 error."""</span>
 
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">n_tries</span> <span class="o">=</span> <span class="mi">3</span>
         <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
@@ -702,13 +704,13 @@ window.onload = wrap_img;
 
 <p>You can apply multiple decorators to a function by stacking them on top of each other. Let’s define two simple decorators and use them both on a function.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="s">"""Greet in English."""</span>
 
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="n">val</span> <span class="o">+</span> <span class="s">"!"</span>
@@ -719,7 +721,7 @@ window.onload = wrap_img;
 <span class="k">def</span> <span class="nf">flare</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="s">"""Add flares to the string."""</span>
 
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="s">"🎉 "</span> <span class="o">+</span> <span class="n">val</span> <span class="o">+</span> <span class="s">" 🎉"</span>
@@ -748,7 +750,7 @@ window.onload = wrap_img;
 
 <p>Before doing that let’s cook up a trivial example of how you can define decorators with parameters.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">joinby</span><span class="p">(</span><span class="n">delimiter</span><span class="o">=</span><span class="s">" "</span><span class="p">):</span>
@@ -757,7 +759,7 @@ window.onload = wrap_img;
     them using a user specified delimiter."""</span>
 
     <span class="k">def</span> <span class="nf">outer_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-        <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">inner_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
@@ -814,7 +816,7 @@ window.onload = wrap_img;
 
 <p>You saw earlier that a decorator specifically designed to take parameters can’t be used without parameters; you need to at least apply parenthesis after the decorator <code class="highlighter-rouge">deco()</code> to use it without explicitly providing the arguments. But what if you want to design one that can used both with and without arguments. Let’s redefine the <code class="highlighter-rouge">joinby</code> decorator so that you can use it with parameters or just like an ordinary parameter-less decorator that we’ve seen before.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">joinby</span><span class="p">(</span><span class="n">_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">" "</span><span class="p">):</span>
@@ -823,7 +825,7 @@ window.onload = wrap_img;
     using a user specified delimiter."""</span>
 
     <span class="k">def</span> <span class="nf">outer_wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-        <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">inner_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">val</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span>
@@ -866,14 +868,14 @@ window.onload = wrap_img;
 
 <p>Personally, I find it cumbersome how you need three layers of nested functions to define a generalized decorator that can be used with or without arguments. <a href="https://www.dabeaz.com/">David Beazly</a> in his book <a href="https://realpython.com/asins/1449340377/">Python Cookbook</a> shows an excellent way to define generalized decorators without writing three levels of nested functions. It uses the built in <code class="highlighter-rouge">functools.partial</code> function to achieve that. The following is a pattern you can use to define generalized decorators in a more elegant way:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="s">"spam"</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">decorator</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="n">foo</span><span class="p">)</span>
 
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Do something with `func` and `foo`, if you're so inclined
 </span>        <span class="k">pass</span>
@@ -895,14 +897,14 @@ window.onload = wrap_img;
 
 <p>Let’s redefine our <code class="highlighter-rouge">retry</code> decorator using this pattern.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
 
 <span class="k">def</span> <span class="nf">retry</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_tries</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">retry</span><span class="p">,</span> <span class="n">n_tries</span><span class="o">=</span><span class="n">n_tries</span><span class="p">)</span>
 
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
@@ -961,9 +963,12 @@ window.onload = wrap_img;
 
 <p>This time, I’ll be using a class to compose a decorator. Classes can be handy to avoid nested architecture while writing decorators. Also, it can be helpful to use a class while writing stateful decorators. You can follow the pattern below to compose decorators with classes.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClassDeco</span><span class="p">:</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">update_wrapper</span>
+
+
+<span class="k">class</span> <span class="nc">ClassDeco</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="n">functools</span><span class="o">.</span><span class="n">update_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="n">update_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -977,12 +982,12 @@ window.onload = wrap_img;
 
 <p>Let’s use the above template to write a decorator named <code class="highlighter-rouge">Emphasis</code> that will add bold tags <code class="highlighter-rouge">&lt;b&gt;&lt;/b&gt;</code>to the string output of a function.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">update_wrapper</span>
 
 
 <span class="k">class</span> <span class="nc">Emphasis</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="n">functools</span><span class="o">.</span><span class="n">update_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="n">update_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1007,12 +1012,12 @@ window.onload = wrap_img;
 
 <p>Before moving on, let’s write a stateful decorator using classes. Stateful decorators can remember the state of their previous run. Here’s a stateful decorator called <code class="highlighter-rouge">Tally</code> that will keep track of the number of times decorated functions are called in a dictionary. The keys of the dictionary will hold the names of the functions and the corresponding values will hold the call count.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">update_wrapper</span>
 
 
 <span class="k">class</span> <span class="nc">Tally</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="n">functools</span><span class="o">.</span><span class="n">update_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="n">update_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tally</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_calls</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1048,8 +1053,7 @@ window.onload = wrap_img;
 
 <p>Decorators can provide an elegant way of memoizing function return values. Imagine you have an expensive API and you’d like call that as few times as possible. The idea is to save and cache values returned by the API for particular arguments, so that if those arguments appear again, you can serve the results from the cache instead of calling the API again. This can dramatically improve your applications’ performance. Here I’ve simulated an expensive API call and provided caching with a decorator.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
 
 
 <span class="k">def</span> <span class="nf">api</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -1073,10 +1077,10 @@ window.onload = wrap_img;
 
 <p>You’ll see that running this function takes roughly 3 seconds. To cache the result , we can use Python’s built in functools.lru_cache to save the result against an argument in a dictionary and serve that when it encounters the same argument again. The only drawback here is, all the arguments need to be hashable.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 
 
-<span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="o">@</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">api</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
     <span class="s">"""API takes an integer and returns the square value of it.
     To simulate a time consuming process, I've added some time delay to it."""</span>
@@ -1102,16 +1106,16 @@ window.onload = wrap_img;
 
 <p>The following decorator converts length from SI units to multiple other units without polluting your target function with conversion logics.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span><span class="p">,</span> <span class="n">partial</span>
 
 
 <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">convert_to</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="s">"""This converts value from meter to others."""</span>
 
     <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">convert</span><span class="p">,</span> <span class="n">convert_to</span><span class="o">=</span><span class="n">convert_to</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">convert</span><span class="p">,</span> <span class="n">convert_to</span><span class="o">=</span><span class="n">convert_to</span><span class="p">)</span>
 
-    <span class="o">@</span><span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="o">@</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Conversion unit: {convert_to}"</span><span class="p">)</span>
 
