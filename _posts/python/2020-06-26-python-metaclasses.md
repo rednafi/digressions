@@ -369,7 +369,7 @@ You can access the `__attrs_ordered__` attribute from both class `A` and an inst
 
 In OOP term, a singleton class is a class that can have only one object (an instance of the class) at a time.
 
-After the first time, if you try to instantiate a Singleton class, it will basically return the same instance of the class that was created before. So any modifications done to this apparantly new instance will mutate the original instance since they're basically the same instance.
+After the first time, if you try to instantiate a Singleton class, it will basically return the same instance of the class that was created before. So any modifications done to this apparently new instance will mutate the original instance since they're basically the same instance.
 
 ```python
 class Singleton(type):
@@ -399,9 +399,8 @@ In the above example, at first, I've created a singleton class `A` by attaching 
 
 ## Implementing a Class that Can't be Subclassed
 
-```
-Suppose you want to create a base class where the users of your class won't be able subclass the base class. In that case, you can write a metaclass that will raise `RuntimeError` if someone tries to create a subclass from the base class.
-```
+Suppose you want to create a base class where the users of your class won't be able to create any subclasses from the base class. In that case, you can write a metaclass and attach that your base class. The base class will raise `RuntimeError` if someone tries to create a subclass from it.
+
 
 ```python
 class TerminateMeta(type):
@@ -452,7 +451,7 @@ RuntimeError: Subclassing a class that has TerminateMeta metaclass is prohibited
 
 ## Disallowing Multiple Inheritance
 
-Multiple inheritance can be fragile and error prone. So if you don't want to allow multiple inheritance in a class, you can do so by attaching a metaclass to the target class.
+Multiple inheritance can be fragile and error prone. So, if you don't want to allow the users to use a base class with any other base classes to form multiple inheritance, you can do so by attaching a metaclass to that target base class.
 
 ```python
 class NoMultiMeta(type):
@@ -499,7 +498,7 @@ TypeError: Inherited multiple base classes!
 
 ## Timing Classes with Metaclasses
 
-Suppose you want to measure the execution time of the different methods of a class. One way of doing that is to define a timer decorator and decorating all the methods to measure and show the execution time. However, by using a metaclass, you can avoid decorating the methods in the class individually.
+Suppose you want to measure the execution time of different methods of a class. One way of doing that is to define a timer decorator and decorating all the methods to measure and show the execution time. However, by using a metaclass, you can avoid decorating the methods in the class individually and the metaclass will dynamically apply the timer decorator to all of the methods of your target class. This can reduce code repetition and improve code readability.
 
 ```python
 from types import FunctionType, MethodType
@@ -590,7 +589,7 @@ registry
 
 ## Debugging Methods with Metaclasses
 
-Debugging a class often involves inspecting the individual methods and adding extra debugging and logging logic to those. However, this can be tedious if you've do this over an over again. Instead you can write an inspection decorator and use a metaclass to dynamically add the decorator to all of the methods of your target class. You can simply detach the metaclass once you're done with debugging and don't want the extra logic in your target class.
+Debugging a class often involves inspecting the individual methods and adding extra debugging logic to those. However, this can get tedious if you've do this over an over again. Instead you can write an inspection decorator and use a metaclass to dynamically apply the decorator to all of the methods of your target class. Later on, you can simply detach the metaclass once you're done with debugging and don't want the extra logic in your target class.
 
 ```python
 from functools import wraps
@@ -643,6 +642,8 @@ Full name of this method: CalcAdv.mul
 ```
 
 ## Exception Handling with Metaclasses
+
+Sometimes you need to handle exceptions in multiple methods of a class in a generic manner. That means all the methods of the class have the same exception handling, logging logic etc. Metaclasses can help you avoid adding repetitive exception handling and logging logics to your methods.
 
 ```python
 from functools import wraps
@@ -761,7 +762,6 @@ TypeError                                 Traceback (most recent call last)
 TypeError: Can't instantiate abstract class ICalc with abstract methods add, div, mul, sub
 ```
 
-
 Although it seems like interface `ICalc` is simply inheriting from the class `ABC`, in fact, `ABC` is attaching a metaclass `ABCMeta` to `ICalc`. This metaclass transforms the `ICalc` class into an abstract class. You can see that the class `ICalc` gives `TypeError` when you take an attempt to initialize it. The only way to use this interface is via creating subclasses from `ICalc` base class and implementing all the abstract methods there. The snippet below shows that:
 
 ```python
@@ -798,6 +798,8 @@ print(calc.div(4, 5))
 
 
 ## Metaclasses & Dataclasses
+
+Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Data classes are awesome but they require you to decorate them with `dataclasses.dataclass`
 
 ### Creating Multiple DataClasses
 
@@ -907,6 +909,8 @@ InvoiceIssued(created_at=datetime.datetime(2020, 6, 24, 12, 57, 22, 543328), inv
 Wrapping your mind around metaclasses is already difficult. So, to avoid any unnecessary confusion, I've entirely evaded any discussion regarding the behavioral difference between *old style classes* and *new style classes* in Python. Also, I've intentionally excluded mentioning the differences between `type` in Python 2 and `type` in Python 3 entirely. Python 2.x has reached its EOL. Save yourself some trouble and switch to Python 3.x if you already haven't done so.
 
 All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 18.04.
+
+This article assumes familiarity with decorators, dataclasses etc. If your knowledge of them is rusty, checkout these posts on [decorators](https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html) and [dataclasses](https://rednafi.github.io/digressions/python/2020/03/12/python-dataclasses.html).
 
 ## References
 
