@@ -11,7 +11,7 @@ In Python, metaclass is one of the few tools that enables you to inject metaprog
 
 > Metaclasses are deeper magic than 99% of users should ever worry about. If you wonder whether you need them, you don’t (the people who actually need them know with certainty that they need them, and don’t need an explanation about why).
 
-Metaclasses are an esoteric OOP concept, lurking behind virtually all Python code. Every Python class that you create is attached to a default metaclass and Python cleverly abstracts away all the meta-magics. So, you're indirectly using them all the time whether you are aware of it or not. For the most part, you don’t need to be aware of it. Most Python programmers rarely, if ever, have to think about metaclasses. This makes metaclasses exiciting for me and I want to explore them in this post to formulate my own judgement. Let's dive in.
+Metaclasses are an esoteric OOP concept, lurking behind virtually all Python code. Every Python class that you create is attached to a default metaclass and Python cleverly abstracts away all the meta-magics. So, you're indirectly using them all the time whether you are aware of it or not. For the most part, you don’t need to be aware of it. Most Python programmers rarely, if ever, have to think about metaclasses. This makes metaclasses exciting for me and I want to explore them in this post to formulate my own judgement. Let's dive in.
 
 ## Metaclasses
 
@@ -57,7 +57,7 @@ print(type(Foo))
 <class 'type'>
 ```
 
-Here, I've defined another class named `Foo` and created an instance `a` of the class. Applying `type` on instance `a` reveals its type as `__main__.Foo` and applying `type` on class `Foo` reveals the type as `type`. So here, we can use the term `class` and `type` interchangebly. This brings up the question:
+Here, I've defined another class named `Foo` and created an instance `a` of the class. Applying `type` on instance `a` reveals its type as `__main__.Foo` and applying `type` on class `Foo` reveals the type as `type`. So here, we can use the term `class` and `type` interchangeably. This brings up the question:
 
 > What on earth this `type` (function? class?) thing actually is and what is the type of `type`?
 
@@ -131,7 +131,7 @@ class A(metaclass=PrintMeta):
 Name of this class is A
 ```
 
-Despite the fact that we haven't called class `A` or created an instance of it, the `__new__()` method of metaclass `PrintMeta` got executed and printed the name of the target class. In the return statement of `__new__()` method, `super()` was used to call the `__new__()` method of the baseclass (`type`) of the metaclass `PrintMeta`.
+Despite the fact that we haven't called class `A` or created an instance of it, the `__new__()` method of metaclass `PrintMeta` got executed and printed the name of the target class. In the return statement of `__new__()` method, `super()` was used to call the `__new__()` method of the base class (`type`) of the metaclass `PrintMeta`.
 
 ## Special Methods Used by Metaclasses
 
@@ -284,7 +284,7 @@ In this section, I'll go through a few real life examples where metaclasses can 
 
 ### Simple Logging with Metaclasses
 
-The goal here is to log a few basic information about a class without directly adding any logging statements to it. Instead, you can whip up a custom metaclass to perfom some metaprogramming and add those statements to the target class without mutating it explicitly.
+The goal here is to log a few basic information about a class without directly adding any logging statements to it. Instead, you can whip up a custom metaclass to perform some metaprogramming and add those statements to the target class without mutating it explicitly.
 
 ```python
 import logging
@@ -452,6 +452,8 @@ RuntimeError: Subclassing a class that has TerminateMeta metaclass is prohibited
 
 ## Disallowing Multiple Inheritance
 
+Multiple inheritance can be fragile and error prone. So if you don't want to allow multiple inheritance in a class, you can do so by attaching a metaclass to the target class.
+
 ```python
 class NoMultiMeta(type):
     def __new__(cls, name, bases, attrs):
@@ -497,6 +499,7 @@ TypeError: Inherited multiple base classes!
 
 ## Timing Classes with Metaclasses
 
+Suppose you want to measure the execution time of the different methods of a class. One way of doing that is to define a timer decorator and decorating all the methods to measure and show the execution time. However, by using a metaclass, you can avoid decorating the methods in the class individually.
 
 ```python
 from types import FunctionType, MethodType
@@ -548,8 +551,7 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 
 ## Registering Plugins With Metaclasses
 
-Suppose a specific single class represents a pluging in your code. You can write a metaclass to keep track of all of the plugins so than you don't have to count them manually.
-
+Suppose a specific single class represents a plugin in your code. You can write a metaclass to keep track of all of the plugins so than you don't have to count them manually.
 
 ```python
 registry = {}
@@ -588,6 +590,7 @@ registry
 
 ## Debugging Methods with Metaclasses
 
+Debugging a class often involves inspecting the individual methods and adding extra debugging and logging logic to those. However, this can be tedious if you've do this over an over again. Instead you can write an inspection decorator and use a metaclass to dynamically add the decorator to all of the methods of your target class. You can simply detach the metaclass once you're done with debugging and don't want the extra logic in your target class.
 
 ```python
 from functools import wraps
@@ -714,7 +717,7 @@ ZeroDivisionError: division by zero
 
 ## Abstract Base Classes
 
-An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods. An abstract method is a method that has a declaration but does not have an implementation. When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can't directly initialize or use an abstract class. Rather, you've to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated `abc` module to help you creat abstract classes. Let's see how you can define a simple abstract class that provides four abstract methods:
+An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods. An abstract method is a method that has a declaration but does not have an implementation. When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can't directly initialize or use an abstract class. Rather, you've to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated `abc` module to help you create abstract classes. Let's see how you can define a simple abstract class that provides four abstract methods:
 
 
 ```python
@@ -758,8 +761,8 @@ TypeError                                 Traceback (most recent call last)
 TypeError: Can't instantiate abstract class ICalc with abstract methods add, div, mul, sub
 ```
 
-You can see that the abstract class `ICalc` gives `TypeError` when you take an attempt to initialize it. The only way to use this blueprint is via subclassing `ICalc` in another class and implementing all the abstract methods there. The snippet below shows that.
 
+Although it seems like interface `ICalc` is simply inheriting from the class `ABC`, in fact, `ABC` is attaching a metaclass `ABCMeta` to `ICalc`. This metaclass transforms the `ICalc` class into an abstract class. You can see that the class `ICalc` gives `TypeError` when you take an attempt to initialize it. The only way to use this interface is via creating subclasses from `ICalc` base class and implementing all the abstract methods there. The snippet below shows that:
 
 ```python
 class Calc(ICalc):
@@ -792,6 +795,7 @@ print(calc.div(4, 5))
 12
 0.8
 ```
+
 
 ## Metaclasses & Dataclasses
 
