@@ -63,7 +63,6 @@ Here, I've defined another class named `Foo` and created an instance `a` of the 
 
 Let's apply `type` on `type`:
 
-
 ```python
 print(type(type))
 ```
@@ -134,7 +133,7 @@ Name of this class is A
 
 Despite the fact that we haven't called class `A` or created an instance of it, the `__new__()` method of metaclass `PrintMeta` got executed and printed the name of the target class. In the return statement of `__new__()` method, `super()` was used to call the `__new__()` method of the baseclass (`type`) of the metaclass `PrintMeta`.
 
-## Special Methods Used by Metaclass
+## Special Methods Used by Metaclasses
 
 Type `type`, as the default metaclass in Python, defines a few special methods that new metaclasses can override to implement unique code generation behavior. Here is a brief overview of these "magic" methods that exist on a metaclass:
 
@@ -237,7 +236,6 @@ Pay attention to the execution order of the special methods of the custom metacl
 
 Note that the metaclass argument is singular – you can’t attach more than one metaclass to a class. However, through multiple inheritance you can accidentally end up with more than one metaclass, and this produces a conflict which must be resolved.
 
-
 ```python
 class FirstMeta(type):
     pass
@@ -284,10 +282,9 @@ Class `First` and `Second` are attached to different metaclasses and class `Thir
 
 In this section, I'll go through a few real life examples where metaclasses can provide viable solutions to several tricky problems that you might encounter during software development. The solutions might appear over-engineered in some cases and almost all of them can be solved without using metaclasses. However, the purpose is to peek into the inner wirings of metaclasses and see how they can offer alternative solutions.
 
-### Simple Logging with Metaclass
+### Simple Logging with Metaclasses
 
-The goal here is to log a few basic information about a class without directly adding any logging statements to it. Instead, you can whip up a custom metaclass to perfom some metaprogramming and add those statements to the target class without mutating it directly.
-
+The goal here is to log a few basic information about a class without directly adding any logging statements to it. Instead, you can whip up a custom metaclass to perfom some metaprogramming and add those statements to the target class without mutating it explicitly.
 
 ```python
 import logging
@@ -327,11 +324,11 @@ INFO:root:attrs: {'__module__': '__main__', '__qualname__': 'Point', '__init__':
 Point(5, 10)
 ```
 
-In the above example, I've created a metaclass called `LittleMeta` and added the necessary logging statements to display the information about the target class. Since the logging statements are residing in the `__new__()` method of the metaclass, these information will be logged before the creation of the target class. In the target class, `LittleMeta` replaces the default `type` metaclass and produces the desired result.
+In the above example, I've created a metaclass called `LittleMeta` and added the necessary logging statements to record the information about the target class. Since the logging statements are residing in the `__new__()` method of the metaclass, these information will be logged before the creation of the target class. In the target class `Point`, `LittleMeta` replaces the default `type` metaclass and produces the desired result by mutating the class.
 
 ### Returning Class Attributes in a Custom List
 
-In this case, I want to dynamically attach a new attribute to the target class called `__attrs_ordered__`. Accessing this attribute from the target class (or instance) will give you an alphabetically sorted list of the attribute names. Here, the `__prepare__()` method inside the metaclass `AttrsListMeta` returns an OrderDict instead of a simple dict - so all attributes gathered before `__new__()` call will be ordered. Just like the previous example, the `__new__()` method inside the metaclass implements the logic required to get the list of attribute name.
+In this case, I want to dynamically attach a new attribute to the target class called `__attrs_ordered__`. Accessing this attribute from the target class (or instance) will give out an alphabetically sorted list of the attribute names. Here, the `__prepare__()` method inside the metaclass `AttrsListMeta` returns an `OrderDict` instead of a simple `dict` - so all attributes gathered before the `__new__()` method call will be ordered. Just like the previous example, here, the `__new__()` method inside the metaclass implements the logic required to get the sorted list of the attribute names.
 
 
 ```python
@@ -366,14 +363,13 @@ a.__attrs_ordered__
 ['__init__', '__module__', '__qualname__']
 ```
 
-
-You can access the `__attrs_ordered__` attribute from both class `A` and the instance of class `A`. Try removing the `sorted()` function inside the `__new__()` method of the metaclass and see what happens!
+You can access the `__attrs_ordered__` attribute from both class `A` and an instance of class `A`. Try removing the `sorted()` function inside the `__new__()` method of the metaclass and see what happens!
 
 ### Creating Singleton Class
 
 In OOP term, a singleton class is a class that can have only one object (an instance of the class) at a time.
-After first time, if you try to instantiate the Singleton class, the new variable will also points to the first instance created. So whatever modifications you do to any variable inside the class through any instance, it affects the variable of the single instance created and is visible if you access that variable through any variable of that class type defined.
 
+After the first time, if you try to instantiate a Singleton class, it will basically return the same instance of the class that was created before. So any modifications done to this apparantly new instance will mutate the original instance since they're basically the same instance.
 
 ```python
 class Singleton(type):
@@ -399,14 +395,13 @@ a is b
 True
 ```
 
+In the above example, at first, I've created a singleton class `A` by attaching the `Singleton` metaclass to it. Secondly, I've instantiated class `A` and assigned the instance of the class to a variable `a`. Thirdly, I've instantiated the class again and assigned variable a `b` to this seemingly new instance. Checking the identity of the two variables `a` and `b` reveals that both of them actually point to the same instance.
 
 ## Implementing a Class that Can't be Subclassed
 
-
 ```
-Suppose you want to
+Suppose you want to create a base class where the users of your class won't be able subclass the base class. In that case, you can write a metaclass that will raise `RuntimeError` if someone tries to create a subclass from the base class.
 ```
-
 
 ```python
 class TerminateMeta(type):
@@ -450,19 +445,57 @@ RuntimeError                              Traceback (most recent call last)
         23     pass
         24
 
-
-<ipython-input-438-ccba42f1f95b> in __new__(cls, name, bases, attrs)
-        9         for typ in type_list:
-        10             if typ is cls:
----> 11                 raise RuntimeError(
-        12                     f"Subclassing a class that has "
-        13                     + f"{cls.__name__} metaclass is prohibited"
-
+...
 
 RuntimeError: Subclassing a class that has TerminateMeta metaclass is prohibited
 ```
 
-## Timing Classes with Metaclass
+## Disallowing Multiple Inheritance
+
+```python
+class NoMultiMeta(type):
+    def __new__(cls, name, bases, attrs):
+        if len(bases) > 1:
+            raise TypeError("Inherited multiple base classes!")
+        return super().__new__(cls, name, bases, attrs)
+
+
+class Base(metaclass=NoMultiMeta):
+    pass
+
+
+# no error is raised
+class A(Base):
+    pass
+
+
+# no error is raised
+class B(Base):
+    pass
+
+
+# This will raise an error!
+class C(A, B):
+    pass
+```
+
+```
+---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+<ipython-input-404-36c323db1ea0> in <module>
+        18
+        19 # This will raise an error!
+---> 20 class C(A, B):
+        21     pass
+
+...
+
+TypeError: Inherited multiple base classes!
+```
+
+## Timing Classes with Metaclasses
 
 
 ```python
@@ -513,7 +546,7 @@ I shout!
 Executing Shouter.intro took 6.747245788574219e-05 seconds.
 ```
 
-## Registering Plugins With Metaclass
+## Registering Plugins With Metaclasses
 
 Suppose a specific single class represents a pluging in your code. You can write a metaclass to keep track of all of the plugins so than you don't have to count them manually.
 
@@ -553,59 +586,7 @@ registry
 {'A': __main__.A, 'B': __main__.B, 'C': __main__.C, 'D': __main__.D}
 ```
 
-## Disallowing Multiple Inheritance
-
-```python
-class NoMultiMeta(type):
-    def __new__(cls, name, bases, attrs):
-        if len(bases) > 1:
-            raise TypeError("Inherited multiple base classes!")
-        return super().__new__(cls, name, bases, attrs)
-
-
-class Base(metaclass=NoMultiMeta):
-    pass
-
-
-# no error is raised
-class A(Base):
-    pass
-
-
-# no error is raised
-class B(Base):
-    pass
-
-
-# This will raise an error!
-class C(A, B):
-    pass
-```
-
-```
----------------------------------------------------------------------------
-
-TypeError                                 Traceback (most recent call last)
-
-<ipython-input-404-36c323db1ea0> in <module>
-        18
-        19 # This will raise an error!
----> 20 class C(A, B):
-        21     pass
-
-
-<ipython-input-404-36c323db1ea0> in __new__(cls, name, bases, attrs)
-        2     def __new__(cls, name, bases, attrs):
-        3         if len(bases)>1:
-----> 4             raise TypeError("Inherited multiple base classes!")
-        5         return super().__new__(cls, name, bases, attrs)
-        6
-
-
-TypeError: Inherited multiple base classes!
-```
-
-## Debugging Methods with Metaclass
+## Debugging Methods with Metaclasses
 
 
 ```python
@@ -658,7 +639,7 @@ Full name of this method: CalcAdv.mul
 6
 ```
 
-## Exception Handling with Metaclass
+## Exception Handling with Metaclasses
 
 ```python
 from functools import wraps
@@ -812,7 +793,7 @@ print(calc.div(4, 5))
 0.8
 ```
 
-## Dataclasses with Metaclass
+## Metaclasses & Dataclasses
 
 ### Creating Multiple DataClasses
 
@@ -859,7 +840,7 @@ print(inv)
 InvoiceIssued(created_at=datetime.datetime(2020, 6, 20, 1, 3, 24, 967633), invoice_uuid=22, customer_uuid=34, total_amount=100.0, due_date=datetime.datetime(2020, 6, 19, 0, 0))
 ```
 
-### Avoiding Dataclass Decorator with Metaclass
+### Avoiding Dataclass Decorator with Metaclasses
 
 ```python
 from dataclasses import dataclass
@@ -918,6 +899,10 @@ InvoiceIssued(created_at=datetime.datetime(2020, 6, 24, 12, 57, 22, 543328), inv
 ```
 
 ## Remarks
+
+Wrapping your mind around metaclasses is already difficult. So, to avoid any unnecessary confusion, I've entirely evaded any discussion regarding the behavioral difference between *old style classes* and *new style classes* in Python. Also, I've intentionally excluded mentioning the differences between `type` in Python 2 and `type` in Python 3 entirely. Python 2.x has reached its EOL. Save yourself some trouble and switch to Python 3.x if you already haven't done so.
+
+All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 18.04.
 
 ## References
 
