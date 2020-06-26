@@ -514,7 +514,6 @@ def timefunc(func):
 
 class TimerMeta(type):
     def __new__(cls, name, bases, attrs):
-
         new_cls = super().__new__(cls, name, bases, attrs)
 
         # key is attribute name and val is attribute value in attribute dict
