@@ -796,13 +796,11 @@ print(calc.div(4, 5))
 0.8
 ```
 
-
 ## Metaclasses & Dataclasses
 
-Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Data classes are awesome but they require you to decorate them with `dataclasses.dataclass`
+Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Dataclasses automatically create `__init__()`, `__repr__()`, `__eq__()`, `__gt__()`, `__lt__()` etc methods without you having to add them explicitly. This can be very handy when you need to create custom containers for your data. You can create dataclasses in the following manner:
 
 ### Creating Multiple DataClasses
-
 
 ```python
 from dataclasses import dataclass
@@ -847,6 +845,11 @@ InvoiceIssued(created_at=datetime.datetime(2020, 6, 20, 1, 3, 24, 967633), invoi
 ```
 
 ### Avoiding Dataclass Decorator with Metaclasses
+
+Now one thing that I find cumbersome while creating multiple dataclasses is having to attach the `@dataclasses.dataclass` decorator to each of the dataclasses. Also, the decorator takes multiple arguments to customize the dataclass behavior and it can quickly get cumbersome when you've to create multiple dataclasses with custom behavior. Moreover, this goes against the DRY (Don't Repeat Yourself) principle in software engineering.
+
+To avoid this, you can write a metaclass that will automatically apply the customized dataclass decorator to all of the target classes implicitly. All you have to do is to attach the metaclass to a base dataclass and inherit from it in the later dataclasses that need to be created.
+
 
 ```python
 from dataclasses import dataclass
@@ -906,13 +909,13 @@ InvoiceIssued(created_at=datetime.datetime(2020, 6, 24, 12, 57, 22, 543328), inv
 
 ## Should You Use It?
 
-Most of the problems you've seen above can be solved without using metaclasses. Decorators can also be used to perform metaprogramming in a more manageable and subjectively cleaner way. One case where you absolutely have to use metaclasses is to avoid applying decorators to multiple classes and methods repetitively.
+Almost all of the problems you've encountered above can be solved without using metaclasses. Decorators can also be exclusively used to perform metaprogramming in a more manageable and subjectively cleaner way. One case where you absolutely have to use metaclasses is to avoid applying decorators to multiple classes or methods repetitively.
 
-Also, metaclasses can easily veer into the realm of being a “solution in search of a problem“.If the problem at hand can be solved in a simpler way, it probably should be. However, I still think that you should at least try to understand how metaclasses work to have a better grasp on how Python classes work in general and can recognize when a metaclass really is the appropriate tool to use.
+Also, metaclasses can easily veer into the realm of being a *“solution in search of a problem“.* If the problem at hand can be solved in a simpler way, it probably should be. However, I still think that you should at least try to understand how metaclasses work to have a better grasp on how Python classes work in general and can recognize when a metaclass really is the appropriate tool to use.
 
 ## Remarks
 
-Wrapping your mind around metaclasses is already difficult. So, to avoid any unnecessary confusion, I've entirely evaded any discussion regarding the behavioral difference between *old style classes* and *new style classes* in Python. Also, I've intentionally excluded mentioning the differences between `type` in Python 2 and `type` in Python 3 entirely. Python 2.x has reached its EOL. Save yourself some trouble and switch to Python 3.x if you already haven't done so.
+Wrapping your mind around metaclasses can be tricky. So, to avoid any unnecessary confusion, I've entirely evaded any discussion regarding the behavioral difference between *old style classes* and *new style classes* in Python. Also, I've intentionally excluded mentioning the differences between `type` in Python 2 and `type` in Python 3 entirely. Python 2.x has reached its EOL. Save yourself some trouble and switch to Python 3.x if you already haven't done so.
 
 All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 18.04.
 
