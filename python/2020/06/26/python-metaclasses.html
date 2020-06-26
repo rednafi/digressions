@@ -307,6 +307,8 @@ True
 </blockquote>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ExampleMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="s">"""Simple metaclass showing the execution flow of the special methods."""</span>
+
     <span class="o">@</span><span class="nb">classmethod</span>
     <span class="k">def</span> <span class="nf">__prepare__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">):</span>
 
@@ -558,11 +560,6 @@ Point(5, 10)
 <p>Suppose you want to create a base class where the users of your class won’t be able to create any subclasses from the base class. In that case, you can write a metaclass and attach that your base class. The base class will raise <code class="highlighter-rouge">RuntimeError</code> if someone tries to create a subclass from it.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">TerminateMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="s">"""
-    A terminating metaclass. Subclassing a class that has
-    the TerminateMeta metaclass should fail.
-    """</span>
-
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="n">type_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">base</span><span class="p">)</span> <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">]</span>
 
@@ -1006,7 +1003,7 @@ TypeError: Can't instantiate abstract class ICalc with abstract methods add, div
         Parameters
         ----------
         name : str
-            name of the class being defined (Klass in this example)
+            name of the class being defined (Event in this example)
         bases : tuple
             base classes for constructed class, empty tuple in this case
         attrs : dict
