@@ -7,7 +7,7 @@ description: Unraveling the voodoo magic behind Python's metaclasses
 categories: [Python]
 ---
 
-In Python, metaclass is one of the few tools that enables you to inject metaprogramming capabilities into your code. The term metaprogramming refers to the potential for a program to manipulate itself in a self referential manner. However, messing with metaclasses is often considered an arcane art that is beyond the grasp of the proletariats. Heck, even [Tim Peters](https://en.wikipedia.org/wiki/Tim_Peters_(software_engineer)) advices you to tread carefully while dealing with these.
+In Python, metaclass is one of the few tools that enables you to inject metaprogramming capabilities into your code. The term metaprogramming refers to the potential for a program to manipulate itself in a self referential manner. However, messing with metaclasses is often considered an arcane art that's beyond the grasp of the proletariats. Heck, even [Tim Peters](https://en.wikipedia.org/wiki/Tim_Peters_(software_engineer)) advices you to tread carefully while dealing with these.
 
 > Metaclasses are deeper magic than 99% of users should ever worry about. If you wonder whether you need them, you don’t (the people who actually need them know with certainty that they need them, and don’t need an explanation about why).
 
@@ -19,11 +19,11 @@ A metaclass is a class whose instances are classes. Like an "ordinary" class def
 
 ![image.png](https://media.geeksforgeeks.org/wp-content/uploads/metaclass-hierarchy-Page-1-1024x370.jpeg)
 
-Metaclasses are not supported by every object oriented programming language. Those programming language, which support metaclasses, considerably vary in way they implement them. Python provides you a way to get under the hood and define custom metaclasses.
+Metaclasses aren't supported by every object oriented programming language. Those programming language, which support metaclasses, considerably vary in way they implement them. Python provides you a way to get under the hood and define custom metaclasses.
 
 ## Understanding Type and Class
 
-In Python, everything is an object. Classes are objects as well. As a result all classes must have corresponding types. You deal with built in types like `int`, `float`, `list` etc all the time. Consider this example:
+In Python, everything is an object. Classes are objects as well. As a result, all classes must have corresponding types. You deal with built in types like `int`, `float`, `list` etc all the time. Consider this example:
 
 
 ```python
@@ -97,7 +97,7 @@ True
 True
 ```
 
-The the last line of the above code snippet demonstrates that `type` is also an instance of metaclass `type`. Normally you can't write self referential classes like that in pure Python. However, you can circumvent this limitation by subclassing from `type`. This enables you to write custom metaclasses that you can use to dictate and mutate the way classes are created and instantiated. From now on, I'll be referring to the instance class of a metaclass as target class. Let's create a custom metaclass that just prints the name of the target class while creating it:
+The the last line of the above code snippet demonstrates that `type` is also an instance of metaclass `type`. Normally, you can't write self referential classes like that in pure Python. However, you can circumvent this limitation by subclassing from `type`. This enables you to write custom metaclasses that you can use to dictate and mutate the way classes are created and instantiated. From now on, I'll be referring to the instance class of a metaclass as *target class*. Let's create a custom metaclass that just prints the name of the target class while creating it:
 
 
 ```python
@@ -582,7 +582,7 @@ registry
 
 ### Debugging Methods with Metaclasses
 
-Debugging a class often involves inspecting the individual methods and adding extra debugging logic to those. However, this can get tedious if you've do this over an over again. Instead you can write an inspection decorator and use a metaclass to dynamically apply the decorator to all of the methods of your target class. Later on, you can simply detach the metaclass once you're done with debugging and don't want the extra logic in your target class.
+Debugging a class often involves inspecting the individual methods and adding extra debugging logic to those. However, this can get tedious if you've do this over an over again. Instead, you can write an inspection decorator and use a metaclass to dynamically apply the decorator to all of the methods of your target class. Later on, you can simply detach the metaclass once you're done with debugging and don't want the extra logic in your target class.
 
 ```python
 from functools import wraps
@@ -839,7 +839,7 @@ InvoiceIssued(created_at=datetime.datetime(2020, 6, 20, 1, 3, 24, 967633), invoi
 
 #### Avoiding Dataclass Decorator with Metaclasses
 
-Now one thing that I find cumbersome while creating multiple dataclasses is having to attach the `@dataclasses.dataclass` decorator to each of the dataclasses. Also, the decorator takes multiple arguments to customize the dataclass behavior and it can quickly get cumbersome when you've to create multiple dataclasses with custom behavior. Moreover, this goes against the DRY (Don't Repeat Yourself) principle in software engineering.
+Now, one thing that I find cumbersome while creating multiple dataclasses is having to attach the `@dataclasses.dataclass` decorator to each of the dataclasses. Also, the decorator takes multiple arguments to customize the dataclass behavior and it can quickly get cumbersome when you've to create multiple dataclasses with custom behavior. Moreover, this goes against the DRY (Don't Repeat Yourself) principle in software engineering.
 
 To avoid this, you can write a metaclass that will automatically apply the customized dataclass decorator to all of the target classes implicitly. All you have to do is to attach the metaclass to a base dataclass and inherit from it in the later dataclasses that need to be created.
 
