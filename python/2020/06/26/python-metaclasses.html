@@ -166,7 +166,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#should-you-use-it">Should You Use It?</a></li>
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#references">References</a></li>
-</ul><p>In Python, metaclass is one of the few tools that enables you to inject metaprogramming capabilities into your code. The term metaprogramming refers to the potential for a program to manipulate itself in a self referential manner. However, messing with metaclasses is often considered an arcane art that is beyond the grasp of the proletariats. Heck, even <a href="https://en.wikipedia.org/wiki/Tim_Peters_(software_engineer)">Tim Peters</a> advices you to tread carefully while dealing with these.</p>
+</ul><p>In Python, metaclass is one of the few tools that enables you to inject metaprogramming capabilities into your code. The term metaprogramming refers to the potential for a program to manipulate itself in a self referential manner. However, messing with metaclasses is often considered an arcane art that’s beyond the grasp of the proletariats. Heck, even <a href="https://en.wikipedia.org/wiki/Tim_Peters_(software_engineer)">Tim Peters</a> advices you to tread carefully while dealing with these.</p>
 
 <blockquote>
   <p>Metaclasses are deeper magic than 99% of users should ever worry about. If you wonder whether you need them, you don’t (the people who actually need them know with certainty that they need them, and don’t need an explanation about why).</p>
@@ -181,12 +181,12 @@ window.onload = wrap_img;
 
 <p><img src="https://media.geeksforgeeks.org/wp-content/uploads/metaclass-hierarchy-Page-1-1024x370.jpeg" alt="image.png"></p>
 
-<p>Metaclasses are not supported by every object oriented programming language. Those programming language, which support metaclasses, considerably vary in way they implement them. Python provides you a way to get under the hood and define custom metaclasses.</p>
+<p>Metaclasses aren’t supported by every object oriented programming language. Those programming language, which support metaclasses, considerably vary in way they implement them. Python provides you a way to get under the hood and define custom metaclasses.</p>
 
 <h2 id="understanding-type-and-class">
 <a class="anchor" href="#understanding-type-and-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Understanding Type and Class</h2>
 
-<p>In Python, everything is an object. Classes are objects as well. As a result all classes must have corresponding types. You deal with built in types like <code class="highlighter-rouge">int</code>, <code class="highlighter-rouge">float</code>, <code class="highlighter-rouge">list</code> etc all the time. Consider this example:</p>
+<p>In Python, everything is an object. Classes are objects as well. As a result, all classes must have corresponding types. You deal with built in types like <code class="highlighter-rouge">int</code>, <code class="highlighter-rouge">float</code>, <code class="highlighter-rouge">list</code> etc all the time. Consider this example:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>
 
@@ -251,7 +251,7 @@ True
 True
 </code></pre></div></div>
 
-<p>The the last line of the above code snippet demonstrates that <code class="highlighter-rouge">type</code> is also an instance of metaclass <code class="highlighter-rouge">type</code>. Normally you can’t write self referential classes like that in pure Python. However, you can circumvent this limitation by subclassing from <code class="highlighter-rouge">type</code>. This enables you to write custom metaclasses that you can use to dictate and mutate the way classes are created and instantiated. From now on, I’ll be referring to the instance class of a metaclass as target class. Let’s create a custom metaclass that just prints the name of the target class while creating it:</p>
+<p>The the last line of the above code snippet demonstrates that <code class="highlighter-rouge">type</code> is also an instance of metaclass <code class="highlighter-rouge">type</code>. Normally, you can’t write self referential classes like that in pure Python. However, you can circumvent this limitation by subclassing from <code class="highlighter-rouge">type</code>. This enables you to write custom metaclasses that you can use to dictate and mutate the way classes are created and instantiated. From now on, I’ll be referring to the instance class of a metaclass as <em>target class</em>. Let’s create a custom metaclass that just prints the name of the target class while creating it:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PrintMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
@@ -730,7 +730,7 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 <h3 id="debugging-methods-with-metaclasses">
 <a class="anchor" href="#debugging-methods-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debugging Methods with Metaclasses</h3>
 
-<p>Debugging a class often involves inspecting the individual methods and adding extra debugging logic to those. However, this can get tedious if you’ve do this over an over again. Instead you can write an inspection decorator and use a metaclass to dynamically apply the decorator to all of the methods of your target class. Later on, you can simply detach the metaclass once you’re done with debugging and don’t want the extra logic in your target class.</p>
+<p>Debugging a class often involves inspecting the individual methods and adding extra debugging logic to those. However, this can get tedious if you’ve do this over an over again. Instead, you can write an inspection decorator and use a metaclass to dynamically apply the decorator to all of the methods of your target class. Later on, you can simply detach the metaclass once you’re done with debugging and don’t want the extra logic in your target class.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">FunctionType</span><span class="p">,</span> <span class="n">MethodType</span>
@@ -981,7 +981,7 @@ TypeError: Can't instantiate abstract class ICalc with abstract methods add, div
 <h4 id="avoiding-dataclass-decorator-with-metaclasses">
 <a class="anchor" href="#avoiding-dataclass-decorator-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Avoiding Dataclass Decorator with Metaclasses</h4>
 
-<p>Now one thing that I find cumbersome while creating multiple dataclasses is having to attach the <code class="highlighter-rouge">@dataclasses.dataclass</code> decorator to each of the dataclasses. Also, the decorator takes multiple arguments to customize the dataclass behavior and it can quickly get cumbersome when you’ve to create multiple dataclasses with custom behavior. Moreover, this goes against the DRY (Don’t Repeat Yourself) principle in software engineering.</p>
+<p>Now, one thing that I find cumbersome while creating multiple dataclasses is having to attach the <code class="highlighter-rouge">@dataclasses.dataclass</code> decorator to each of the dataclasses. Also, the decorator takes multiple arguments to customize the dataclass behavior and it can quickly get cumbersome when you’ve to create multiple dataclasses with custom behavior. Moreover, this goes against the DRY (Don’t Repeat Yourself) principle in software engineering.</p>
 
 <p>To avoid this, you can write a metaclass that will automatically apply the customized dataclass decorator to all of the target classes implicitly. All you have to do is to attach the metaclass to a base dataclass and inherit from it in the later dataclasses that need to be created.</p>
 
