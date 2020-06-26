@@ -150,6 +150,8 @@ These are the methods to override in your custom metaclass to give your classes 
 
 ```python
 class ExampleMeta(type):
+    """Simple metaclass showing the execution flow of the special methods."""
+
     @classmethod
     def __prepare__(cls, name, bases):
 
@@ -407,11 +409,6 @@ Suppose you want to create a base class where the users of your class won't be a
 
 ```python
 class TerminateMeta(type):
-    """
-    A terminating metaclass. Subclassing a class that has
-    the TerminateMeta metaclass should fail.
-    """
-
     def __new__(cls, name, bases, attrs):
         type_list = [type(base) for base in bases]
 
@@ -866,7 +863,7 @@ class EventMeta(type):
         Parameters
         ----------
         name : str
-            name of the class being defined (Klass in this example)
+            name of the class being defined (Event in this example)
         bases : tuple
             base classes for constructed class, empty tuple in this case
         attrs : dict
