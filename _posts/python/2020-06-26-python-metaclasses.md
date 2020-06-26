@@ -341,7 +341,6 @@ class AttrsListMeta(type):
         return OrderedDict()
 
     def __new__(cls, name, bases, attrs, **kwargs):
-
         attrs_names = [k for k in attrs.keys()]
         attrs_names_ordered = sorted(attrs_names)
         attrs["__attrs_ordered__"] = attrs_names_ordered
