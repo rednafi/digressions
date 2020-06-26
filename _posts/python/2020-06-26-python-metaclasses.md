@@ -400,7 +400,7 @@ True
 
 In the above example, at first, I've created a singleton class `A` by attaching the `Singleton` metaclass to it. Secondly, I've instantiated class `A` and assigned the instance of the class to a variable `a`. Thirdly, I've instantiated the class again and assigned variable a `b` to this seemingly new instance. Checking the identity of the two variables `a` and `b` reveals that both of them actually point to the same instance.
 
-## Implementing a Class that Can't be Subclassed
+### Implementing a Class that Can't be Subclassed
 
 Suppose you want to create a base class where the users of your class won't be able to create any subclasses from the base class. In that case, you can write a metaclass and attach that your base class. The base class will raise `RuntimeError` if someone tries to create a subclass from it.
 
@@ -452,7 +452,7 @@ RuntimeError                              Traceback (most recent call last)
 RuntimeError: Subclassing a class that has TerminateMeta metaclass is prohibited
 ```
 
-## Disallowing Multiple Inheritance
+### Disallowing Multiple Inheritance
 
 Multiple inheritance can be fragile and error prone. So, if you don't want to allow the users to use a base class with any other base classes to form multiple inheritance, you can do so by attaching a metaclass to that target base class.
 
@@ -499,7 +499,7 @@ TypeError                                 Traceback (most recent call last)
 TypeError: Inherited multiple base classes!
 ```
 
-## Timing Classes with Metaclasses
+### Timing Classes with Metaclasses
 
 Suppose you want to measure the execution time of different methods of a class. One way of doing that is to define a timer decorator and decorating all the methods to measure and show the execution time. However, by using a metaclass, you can avoid decorating the methods in the class individually and the metaclass will dynamically apply the timer decorator to all of the methods of your target class. This can reduce code repetition and improve code readability.
 
@@ -551,7 +551,7 @@ I shout!
 Executing Shouter.intro took 6.747245788574219e-05 seconds.
 ```
 
-## Registering Plugins With Metaclasses
+### Registering Plugins With Metaclasses
 
 Suppose a specific single class represents a plugin in your code. You can write a metaclass to keep track of all of the plugins so than you don't have to count them manually.
 
@@ -590,7 +590,7 @@ registry
 {'A': __main__.A, 'B': __main__.B, 'C': __main__.C, 'D': __main__.D}
 ```
 
-## Debugging Methods with Metaclasses
+### Debugging Methods with Metaclasses
 
 Debugging a class often involves inspecting the individual methods and adding extra debugging logic to those. However, this can get tedious if you've do this over an over again. Instead you can write an inspection decorator and use a metaclass to dynamically apply the decorator to all of the methods of your target class. Later on, you can simply detach the metaclass once you're done with debugging and don't want the extra logic in your target class.
 
@@ -644,7 +644,7 @@ Full name of this method: CalcAdv.mul
 6
 ```
 
-## Exception Handling with Metaclasses
+### Exception Handling with Metaclasses
 
 Sometimes you need to handle exceptions in multiple methods of a class in a generic manner. That means all the methods of the class have the same exception handling, logging logic etc. Metaclasses can help you avoid adding repetitive exception handling and logging logics to your methods.
 
@@ -719,7 +719,7 @@ ZeroDivisionError                         Traceback (most recent call last)
 ZeroDivisionError: division by zero
 ```
 
-## Abstract Base Classes
+### Abstract Base Classes
 
 An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods. An abstract method is a method that has a declaration but does not have an implementation. When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can't directly initialize or use an abstract class. Rather, you've to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated `abc` module to help you create abstract classes. Let's see how you can define a simple abstract class that provides four abstract methods:
 
@@ -799,11 +799,11 @@ print(calc.div(4, 5))
 0.8
 ```
 
-## Metaclasses & Dataclasses
+### Metaclasses & Dataclasses
 
 Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Dataclasses automatically create `__init__`, `__repr__`, `__eq__`, `__gt__`, `__lt__` etc methods without you having to add them explicitly. This can be very handy when you need to create custom containers for your data. You can create dataclasses in the following manner:
 
-### Creating Multiple DataClasses
+#### Creating Multiple DataClasses
 
 ```python
 from dataclasses import dataclass
@@ -847,7 +847,7 @@ print(inv)
 InvoiceIssued(created_at=datetime.datetime(2020, 6, 20, 1, 3, 24, 967633), invoice_uuid=22, customer_uuid=34, total_amount=100.0, due_date=datetime.datetime(2020, 6, 19, 0, 0))
 ```
 
-### Avoiding Dataclass Decorator with Metaclasses
+#### Avoiding Dataclass Decorator with Metaclasses
 
 Now one thing that I find cumbersome while creating multiple dataclasses is having to attach the `@dataclasses.dataclass` decorator to each of the dataclasses. Also, the decorator takes multiple arguments to customize the dataclass behavior and it can quickly get cumbersome when you've to create multiple dataclasses with custom behavior. Moreover, this goes against the DRY (Don't Repeat Yourself) principle in software engineering.
 
