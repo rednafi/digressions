@@ -155,7 +155,6 @@ class ExampleMeta(type):
 
     @classmethod
     def __prepare__(cls, name, bases):
-
         """Defines the class namespace in a mapping that stores
         the attributes
 
