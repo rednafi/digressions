@@ -171,7 +171,6 @@ class ExampleMeta(type):
         return super().__prepare__(name, bases)
 
     def __new__(cls, name, bases, attrs):
-
         """__new__ is a classmethod, even without @classmethod decorator
 
         Parameters
@@ -188,7 +187,6 @@ class ExampleMeta(type):
         return super().__new__(cls, name, bases, attrs)
 
     def __init__(self, name, bases, attrs):
-
         """This method is called to set up values after the
         instance/object is created."""
 
@@ -196,9 +194,7 @@ class ExampleMeta(type):
         super().__init__(name, bases, attrs)
 
     def __call__(self, *args, **kwargs):
-
-        """
-        This method is called when the constructor of the new class
+        """This method is called when the constructor of the new class
         is to be used to create an object
 
         Parameters
