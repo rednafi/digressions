@@ -904,13 +904,19 @@ print(inv)
 InvoiceIssued(created_at=datetime.datetime(2020, 6, 24, 12, 57, 22, 543328), invoice_uuid=22, customer_uuid=34, total_amount=100.0, due_date=datetime.datetime(2020, 6, 19, 0, 0))
 ```
 
+## Should You Use It?
+
+Most of the problems you've seen above can be solved without using metaclasses. Decorators can also be used to perform metaprogramming in a more manageable and subjectively cleaner way. One case where you absolutely have to use metaclasses is to avoid applying decorators to multiple classes and methods repetitively.
+
+Also, metaclasses can easily veer into the realm of being a “solution in search of a problem“.If the problem at hand can be solved in a simpler way, it probably should be. However, I still think that you should at least try to understand how metaclasses work to have a better grasp on how Python classes work in general and can recognize when a metaclass really is the appropriate tool to use.
+
 ## Remarks
 
 Wrapping your mind around metaclasses is already difficult. So, to avoid any unnecessary confusion, I've entirely evaded any discussion regarding the behavioral difference between *old style classes* and *new style classes* in Python. Also, I've intentionally excluded mentioning the differences between `type` in Python 2 and `type` in Python 3 entirely. Python 2.x has reached its EOL. Save yourself some trouble and switch to Python 3.x if you already haven't done so.
 
 All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 18.04.
 
-This article assumes familiarity with decorators, dataclasses etc. If your knowledge of them is rusty, checkout these posts on [decorators](https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html) and [dataclasses](https://rednafi.github.io/digressions/python/2020/03/12/python-dataclasses.html).
+This article assumes familiarity with decorators, dataclasses etc. If your knowledge on them is rusty, checkout these posts on [decorators](https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html) and [dataclasses](https://rednafi.github.io/digressions/python/2020/03/12/python-dataclasses.html).
 
 ## References
 
