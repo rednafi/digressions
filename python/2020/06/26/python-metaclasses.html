@@ -148,19 +148,19 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#simple-logging-with-metaclasses">Simple Logging with Metaclasses</a></li>
 <li class="toc-entry toc-h3"><a href="#returning-class-attributes-in-a-custom-list">Returning Class Attributes in a Custom List</a></li>
 <li class="toc-entry toc-h3"><a href="#creating-singleton-class">Creating Singleton Class</a></li>
+<li class="toc-entry toc-h3"><a href="#implementing-a-class-that-cant-be-subclassed">Implementing a Class that Can’t be Subclassed</a></li>
+<li class="toc-entry toc-h3"><a href="#disallowing-multiple-inheritance">Disallowing Multiple Inheritance</a></li>
+<li class="toc-entry toc-h3"><a href="#timing-classes-with-metaclasses">Timing Classes with Metaclasses</a></li>
+<li class="toc-entry toc-h3"><a href="#registering-plugins-with-metaclasses">Registering Plugins With Metaclasses</a></li>
+<li class="toc-entry toc-h3"><a href="#debugging-methods-with-metaclasses">Debugging Methods with Metaclasses</a></li>
+<li class="toc-entry toc-h3"><a href="#exception-handling-with-metaclasses">Exception Handling with Metaclasses</a></li>
+<li class="toc-entry toc-h3"><a href="#abstract-base-classes">Abstract Base Classes</a></li>
+<li class="toc-entry toc-h3"><a href="#metaclasses--dataclasses">Metaclasses &amp; Dataclasses</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#creating-multiple-dataclasses">Creating Multiple DataClasses</a></li>
+<li class="toc-entry toc-h4"><a href="#avoiding-dataclass-decorator-with-metaclasses">Avoiding Dataclass Decorator with Metaclasses</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#implementing-a-class-that-cant-be-subclassed">Implementing a Class that Can’t be Subclassed</a></li>
-<li class="toc-entry toc-h2"><a href="#disallowing-multiple-inheritance">Disallowing Multiple Inheritance</a></li>
-<li class="toc-entry toc-h2"><a href="#timing-classes-with-metaclasses">Timing Classes with Metaclasses</a></li>
-<li class="toc-entry toc-h2"><a href="#registering-plugins-with-metaclasses">Registering Plugins With Metaclasses</a></li>
-<li class="toc-entry toc-h2"><a href="#debugging-methods-with-metaclasses">Debugging Methods with Metaclasses</a></li>
-<li class="toc-entry toc-h2"><a href="#exception-handling-with-metaclasses">Exception Handling with Metaclasses</a></li>
-<li class="toc-entry toc-h2"><a href="#abstract-base-classes">Abstract Base Classes</a></li>
-<li class="toc-entry toc-h2"><a href="#metaclasses--dataclasses">Metaclasses &amp; Dataclasses</a>
-<ul>
-<li class="toc-entry toc-h3"><a href="#creating-multiple-dataclasses">Creating Multiple DataClasses</a></li>
-<li class="toc-entry toc-h3"><a href="#avoiding-dataclass-decorator-with-metaclasses">Avoiding Dataclass Decorator with Metaclasses</a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#should-you-use-it">Should You Use It?</a></li>
@@ -552,8 +552,8 @@ Point(5, 10)
 
 <p>In the above example, at first, I’ve created a singleton class <code class="highlighter-rouge">A</code> by attaching the <code class="highlighter-rouge">Singleton</code> metaclass to it. Secondly, I’ve instantiated class <code class="highlighter-rouge">A</code> and assigned the instance of the class to a variable <code class="highlighter-rouge">a</code>. Thirdly, I’ve instantiated the class again and assigned variable a <code class="highlighter-rouge">b</code> to this seemingly new instance. Checking the identity of the two variables <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> reveals that both of them actually point to the same instance.</p>
 
-<h2 id="implementing-a-class-that-cant-be-subclassed">
-<a class="anchor" href="#implementing-a-class-that-cant-be-subclassed" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementing a Class that Can’t be Subclassed</h2>
+<h3 id="implementing-a-class-that-cant-be-subclassed">
+<a class="anchor" href="#implementing-a-class-that-cant-be-subclassed" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementing a Class that Can’t be Subclassed</h3>
 
 <p>Suppose you want to create a base class where the users of your class won’t be able to create any subclasses from the base class. In that case, you can write a metaclass and attach that your base class. The base class will raise <code class="highlighter-rouge">RuntimeError</code> if someone tries to create a subclass from it.</p>
 
@@ -602,8 +602,8 @@ RuntimeError                              Traceback (most recent call last)
 RuntimeError: Subclassing a class that has TerminateMeta metaclass is prohibited
 </code></pre></div></div>
 
-<h2 id="disallowing-multiple-inheritance">
-<a class="anchor" href="#disallowing-multiple-inheritance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disallowing Multiple Inheritance</h2>
+<h3 id="disallowing-multiple-inheritance">
+<a class="anchor" href="#disallowing-multiple-inheritance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disallowing Multiple Inheritance</h3>
 
 <p>Multiple inheritance can be fragile and error prone. So, if you don’t want to allow the users to use a base class with any other base classes to form multiple inheritance, you can do so by attaching a metaclass to that target base class.</p>
 
@@ -648,8 +648,8 @@ TypeError                                 Traceback (most recent call last)
 TypeError: Inherited multiple base classes!
 </code></pre></div></div>
 
-<h2 id="timing-classes-with-metaclasses">
-<a class="anchor" href="#timing-classes-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Timing Classes with Metaclasses</h2>
+<h3 id="timing-classes-with-metaclasses">
+<a class="anchor" href="#timing-classes-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Timing Classes with Metaclasses</h3>
 
 <p>Suppose you want to measure the execution time of different methods of a class. One way of doing that is to define a timer decorator and decorating all the methods to measure and show the execution time. However, by using a metaclass, you can avoid decorating the methods in the class individually and the metaclass will dynamically apply the timer decorator to all of the methods of your target class. This can reduce code repetition and improve code readability.</p>
 
@@ -699,8 +699,8 @@ I shout!
 Executing Shouter.intro took 6.747245788574219e-05 seconds.
 </code></pre></div></div>
 
-<h2 id="registering-plugins-with-metaclasses">
-<a class="anchor" href="#registering-plugins-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Registering Plugins With Metaclasses</h2>
+<h3 id="registering-plugins-with-metaclasses">
+<a class="anchor" href="#registering-plugins-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Registering Plugins With Metaclasses</h3>
 
 <p>Suppose a specific single class represents a plugin in your code. You can write a metaclass to keep track of all of the plugins so than you don’t have to count them manually.</p>
 
@@ -737,8 +737,8 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'A': __main__.A, 'B': __main__.B, 'C': __main__.C, 'D': __main__.D}
 </code></pre></div></div>
 
-<h2 id="debugging-methods-with-metaclasses">
-<a class="anchor" href="#debugging-methods-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debugging Methods with Metaclasses</h2>
+<h3 id="debugging-methods-with-metaclasses">
+<a class="anchor" href="#debugging-methods-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Debugging Methods with Metaclasses</h3>
 
 <p>Debugging a class often involves inspecting the individual methods and adding extra debugging logic to those. However, this can get tedious if you’ve do this over an over again. Instead you can write an inspection decorator and use a metaclass to dynamically apply the decorator to all of the methods of your target class. Later on, you can simply detach the metaclass once you’re done with debugging and don’t want the extra logic in your target class.</p>
 
@@ -790,8 +790,8 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 6
 </code></pre></div></div>
 
-<h2 id="exception-handling-with-metaclasses">
-<a class="anchor" href="#exception-handling-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exception Handling with Metaclasses</h2>
+<h3 id="exception-handling-with-metaclasses">
+<a class="anchor" href="#exception-handling-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exception Handling with Metaclasses</h3>
 
 <p>Sometimes you need to handle exceptions in multiple methods of a class in a generic manner. That means all the methods of the class have the same exception handling, logging logic etc. Metaclasses can help you avoid adding repetitive exception handling and logging logics to your methods.</p>
 
@@ -864,8 +864,8 @@ ZeroDivisionError                         Traceback (most recent call last)
 ZeroDivisionError: division by zero
 </code></pre></div></div>
 
-<h2 id="abstract-base-classes">
-<a class="anchor" href="#abstract-base-classes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Abstract Base Classes</h2>
+<h3 id="abstract-base-classes">
+<a class="anchor" href="#abstract-base-classes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Abstract Base Classes</h3>
 
 <p>An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods. An abstract method is a method that has a declaration but does not have an implementation. When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can’t directly initialize or use an abstract class. Rather, you’ve to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated <code class="highlighter-rouge">abc</code> module to help you create abstract classes. Let’s see how you can define a simple abstract class that provides four abstract methods:</p>
 
@@ -940,13 +940,13 @@ TypeError: Can't instantiate abstract class ICalc with abstract methods add, div
 0.8
 </code></pre></div></div>
 
-<h2 id="metaclasses--dataclasses">
-<a class="anchor" href="#metaclasses--dataclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Metaclasses &amp; Dataclasses</h2>
+<h3 id="metaclasses--dataclasses">
+<a class="anchor" href="#metaclasses--dataclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Metaclasses &amp; Dataclasses</h3>
 
 <p>Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Dataclasses automatically create <code class="highlighter-rouge">__init__</code>, <code class="highlighter-rouge">__repr__</code>, <code class="highlighter-rouge">__eq__</code>, <code class="highlighter-rouge">__gt__</code>, <code class="highlighter-rouge">__lt__</code> etc methods without you having to add them explicitly. This can be very handy when you need to create custom containers for your data. You can create dataclasses in the following manner:</p>
 
-<h3 id="creating-multiple-dataclasses">
-<a class="anchor" href="#creating-multiple-dataclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating Multiple DataClasses</h3>
+<h4 id="creating-multiple-dataclasses">
+<a class="anchor" href="#creating-multiple-dataclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating Multiple DataClasses</h4>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
@@ -988,8 +988,8 @@ TypeError: Can't instantiate abstract class ICalc with abstract methods add, div
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InvoiceIssued(created_at=datetime.datetime(2020, 6, 20, 1, 3, 24, 967633), invoice_uuid=22, customer_uuid=34, total_amount=100.0, due_date=datetime.datetime(2020, 6, 19, 0, 0))
 </code></pre></div></div>
 
-<h3 id="avoiding-dataclass-decorator-with-metaclasses">
-<a class="anchor" href="#avoiding-dataclass-decorator-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Avoiding Dataclass Decorator with Metaclasses</h3>
+<h4 id="avoiding-dataclass-decorator-with-metaclasses">
+<a class="anchor" href="#avoiding-dataclass-decorator-with-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Avoiding Dataclass Decorator with Metaclasses</h4>
 
 <p>Now one thing that I find cumbersome while creating multiple dataclasses is having to attach the <code class="highlighter-rouge">@dataclasses.dataclass</code> decorator to each of the dataclasses. Also, the decorator takes multiple arguments to customize the dataclass behavior and it can quickly get cumbersome when you’ve to create multiple dataclasses with custom behavior. Moreover, this goes against the DRY (Don’t Repeat Yourself) principle in software engineering.</p>
 

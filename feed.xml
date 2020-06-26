@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-06-26T06:04:31-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Red’s Digressions</title><subtitle>Sporadic cogitations on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Deciphering Python’s Metaclasses</title><link href="https://rednafi.github.io/digressions/python/2020/06/26/python-metaclasses.html" rel="alternate" type="text/html" title="Deciphering Python's Metaclasses" /><published>2020-06-26T00:00:00-05:00</published><updated>2020-06-26T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/python/2020/06/26/python-metaclasses</id><content type="html" xml:base="https://rednafi.github.io/digressions/python/2020/06/26/python-metaclasses.html">&lt;p&gt;In Python, metaclass is one of the few tools that enables you to inject metaprogramming capabilities into your code. The term metaprogramming refers to the potential for a program to manipulate itself in a self referential manner. However, messing with metaclasses is often considered an arcane art that is beyond the grasp of the proletariats. Heck, even &lt;a href=&quot;https://en.wikipedia.org/wiki/Tim_Peters_(software_engineer)&quot;&gt;Tim Peters&lt;/a&gt; advices you to tread carefully while dealing with these.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://rednafi.github.io/digressions/feed.xml" rel="self" type="application/atom+xml" /><link href="https://rednafi.github.io/digressions/" rel="alternate" type="text/html" /><updated>2020-06-26T06:06:55-05:00</updated><id>https://rednafi.github.io/digressions/feed.xml</id><title type="html">Red’s Digressions</title><subtitle>Sporadic cogitations on software, tech &amp; personal beliefs</subtitle><entry><title type="html">Deciphering Python’s Metaclasses</title><link href="https://rednafi.github.io/digressions/python/2020/06/26/python-metaclasses.html" rel="alternate" type="text/html" title="Deciphering Python's Metaclasses" /><published>2020-06-26T00:00:00-05:00</published><updated>2020-06-26T00:00:00-05:00</updated><id>https://rednafi.github.io/digressions/python/2020/06/26/python-metaclasses</id><content type="html" xml:base="https://rednafi.github.io/digressions/python/2020/06/26/python-metaclasses.html">&lt;p&gt;In Python, metaclass is one of the few tools that enables you to inject metaprogramming capabilities into your code. The term metaprogramming refers to the potential for a program to manipulate itself in a self referential manner. However, messing with metaclasses is often considered an arcane art that is beyond the grasp of the proletariats. Heck, even &lt;a href=&quot;https://en.wikipedia.org/wiki/Tim_Peters_(software_engineer)&quot;&gt;Tim Peters&lt;/a&gt; advices you to tread carefully while dealing with these.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Metaclasses are deeper magic than 99% of users should ever worry about. If you wonder whether you need them, you don’t (the people who actually need them know with certainty that they need them, and don’t need an explanation about why).&lt;/p&gt;
@@ -372,7 +372,7 @@ Point(5, 10)
 
 &lt;p&gt;In the above example, at first, I’ve created a singleton class &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt; by attaching the &lt;code class=&quot;highlighter-rouge&quot;&gt;Singleton&lt;/code&gt; metaclass to it. Secondly, I’ve instantiated class &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt; and assigned the instance of the class to a variable &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;. Thirdly, I’ve instantiated the class again and assigned variable a &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; to this seemingly new instance. Checking the identity of the two variables &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; reveals that both of them actually point to the same instance.&lt;/p&gt;
 
-&lt;h2 id=&quot;implementing-a-class-that-cant-be-subclassed&quot;&gt;Implementing a Class that Can’t be Subclassed&lt;/h2&gt;
+&lt;h3 id=&quot;implementing-a-class-that-cant-be-subclassed&quot;&gt;Implementing a Class that Can’t be Subclassed&lt;/h3&gt;
 
 &lt;p&gt;Suppose you want to create a base class where the users of your class won’t be able to create any subclasses from the base class. In that case, you can write a metaclass and attach that your base class. The base class will raise &lt;code class=&quot;highlighter-rouge&quot;&gt;RuntimeError&lt;/code&gt; if someone tries to create a subclass from it.&lt;/p&gt;
 
@@ -421,7 +421,7 @@ RuntimeError                              Traceback (most recent call last)
 RuntimeError: Subclassing a class that has TerminateMeta metaclass is prohibited
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;disallowing-multiple-inheritance&quot;&gt;Disallowing Multiple Inheritance&lt;/h2&gt;
+&lt;h3 id=&quot;disallowing-multiple-inheritance&quot;&gt;Disallowing Multiple Inheritance&lt;/h3&gt;
 
 &lt;p&gt;Multiple inheritance can be fragile and error prone. So, if you don’t want to allow the users to use a base class with any other base classes to form multiple inheritance, you can do so by attaching a metaclass to that target base class.&lt;/p&gt;
 
@@ -466,7 +466,7 @@ TypeError                                 Traceback (most recent call last)
 TypeError: Inherited multiple base classes!
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;timing-classes-with-metaclasses&quot;&gt;Timing Classes with Metaclasses&lt;/h2&gt;
+&lt;h3 id=&quot;timing-classes-with-metaclasses&quot;&gt;Timing Classes with Metaclasses&lt;/h3&gt;
 
 &lt;p&gt;Suppose you want to measure the execution time of different methods of a class. One way of doing that is to define a timer decorator and decorating all the methods to measure and show the execution time. However, by using a metaclass, you can avoid decorating the methods in the class individually and the metaclass will dynamically apply the timer decorator to all of the methods of your target class. This can reduce code repetition and improve code readability.&lt;/p&gt;
 
@@ -516,7 +516,7 @@ I shout!
 Executing Shouter.intro took 6.747245788574219e-05 seconds.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;registering-plugins-with-metaclasses&quot;&gt;Registering Plugins With Metaclasses&lt;/h2&gt;
+&lt;h3 id=&quot;registering-plugins-with-metaclasses&quot;&gt;Registering Plugins With Metaclasses&lt;/h3&gt;
 
 &lt;p&gt;Suppose a specific single class represents a plugin in your code. You can write a metaclass to keep track of all of the plugins so than you don’t have to count them manually.&lt;/p&gt;
 
@@ -553,7 +553,7 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{'A': __main__.A, 'B': __main__.B, 'C': __main__.C, 'D': __main__.D}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;debugging-methods-with-metaclasses&quot;&gt;Debugging Methods with Metaclasses&lt;/h2&gt;
+&lt;h3 id=&quot;debugging-methods-with-metaclasses&quot;&gt;Debugging Methods with Metaclasses&lt;/h3&gt;
 
 &lt;p&gt;Debugging a class often involves inspecting the individual methods and adding extra debugging logic to those. However, this can get tedious if you’ve do this over an over again. Instead you can write an inspection decorator and use a metaclass to dynamically apply the decorator to all of the methods of your target class. Later on, you can simply detach the metaclass once you’re done with debugging and don’t want the extra logic in your target class.&lt;/p&gt;
 
@@ -605,7 +605,7 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 6
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;exception-handling-with-metaclasses&quot;&gt;Exception Handling with Metaclasses&lt;/h2&gt;
+&lt;h3 id=&quot;exception-handling-with-metaclasses&quot;&gt;Exception Handling with Metaclasses&lt;/h3&gt;
 
 &lt;p&gt;Sometimes you need to handle exceptions in multiple methods of a class in a generic manner. That means all the methods of the class have the same exception handling, logging logic etc. Metaclasses can help you avoid adding repetitive exception handling and logging logics to your methods.&lt;/p&gt;
 
@@ -678,7 +678,7 @@ ZeroDivisionError                         Traceback (most recent call last)
 ZeroDivisionError: division by zero
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;abstract-base-classes&quot;&gt;Abstract Base Classes&lt;/h2&gt;
+&lt;h3 id=&quot;abstract-base-classes&quot;&gt;Abstract Base Classes&lt;/h3&gt;
 
 &lt;p&gt;An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods. An abstract method is a method that has a declaration but does not have an implementation. When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can’t directly initialize or use an abstract class. Rather, you’ve to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated &lt;code class=&quot;highlighter-rouge&quot;&gt;abc&lt;/code&gt; module to help you create abstract classes. Let’s see how you can define a simple abstract class that provides four abstract methods:&lt;/p&gt;
 
@@ -753,11 +753,11 @@ TypeError: Can't instantiate abstract class ICalc with abstract methods add, div
 0.8
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;metaclasses--dataclasses&quot;&gt;Metaclasses &amp;amp; Dataclasses&lt;/h2&gt;
+&lt;h3 id=&quot;metaclasses--dataclasses&quot;&gt;Metaclasses &amp;amp; Dataclasses&lt;/h3&gt;
 
 &lt;p&gt;Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Dataclasses automatically create &lt;code class=&quot;highlighter-rouge&quot;&gt;__init__&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;__repr__&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;__eq__&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;__gt__&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;__lt__&lt;/code&gt; etc methods without you having to add them explicitly. This can be very handy when you need to create custom containers for your data. You can create dataclasses in the following manner:&lt;/p&gt;
 
-&lt;h3 id=&quot;creating-multiple-dataclasses&quot;&gt;Creating Multiple DataClasses&lt;/h3&gt;
+&lt;h4 id=&quot;creating-multiple-dataclasses&quot;&gt;Creating Multiple DataClasses&lt;/h4&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;dataclasses&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataclass&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;
@@ -799,7 +799,7 @@ TypeError: Can't instantiate abstract class ICalc with abstract methods add, div
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;InvoiceIssued(created_at=datetime.datetime(2020, 6, 20, 1, 3, 24, 967633), invoice_uuid=22, customer_uuid=34, total_amount=100.0, due_date=datetime.datetime(2020, 6, 19, 0, 0))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;avoiding-dataclass-decorator-with-metaclasses&quot;&gt;Avoiding Dataclass Decorator with Metaclasses&lt;/h3&gt;
+&lt;h4 id=&quot;avoiding-dataclass-decorator-with-metaclasses&quot;&gt;Avoiding Dataclass Decorator with Metaclasses&lt;/h4&gt;
 
 &lt;p&gt;Now one thing that I find cumbersome while creating multiple dataclasses is having to attach the &lt;code class=&quot;highlighter-rouge&quot;&gt;@dataclasses.dataclass&lt;/code&gt; decorator to each of the dataclasses. Also, the decorator takes multiple arguments to customize the dataclass behavior and it can quickly get cumbersome when you’ve to create multiple dataclasses with custom behavior. Moreover, this goes against the DRY (Don’t Repeat Yourself) principle in software engineering.&lt;/p&gt;
 
