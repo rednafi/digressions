@@ -150,12 +150,14 @@ These are the methods to override in your custom metaclass to give your classes 
 
 ```python
 class ExampleMeta(type):
-    """Simple metaclass showing the execution flow of the special methods."""
+    """Simple metaclass showing the execution flow of the
+    special methods."""
 
     @classmethod
     def __prepare__(cls, name, bases):
 
-        """Defines the class namespace in a mapping that stores the attributes
+        """Defines the class namespace in a mapping that stores
+        the attributes
 
         Parameters
         ----------
@@ -187,9 +189,8 @@ class ExampleMeta(type):
 
     def __init__(self, name, bases, attrs):
 
-        """This method is called to set up values after the instance/object
-        is created
-        """
+        """This method is called to set up values after the
+        instance/object is created."""
 
         print(f"Calling __init__ method of {super()}!")
         super().__init__(name, bases, attrs)
@@ -197,8 +198,8 @@ class ExampleMeta(type):
     def __call__(self, *args, **kwargs):
 
         """
-        This method is called when the constructor of the new class is to be used
-        to create an object
+        This method is called when the constructor of the new class
+        is to be used to create an object
 
         Parameters
         ----------
