@@ -17,7 +17,7 @@ Metaclasses are an esoteric OOP concept, lurking behind virtually all Python cod
 
 A metaclass is a class whose instances are classes. Like an "ordinary" class defines the behavior of the instances of the class, a metaclass defines the behavior of classes and their instances.
 
-![image.png](attachment:image.png)
+![image.png](https://media.geeksforgeeks.org/wp-content/uploads/metaclass-hierarchy-Page-1-1024x370.jpeg)
 
 Metaclasses are not supported by every object oriented programming language. Those programming language, which support metaclasses, considerably vary in way they implement them. Python provides you a way to get under the hood and define custom metaclasses.
 
