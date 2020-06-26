@@ -495,7 +495,6 @@ Point(5, 10)
         <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
         <span class="n">attrs_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
         <span class="n">attrs_names_ordered</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">attrs_names</span><span class="p">)</span>
         <span class="n">attrs</span><span class="p">[</span><span class="s">"__attrs_ordered__"</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs_names_ordered</span>
