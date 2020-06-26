@@ -131,7 +131,7 @@ class A(metaclass=PrintMeta):
 Name of this class is A
 ```
 
-Despite the fact that we haven't called class `A` or created an instance of it, the `__new__()` method of metaclass `PrintMeta` got executed and printed the name of the target class. In the return statement of `__new__()` method, `super()` was used to call the `__new__()` method of the base class (`type`) of the metaclass `PrintMeta`.
+Despite the fact that we haven't called class `A` or created an instance of it, the `__new__` method of metaclass `PrintMeta` got executed and printed the name of the target class. In the return statement of `__new__` method, `super()` was used to call the `__new__` method of the base class (`type`) of the metaclass `PrintMeta`.
 
 ## Special Methods Used by Metaclasses
 
@@ -142,7 +142,10 @@ Type `type`, as the default metaclass in Python, defines a few special methods t
 * `__prepare__`: Defines the class namespace in a mapping that stores the attributes
 * `__call__`: This method is called when the constructor of the new class is to be used to create an object
 
+
 These are the methods to override in your custom metaclass to give your classes behaviors different from that of `type`. The following example shows the default behaviors of these special methods and their execution order.
+
+> Note: Some people immediately think of `__init__`, and I’ve occasionally called it “the constructor” myself; but in actuality, as its name indicates, it’s an initializer and by the time it’s invoked, the object has already been created, seeing as it’s passed in as self. The real constructor is a far less famous function: `__new__`. The reason you might never hear about it or use it- is that allocation doesn’t mean that much in Python, which manages memory on its own. So if you do override `__new__`, it’d be just like your `__init__` —except you’ll have to call into Python to actually create the object, and then return that object afterward.
 
 
 ```python
@@ -230,7 +233,7 @@ Printing <class '__main__.A'> kwargs {}
 Calling __init__ method of <__main__.A object at 0x7febe710a130>
 ```
 
-Pay attention to the execution order of the special methods of the custom metaclass `ExampleMeta`. The `__prepare__()` method is called first and is followed by `__new__()`, `__init__()` and `__call__()` respectively. Only after that the first method `__init__()` of the target class `A` is called. This is important since it'll help you to decide how you'll mutate and change the behavior of your target class.
+Pay attention to the execution order of the special methods of the custom metaclass `ExampleMeta`. The `__prepare__` method is called first and is followed by `__new__`, `__init__` and `__call__` respectively. Only after that the first method `__init__` of the target class `A` is called. This is important since it'll help you to decide how you'll mutate and change the behavior of your target class.
 
 ## Metaclass Conflicts
 
@@ -324,11 +327,11 @@ INFO:root:attrs: {'__module__': '__main__', '__qualname__': 'Point', '__init__':
 Point(5, 10)
 ```
 
-In the above example, I've created a metaclass called `LittleMeta` and added the necessary logging statements to record the information about the target class. Since the logging statements are residing in the `__new__()` method of the metaclass, these information will be logged before the creation of the target class. In the target class `Point`, `LittleMeta` replaces the default `type` metaclass and produces the desired result by mutating the class.
+In the above example, I've created a metaclass called `LittleMeta` and added the necessary logging statements to record the information about the target class. Since the logging statements are residing in the `__new__` method of the metaclass, these information will be logged before the creation of the target class. In the target class `Point`, `LittleMeta` replaces the default `type` metaclass and produces the desired result by mutating the class.
 
 ### Returning Class Attributes in a Custom List
 
-In this case, I want to dynamically attach a new attribute to the target class called `__attrs_ordered__`. Accessing this attribute from the target class (or instance) will give out an alphabetically sorted list of the attribute names. Here, the `__prepare__()` method inside the metaclass `AttrsListMeta` returns an `OrderDict` instead of a simple `dict` - so all attributes gathered before the `__new__()` method call will be ordered. Just like the previous example, here, the `__new__()` method inside the metaclass implements the logic required to get the sorted list of the attribute names.
+In this case, I want to dynamically attach a new attribute to the target class called `__attrs_ordered__`. Accessing this attribute from the target class (or instance) will give out an alphabetically sorted list of the attribute names. Here, the `__prepare__` method inside the metaclass `AttrsListMeta` returns an `OrderDict` instead of a simple `dict` - so all attributes gathered before the `__new__` method call will be ordered. Just like the previous example, here, the `__new__` method inside the metaclass implements the logic required to get the sorted list of the attribute names.
 
 
 ```python
@@ -363,7 +366,7 @@ a.__attrs_ordered__
 ['__init__', '__module__', '__qualname__']
 ```
 
-You can access the `__attrs_ordered__` attribute from both class `A` and an instance of class `A`. Try removing the `sorted()` function inside the `__new__()` method of the metaclass and see what happens!
+You can access the `__attrs_ordered__` attribute from both class `A` and an instance of class `A`. Try removing the `sorted()` function inside the `__new__` method of the metaclass and see what happens!
 
 ### Creating Singleton Class
 
@@ -798,7 +801,7 @@ print(calc.div(4, 5))
 
 ## Metaclasses & Dataclasses
 
-Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Dataclasses automatically create `__init__()`, `__repr__()`, `__eq__()`, `__gt__()`, `__lt__()` etc methods without you having to add them explicitly. This can be very handy when you need to create custom containers for your data. You can create dataclasses in the following manner:
+Data classes were introduced to python in version 3.7. Basically they can be regarded as code generators that reduce the amount of boilerplate you need to write while generating generic classes. Dataclasses automatically create `__init__`, `__repr__`, `__eq__`, `__gt__`, `__lt__` etc methods without you having to add them explicitly. This can be very handy when you need to create custom containers for your data. You can create dataclasses in the following manner:
 
 ### Creating Multiple DataClasses
 
