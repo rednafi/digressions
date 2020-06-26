@@ -295,7 +295,6 @@ logging.basicConfig(level=logging.INFO)
 
 class LittleMeta(type):
     def __new__(cls, name, bases, attrs):
-
         logging.info(f"classname: {name}")
         logging.info(f"baseclasses: {bases}")
         logging.info(f"attrs: {attrs}")
