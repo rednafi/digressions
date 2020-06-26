@@ -142,10 +142,10 @@ Type `type`, as the default metaclass in Python, defines a few special methods t
 * `__prepare__`: Defines the class namespace in a mapping that stores the attributes
 * `__call__`: This method is called when the constructor of the new class is to be used to create an object
 
-
 These are the methods to override in your custom metaclass to give your classes behaviors different from that of `type`. The following example shows the default behaviors of these special methods and their execution order.
 
-> Note: Some people immediately think of `__init__`, and I’ve occasionally called it “the constructor” myself; but in actuality, as its name indicates, it’s an initializer and by the time it’s invoked, the object has already been created, seeing as it’s passed in as self. The real constructor is a far less famous function: `__new__`. The reason you might never hear about it or use it- is that allocation doesn’t mean that much in Python, which manages memory on its own. So if you do override `__new__`, it’d be just like your `__init__` —except you’ll have to call into Python to actually create the object, and then return that object afterward.
+> Some people immediately think of `__init__`, and I’ve occasionally called it “the constructor” myself; but in actuality, as its name indicates, it’s an initializer and by the time it’s invoked, the object has already been created, seeing as it’s passed in as self. The real constructor is a far less famous function: `__new__`. The reason you might never hear about it or use it- is that allocation doesn’t mean that much in Python, which manages memory on its own. So if you do override `__new__`, it’d be just like your `__init__` —except you’ll have to call into Python to actually create the object, and then return that object afterward.
+
 
 
 ```python
