@@ -1095,7 +1095,7 @@ This section discusses two advanced data structures that I mentioned at the begi
 
 This mutable set-like data structure doesn't perform hashing to store data. It can store integers in a fixed range. While storing integers, `BitSet` objects use less memory compared to built-in sets.
 
-However, since no hashing happens, it's slower to perform addition and retrieval compared to built-in sets. The following code snipped was taken directly from [Raymond Hettinger](https://twitter.com/raymondh)'s 2019 PyCon Russia [talk](https://www.youtube.com/watch?v=S_ipdVNSFlo) on advanced data structures.
+However, since no hashing happens, it's slower to perform addition and retrieval compared to built-in sets. The following code snippet was taken directly from [Raymond Hettinger](https://twitter.com/raymondh)'s 2019 PyCon Russia [talk](https://www.youtube.com/watch?v=S_ipdVNSFlo) on advanced data structures.
 
 ```python
 from collections.abc import MutableSet
