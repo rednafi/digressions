@@ -13,7 +13,7 @@ One way to understand how built-in objects like dictionary, list, set etc work i
 
 ## Concept Edifice
 
-To understand how all these work, you'll need a fair bit of knowledge about Interfaces, Abstract Base Classes, Mixin Classes etc. I'll build the concept edifice layer by layer where you'll learn about interfaces first and how they can be created and used using the `abc.ABC` class. Then you'll learn how abstract base classes differ from interfaces. After that I'll introduce mixins and explain how all these concepts can be knitted together to architect custom data structures with amazing capabilities. Let's dive in.
+To understand how all these work, you'll need a fair bit of knowledge about Interfaces, Abstract Base Classes, Mixin Classes etc. I'll build the concept edifice layer by layer where you'll learn about interfaces first and how they can be created and used via the `abc.ABC` class. Then you'll learn how abstract base classes differ from interfaces. After that I'll introduce mixins and explain how all these concepts can be knitted together to architect custom data structures with amazing capabilities. Let's dive in.
 
 ## Interfaces
 
