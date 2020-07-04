@@ -1381,34 +1381,27 @@ Size of a BitSet object: 100 bytes
 
 <p>Before running the code snippet below, you’ll need to install SQLAlchemy as an external dependency.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sqla_dict</span><span class="o">.</span><span class="n">py</span>
+<span class="s">"""
 This is a self contained custom data structure with dict like
 key-value storage capabilities.
-
 * Can store the key-value pairs in any sqlalchemy supported db
 * Employs thread safe transactional scope
 * Modular, just change the session_scope to use a different db
 * This example uses sqlite db for demonstration purpose
-
 The code is inspired by Raymond Hettinger's talk `Build powerful,
 new data structures with Python's abstract base classes`.
-
 https://www.youtube.com/watch?v=S_ipdVNSFlo
-
 MIT License
-
 Copyright (c) 2020 Redowan Delowar
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -1438,6 +1431,7 @@ SOFTWARE.
     <span class="o">@</span><span class="n">contextmanager</span>
     <span class="k">def</span> <span class="nf">session_scope</span><span class="p">():</span>
         <span class="s">"""Provide a transactional scope around a series of operations."""</span>
+        
         <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">session</span>
@@ -1459,9 +1453,12 @@ SOFTWARE.
 
 
 <span class="k">class</span> <span class="nc">SQLAlechemyDict</span><span class="p">(</span><span class="n">MutableMapping</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbname</span><span class="p">,</span> <span class="n">session_scope</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="p">[],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbname</span><span class="p">,</span> <span class="n">session_scope</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbname</span> <span class="o">=</span> <span class="n">dbname</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">session_scope</span> <span class="o">=</span> <span class="n">session_scope</span>
+
+        <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_scope</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
             <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"CREATE TABLE Dict (key text, value text)"</span><span class="p">)</span>
