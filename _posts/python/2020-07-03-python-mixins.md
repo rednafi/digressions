@@ -1240,34 +1240,27 @@ Before running the code snippet below, you'll need to install SQLAlchemy as an e
 
 
 ```python
+sqla_dict.py
 """
 This is a self contained custom data structure with dict like
 key-value storage capabilities.
-
 * Can store the key-value pairs in any sqlalchemy supported db
 * Employs thread safe transactional scope
 * Modular, just change the session_scope to use a different db
 * This example uses sqlite db for demonstration purpose
-
 The code is inspired by Raymond Hettinger's talk `Build powerful,
 new data structures with Python's abstract base classes`.
-
 https://www.youtube.com/watch?v=S_ipdVNSFlo
-
 MIT License
-
 Copyright (c) 2020 Redowan Delowar
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -1297,6 +1290,7 @@ def create_transaction_session(dburl):
     @contextmanager
     def session_scope():
         """Provide a transactional scope around a series of operations."""
+        
         session = Session()
         try:
             yield session
@@ -1318,9 +1312,12 @@ session_scope = create_transaction_session("sqlite:///foo.db")
 
 
 class SQLAlechemyDict(MutableMapping):
-    def __init__(self, dbname, session_scope, items=[], **kwargs):
+    def __init__(self, dbname, session_scope, items=None, **kwargs):
         self.dbname = dbname
         self.session_scope = session_scope
+
+        if items is None:
+            items = []
 
         with self.session_scope() as session:
             session.execute("CREATE TABLE Dict (key text, value text)")
