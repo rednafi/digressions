@@ -324,7 +324,7 @@ This will print out an instance of the class `StageConfig`.
 
 ## Remarks
 
-The above workflow works perfectly for my usage scenario. So subjectively, I feel like it's an elegant solution to a very icky problem. Your mileage may vary. All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.
+The above workflow works perfectly for my usage scenario. So subjectively, I feel like it's an elegant solution to a very icky problem. Your mileage may vary. All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 20.04.
 
 ## Resources
 

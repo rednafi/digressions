@@ -910,7 +910,7 @@ Also, metaclasses can easily veer into the realm of being a *“solution in sear
 
 Wrapping your mind around metaclasses can be tricky. So, to avoid any unnecessary confusion, I've entirely evaded any discussion regarding the behavioral difference between *old style classes* and *new style classes* in Python. Also, I've intentionally excluded mentioning the differences between `type` in Python 2 and `type` in Python 3 entirely. Python 2.x has reached its EOL. Save yourself some trouble and switch to Python 3.x if you already haven't done so.
 
-All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 18.04.
+All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 20.04.
 
 This article assumes familiarity with decorators, dataclasses etc. If your knowledge on them is rusty, checkout these posts on [decorators](https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html) and [dataclasses](https://rednafi.github.io/digressions/python/2020/03/12/python-dataclasses.html).
 

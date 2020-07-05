@@ -702,7 +702,7 @@ The ability to manipulate paths in an OO way and not having to rummage through t
 
 ## Remarks
 
-All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04.
+All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 20.04.
 
 ## References
 

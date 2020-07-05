@@ -383,7 +383,7 @@ Well, yes obviously. But not always. You see, you need a little bit of planning 
 
 ## Remarks
 
-All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 18.04.
+All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 20.04.
 
 ## References
 

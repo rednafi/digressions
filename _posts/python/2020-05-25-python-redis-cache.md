@@ -442,7 +442,7 @@ This will take you to the swagger dashboard. Here you can make requests using th
 
 ## Remarks
 
-All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04. You can find the complete source code of the app [here](https://github.com/rednafi/redis-request-caching).
+All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 20.04. You can find the complete source code of the app [here](https://github.com/rednafi/redis-request-caching).
 
 ## Disclaimer
 

@@ -1402,7 +1402,7 @@ Running the above code snippet will create a SQLite database named `foo.db` in y
 
 ## Remarks
 
-All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 18.04. Familiarity with built-in data structures, basic object-oriented protocols, decorators, dunder methods etc is assumed.
+All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 20.04. Familiarity with built-in data structures, basic object-oriented protocols, decorators, dunder methods etc is assumed.
 
 ## References
 
