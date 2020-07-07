@@ -305,7 +305,7 @@ def route_optima(coordinates: str) -> dict:
         data = get_routes_from_api(coordinates)
 
         # This block sets saves the respose to redis and serves it directly
-        if data["code"] == "Ok":
+        if data.get("code") == "Ok":
             data["cache"] = False
             data = json.dumps(data)
             state = set_routes_to_cache(key=coordinates, value=data)
