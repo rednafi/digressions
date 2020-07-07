@@ -159,7 +159,9 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#disclaimer">Disclaimer</a></li>
 <li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
-</ul><p>Recently, I was working with <a href="https://www.mapbox.com/">MapBox</a>’s <a href="https://docs.mapbox.com/api/navigation/#optimization">Route Optimization API</a>. Basically, it tries to solve the <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">traveling salesman problem</a> where you provide the API with coordinates of multiple places and it returns a duration-optimized route between those locations. This is a perfect usecase where <a href="https://redis.io/">Redis</a> caching can come handy. Redis is a blazingly fast, lightweight in-memory database with additional persistence options; making it a perfect candidate for the task at hand. Here, caching can save you from making redundant API requests and also, it can dramatically improve the response time as well.</p>
+</ul><p><strong><em>Updated on 2020-07-07</em></strong>: <em>Replaced <code class="highlighter-rouge">data["code"]</code> with <code class="highlighter-rouge">data.get("code")</code></em></p>
+
+<p>Recently, I was working with <a href="https://www.mapbox.com/">MapBox</a>’s <a href="https://docs.mapbox.com/api/navigation/#optimization">Route Optimization API</a>. Basically, it tries to solve the <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">traveling salesman problem</a> where you provide the API with coordinates of multiple places and it returns a duration-optimized route between those locations. This is a perfect usecase where <a href="https://redis.io/">Redis</a> caching can come handy. Redis is a blazingly fast, lightweight in-memory database with additional persistence options; making it a perfect candidate for the task at hand. Here, caching can save you from making redundant API requests and also, it can dramatically improve the response time as well.</p>
 
 <p>I found that in my country, the optimized routes returned by the API do not change dramatically for at least for a couple of hours. So the workflow will look something like this:</p>
 
@@ -340,7 +342,7 @@ pip <span class="nb">install </span>redis httpx
 </span>        <span class="n">data</span> <span class="o">=</span> <span class="n">get_routes_from_api</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
 
         <span class="c1"># This block sets saves the respose to redis and serves it directly
-</span>        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">"code"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Ok"</span><span class="p">:</span>
+</span>        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"code"</span><span class="p">)</span> <span class="o">==</span> <span class="s">"Ok"</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">"cache"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">set_routes_to_cache</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
