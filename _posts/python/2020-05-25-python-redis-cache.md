@@ -7,6 +7,8 @@ description: Caching MapBox API requests with Python & Redis
 categories: [Python, Database]
 ---
 
+***Updated on 2020-07-07***: *Replaced `data["code"]` with `data.get("code")`*
+
 Recently, I was working with [MapBox](https://www.mapbox.com/)'s [Route Optimization API](https://docs.mapbox.com/api/navigation/#optimization). Basically, it tries to solve the [traveling salesman problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem) where you provide the API with coordinates of multiple places and it returns a duration-optimized route between those locations. This is a perfect usecase where [Redis](https://redis.io/) caching can come handy. Redis is a blazingly fast, lightweight in-memory database with additional persistence options; making it a perfect candidate for the task at hand. Here, caching can save you from making redundant API requests and also, it can dramatically improve the response time as well.
 
 I found that in my country, the optimized routes returned by the API do not change dramatically for at least for a couple of hours. So the workflow will look something like this:
@@ -192,7 +194,7 @@ def route_optima(coordinates: str) -> dict:
         data = get_routes_from_api(coordinates)
 
         # This block sets saves the respose to redis and serves it directly
-        if data["code"] == "Ok":
+        if data.get("code") == "Ok":
             data["cache"] = False
             data = json.dumps(data)
             state = set_routes_to_cache(key=coordinates, value=data)
