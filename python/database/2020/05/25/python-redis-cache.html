@@ -452,7 +452,7 @@ pip <span class="nb">install </span>redis httpx
 </span>        <span class="n">data</span> <span class="o">=</span> <span class="n">get_routes_from_api</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
 
         <span class="c1"># This block sets saves the respose to redis and serves it directly
-</span>        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">"code"</span><span class="p">]</span> <span class="o">==</span> <span class="s">"Ok"</span><span class="p">:</span>
+</span>        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"code"</span><span class="p">)</span> <span class="o">==</span> <span class="s">"Ok"</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">"cache"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">set_routes_to_cache</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
@@ -583,7 +583,7 @@ pip <span class="nb">install </span>redis httpx
 <h2 id="remarks">
 <a class="anchor" href="#remarks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remarks</h2>
 
-<p>All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 18.04. You can find the complete source code of the app <a href="https://github.com/rednafi/redis-request-caching">here</a>.</p>
+<p>All the pieces of codes in the blog were written and tested with python 3.8 on a machine running Ubuntu 20.04. You can find the complete source code of the app <a href="https://github.com/rednafi/redis-request-caching">here</a>.</p>
 
 <h2 id="disclaimer">
 <a class="anchor" href="#disclaimer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Disclaimer</h2>
