@@ -13,7 +13,7 @@ One way to understand how built-in objects like dictionary, list, set etc work i
 
 ## Concept Edifice
 
-To understand how all these work, you'll need a fair bit of knowledge about Interfaces, Abstract Base Classes, Mixin Classes etc. I'll build the concept edifice layer by layer where you'll learn about interfaces first and how they can be created and used using the `abc.ABC` class. Then you'll learn how abstract base classes differ from interfaces. After that I'll introduce mixins and explain how all these concepts can be knitted together to architect custom data structures with amazing capabilities. Let's dive in.
+To understand how all these work, you'll need a fair bit of knowledge about Interfaces, Abstract Base Classes, Mixin Classes etc. I'll build the concept edifice layer by layer where you'll learn about interfaces first and how they can be created and used via the `abc.ABC` class. Then you'll learn how abstract base classes differ from interfaces. After that I'll introduce mixins and explain how all these concepts can be knitted together to architect custom data structures with amazing capabilities. Let's dive in.
 
 ## Interfaces
 
@@ -1095,7 +1095,7 @@ This section discusses two advanced data structures that I mentioned at the begi
 
 This mutable set-like data structure doesn't perform hashing to store data. It can store integers in a fixed range. While storing integers, `BitSet` objects use less memory compared to built-in sets.
 
-However, since no hashing happens, it's slower to perform addition and retrieval compared to built-in sets. The following code snipped was taken directly from [Raymond Hettinger](https://twitter.com/raymondh)'s 2019 PyCon Russia [talk](https://www.youtube.com/watch?v=S_ipdVNSFlo) on advanced data structures.
+However, since no hashing happens, it's slower to perform addition and retrieval compared to built-in sets. The following code snippet was taken directly from [Raymond Hettinger](https://twitter.com/raymondh)'s 2019 PyCon Russia [talk](https://www.youtube.com/watch?v=S_ipdVNSFlo) on advanced data structures.
 
 ```python
 from collections.abc import MutableSet
@@ -1240,34 +1240,27 @@ Before running the code snippet below, you'll need to install SQLAlchemy as an e
 
 
 ```python
+sqla_dict.py
 """
 This is a self contained custom data structure with dict like
 key-value storage capabilities.
-
 * Can store the key-value pairs in any sqlalchemy supported db
 * Employs thread safe transactional scope
 * Modular, just change the session_scope to use a different db
 * This example uses sqlite db for demonstration purpose
-
 The code is inspired by Raymond Hettinger's talk `Build powerful,
 new data structures with Python's abstract base classes`.
-
 https://www.youtube.com/watch?v=S_ipdVNSFlo
-
 MIT License
-
 Copyright (c) 2020 Redowan Delowar
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -1297,6 +1290,7 @@ def create_transaction_session(dburl):
     @contextmanager
     def session_scope():
         """Provide a transactional scope around a series of operations."""
+        
         session = Session()
         try:
             yield session
@@ -1318,9 +1312,12 @@ session_scope = create_transaction_session("sqlite:///foo.db")
 
 
 class SQLAlechemyDict(MutableMapping):
-    def __init__(self, dbname, session_scope, items=[], **kwargs):
+    def __init__(self, dbname, session_scope, items=None, **kwargs):
         self.dbname = dbname
         self.session_scope = session_scope
+
+        if items is None:
+            items = []
 
         with self.session_scope() as session:
             session.execute("CREATE TABLE Dict (key text, value text)")
