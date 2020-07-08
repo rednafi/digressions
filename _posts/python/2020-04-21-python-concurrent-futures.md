@@ -306,6 +306,11 @@ There is one small problem with the example above. The `executor.map()` method r
 To get around that, you can use the `executor.submit()` method to create futures, accumulated the futures in a list, iterate through the futures and handle the exceptions manually. See the following example:
 
 ```python
+from pathlib import Path
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+
+
 def download_one(url):
     """
     Downloads the specified URL and saves it to disk
