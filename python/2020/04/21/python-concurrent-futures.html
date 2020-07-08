@@ -460,7 +460,12 @@ window.onload = wrap_img;
 
 <p>To get around that, you can use the <code class="highlighter-rouge">executor.submit()</code> method to create futures, accumulated the futures in a list, iterate through the futures and handle the exceptions manually. See the following example:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">download_one</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+
+
+<span class="k">def</span> <span class="nf">download_one</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
     <span class="s">"""
     Downloads the specified URL and saves it to disk
     """</span>
