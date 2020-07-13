@@ -7,7 +7,7 @@ description: Caching MapBox API requests with Python & Redis
 categories: [Python, Database]
 ---
 
-***Updated on 2020-07-07***: *Replaced `data["code"]` with `data.get("code")`*
+***Updated on 2020-07-13***: *Removed duplicate keys in docker-compose.yml*
 
 Recently, I was working with [MapBox](https://www.mapbox.com/)'s [Route Optimization API](https://docs.mapbox.com/api/navigation/#optimization). Basically, it tries to solve the [traveling salesman problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem) where you provide the API with coordinates of multiple places and it returns a duration-optimized route between those locations. This is a perfect usecase where [Redis](https://redis.io/) caching can come handy. Redis is a blazingly fast, lightweight in-memory database with additional persistence options; making it a perfect candidate for the task at hand. Here, caching can save you from making redundant API requests and also, it can dramatically improve the response time as well.
 
@@ -31,7 +31,6 @@ services:
   redis:
     container_name: redis-cont
     image: "redis:alpine"
-    command: redis-server --requirepass ubuntu
     environment:
       - REDIS_PASSWORD=ubuntu
       - REDIS_REPLICATION_MODE=master
