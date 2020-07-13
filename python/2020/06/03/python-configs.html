@@ -282,10 +282,10 @@ PROD_REDIS_PORT="5000"
 </span>
     <span class="n">APP_CONFIG</span><span class="p">:</span> <span class="n">AppConfig</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="p">()</span>
 
-    <span class="c1"># global variables
+    <span class="c1"># define global variables with the Field class
 </span>    <span class="n">ENV_STATE</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"ENV_STATE"</span><span class="p">)</span>
 
-    <span class="c1"># environment specific variables
+    <span class="c1"># environment specific variables do not need the Field class
 </span>    <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">REDIS_PASS</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
