@@ -160,7 +160,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#extending-the-pipeline">Extending the Pipeline</a></li>
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
-</ul><p><strong><em>Updated on 2020-06-10</em></strong>: <em>Removed duplicates</em></p>
+</ul><p><strong><em>Updated on 2020-07-13</em></strong>: <em>Fixed dealing with global configs</em></p>
 
 <p>Managing configurations in your Python applications isn’t something you think about much often, until complexity starts to seep in and forces you to re-architect your initial approach. Ideally, your config management flow shouldn’t change across different applications or as your application begins to grow in size and complexity. Even if you’re writing a library, there should be a consistent config management process that scales up properly. Since I primarily spend my time writing data-analytics, data-science applications and expose them using <a href="https://github.com/pallets/flask">Flask</a> or <a href="https://github.com/tiangolo/fastapi">FastAPI</a> framework, I’ll be tacking config management from an application development perspective.</p>
 
@@ -276,14 +276,17 @@ PROD_REDIS_PORT="5000"
 <span class="k">class</span> <span class="nc">GlobalConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
     <span class="s">"""Global configurations."""</span>
 
-    <span class="c1"># This variable will be loaded from the .env file. However, if there is a
-</span>    <span class="c1"># shell environment variable having the same name, that will take precedence.
+    <span class="c1"># These variables will be loaded from the .env file. However, if
+</span>    <span class="c1"># there is a shell environment variable having the same name,
+</span>    <span class="c1"># that will take precedence.
 </span>
     <span class="n">APP_CONFIG</span><span class="p">:</span> <span class="n">AppConfig</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="p">()</span>
 
-    <span class="n">ENV_STATE</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"ENV_STATE"</span><span class="p">)</span>
+    <span class="c1"># global variables
+</span>    <span class="n">ENV_STATE</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s">"ENV_STATE"</span><span class="p">)</span>
 
-    <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="c1"># environment specific variables
+</span>    <span class="n">REDIS_HOST</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">REDIS_PORT</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">REDIS_PASS</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
 
