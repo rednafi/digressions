@@ -8,7 +8,7 @@ categories: [Python]
 
 ---
 
-***Updated on 2020-06-10***: *Removed duplicates*
+***Updated on 2020-07-13***: *Fixed dealing with global configs*
 
 
 Managing configurations in your Python applications isn't something you think about much often, until complexity starts to seep in and forces you to re-architect your initial approach. Ideally, your config management flow shouldn't change across different applications or as your application begins to grow in size and complexity. Even if you're writing a library, there should be a consistent config management process that scales up properly. Since I primarily spend my time writing data-analytics, data-science applications and expose them using [Flask](https://github.com/pallets/flask) or [FastAPI](https://github.com/tiangolo/fastapi) framework, I'll be tacking config management from an application development perspective.
@@ -118,13 +118,16 @@ class AppConfig(BaseModel):
 class GlobalConfig(BaseSettings):
     """Global configurations."""
 
-    # This variable will be loaded from the .env file. However, if there is a
-    # shell environment variable having the same name, that will take precedence.
+    # These variables will be loaded from the .env file. However, if
+    # there is a shell environment variable having the same name,
+    # that will take precedence.
 
     APP_CONFIG: AppConfig = AppConfig()
 
+    # global variables
     ENV_STATE: Optional[str] = Field(None, env="ENV_STATE")
 
+    # environment specific variables
     REDIS_HOST: Optional[str] = None
     REDIS_PORT: Optional[int] = None
     REDIS_PASS: Optional[str] = None
