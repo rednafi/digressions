@@ -159,7 +159,7 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#remarks">Remarks</a></li>
 <li class="toc-entry toc-h2"><a href="#disclaimer">Disclaimer</a></li>
 <li class="toc-entry toc-h2"><a href="#resources">Resources</a></li>
-</ul><p><strong><em>Updated on 2020-07-07</em></strong>: <em>Replaced <code class="highlighter-rouge">data["code"]</code> with <code class="highlighter-rouge">data.get("code")</code></em></p>
+</ul><p><strong><em>Updated on 2020-07-13</em></strong>: <em>Removed duplicate keys in docker-compose.yml</em></p>
 
 <p>Recently, I was working with <a href="https://www.mapbox.com/">MapBox</a>’s <a href="https://docs.mapbox.com/api/navigation/#optimization">Route Optimization API</a>. Basically, it tries to solve the <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">traveling salesman problem</a> where you provide the API with coordinates of multiple places and it returns a duration-optimized route between those locations. This is a perfect usecase where <a href="https://redis.io/">Redis</a> caching can come handy. Redis is a blazingly fast, lightweight in-memory database with additional persistence options; making it a perfect candidate for the task at hand. Here, caching can save you from making redundant API requests and also, it can dramatically improve the response time as well.</p>
 
@@ -184,7 +184,6 @@ window.onload = wrap_img;
   <span class="na">redis</span><span class="pi">:</span>
     <span class="na">container_name</span><span class="pi">:</span> <span class="s">redis-cont</span>
     <span class="na">image</span><span class="pi">:</span> <span class="s2">"</span><span class="s">redis:alpine"</span>
-    <span class="na">command</span><span class="pi">:</span> <span class="s">redis-server --requirepass ubuntu</span>
     <span class="na">environment</span><span class="pi">:</span>
       <span class="pi">-</span> <span class="s">REDIS_PASSWORD=ubuntu</span>
       <span class="pi">-</span> <span class="s">REDIS_REPLICATION_MODE=master</span>
