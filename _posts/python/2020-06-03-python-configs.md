@@ -124,10 +124,10 @@ class GlobalConfig(BaseSettings):
 
     APP_CONFIG: AppConfig = AppConfig()
 
-    # global variables
+    # define global variables with the Field class
     ENV_STATE: Optional[str] = Field(None, env="ENV_STATE")
 
-    # environment specific variables
+    # environment specific variables do not need the Field class
     REDIS_HOST: Optional[str] = None
     REDIS_PORT: Optional[int] = None
     REDIS_PASS: Optional[str] = None
