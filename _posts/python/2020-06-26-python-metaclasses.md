@@ -604,7 +604,7 @@ class DebugMeta(type):
     def __new__(cls, name, bases, attrs):
         new_cls = super().__new__(cls, name, bases, attrs)
 
-        # key is attribute name and val is attribute value in attribute dict
+        # key is attribute name and val is attribute value in the attrs dict
         for key, val in attrs.items():
             if isinstance(val, FunctionType) or isinstance(val, MethodType):
                 setattr(new_cls, key, debug(val))
