@@ -7,6 +7,8 @@ description: Unraveling the voodoo magic behind Python's metaclasses
 categories: [Python]
 ---
 
+***Updated on 2020-11-27***: *Refactoring arg names and testing on Python 3.9*
+
 In Python, metaclass is one of the few tools that enables you to inject metaprogramming capabilities into your code. The term metaprogramming refers to the potential for a program to manipulate itself in a self referential manner. However, messing with metaclasses is often considered an arcane art that's beyond the grasp of the proletariats. Heck, even [Tim Peters](https://en.wikipedia.org/wiki/Tim_Peters_(software_engineer)) advices you to tread carefully while dealing with these.
 
 > Metaclasses are deeper magic than 99% of users should ever worry about. If you wonder whether you need them, you don’t (the people who actually need them know with certainty that they need them, and don’t need an explanation about why).
@@ -107,8 +109,8 @@ class PrintMeta(type):
 
         Parameters
         ----------
-        metaclass : PrintMeta
-            The PrintMeta class
+        metacls : PrintMeta
+            Instance of the the PrintMeta class itself
         cls : str
             Name of the class being defined (Point in this example)
         bases : tuple
