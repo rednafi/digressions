@@ -254,25 +254,27 @@ True
 <p>The the last line of the above code snippet demonstrates that <code class="highlighter-rouge">type</code> is also an instance of metaclass <code class="highlighter-rouge">type</code>. Normally, you can’t write self referential classes like that in pure Python. However, you can circumvent this limitation by subclassing from <code class="highlighter-rouge">type</code>. This enables you to write custom metaclasses that you can use to dictate and mutate the way classes are created and instantiated. From now on, I’ll be referring to the instance class of a metaclass as <em>target class</em>. Let’s create a custom metaclass that just prints the name of the target class while creating it:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PrintMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
         <span class="s">"""__new__ gets executed before the target is created.
 
         Parameters
         ----------
-        name : str
-            name of the class being defined (Point in this example)
+        metaclass : PrintMeta
+            The PrintMeta class
+        cls : str
+            Name of the class being defined (Point in this example)
         bases : tuple
-            base classes for constructed class, empty tuple in this case
-        attrs : dict
-            dict containing methods and fields defined in the class
+            Base classes of the constructed class, empty tuple in this case
+        classdict : dict
+            Dict containing methods and fields defined in the class
 
         Returns
         -------
             instance class of this metaclass
         """</span>
 
-        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Name of this class is: {name}"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Name of this class is: {cls}"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">PrintMeta</span><span class="p">):</span>
@@ -282,7 +284,7 @@ True
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Name of this class is A
 </code></pre></div></div>
 
-<p>Despite the fact that we haven’t called class <code class="highlighter-rouge">A</code> or created an instance of it, the <code class="highlighter-rouge">__new__</code> method of metaclass <code class="highlighter-rouge">PrintMeta</code> got executed and printed the name of the target class. In the return statement of <code class="highlighter-rouge">__new__</code> method, <code class="highlighter-rouge">super()</code> was used to call the <code class="highlighter-rouge">__new__</code> method of the base class (<code class="highlighter-rouge">type</code>) of the metaclass <code class="highlighter-rouge">PrintMeta</code>.</p>
+<p>Despite the fact that we haven’t called class <code class="highlighter-rouge">A</code> or created an instance of it, the <code class="highlighter-rouge">__new__</code> method of metaclass <code class="highlighter-rouge">PrintMeta</code> was executed and printed the name of the target class. In the return statement of <code class="highlighter-rouge">__new__</code> method, <code class="highlighter-rouge">super()</code> was used to call the <code class="highlighter-rouge">__new__</code> method of the base class (<code class="highlighter-rouge">type</code>) of the metaclass <code class="highlighter-rouge">PrintMeta</code>.</p>
 
 <h2 id="special-methods-used-by-metaclasses">
 <a class="anchor" href="#special-methods-used-by-metaclasses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Special Methods Used by Metaclasses</h2>
@@ -311,43 +313,43 @@ True
     special methods."""</span>
 
     <span class="o">@</span><span class="nb">classmethod</span>
-    <span class="k">def</span> <span class="nf">__prepare__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__prepare__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">):</span>
         <span class="s">"""Defines the class namespace in a mapping that stores
         the attributes
 
         Parameters
         ----------
-        name : str
+        cls : str
             name of the class being defined (Point in this example)
         bases : tuple
             base classes for constructed class, empty tuple in this case
         """</span>
 
         <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Calling __prepare__ method of {super()}!"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__prepare__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__prepare__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
         <span class="s">"""__new__ is a classmethod, even without @classmethod decorator
 
         Parameters
         ----------
-        name : str
+        cls : str
             name of the class being defined (Point in this example)
         bases : tuple
             base classes for constructed class, empty tuple in this case
-        attrs : dict
+        classdict : dict
             dict containing methods and fields defined in the class
         """</span>
 
         <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Calling __new__ method of {super()}!"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
         <span class="s">"""This method is called to set up values after the
         instance/object is created."""</span>
 
         <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Calling __init__ method of {super()}!"</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="s">"""This method is called when the constructor of the new class
@@ -450,12 +452,12 @@ TypeError: metaclass conflict: the metaclass of a derived class must be a (non-s
 
 
 <span class="k">class</span> <span class="nc">LittleMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s">"classname: {name}"</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s">"classname: {cls}"</span><span class="p">)</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s">"baseclasses: {bases}"</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s">"attrs: {attrs}"</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s">"classdict: {classdict}"</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">LittleMeta</span><span class="p">):</span>
@@ -491,15 +493,15 @@ Point(5, 10)
 
 <span class="k">class</span> <span class="nc">AttrsListMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
     <span class="o">@</span><span class="nb">classmethod</span>
-    <span class="k">def</span> <span class="nf">__prepare__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__prepare__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">attrs_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">attrs_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">classdict</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
         <span class="n">attrs_names_ordered</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">attrs_names</span><span class="p">)</span>
-        <span class="n">attrs</span><span class="p">[</span><span class="s">"__attrs_ordered__"</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs_names_ordered</span>
+        <span class="n">classdict</span><span class="p">[</span><span class="s">"__attrs_ordered__"</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs_names_ordered</span>
 
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">AttrsListMeta</span><span class="p">):</span>
@@ -509,7 +511,7 @@ Point(5, 10)
 
 
 <span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">a</span><span class="o">.</span><span class="n">__attrs_ordered__</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">__attrs_ordered__</span><span class="p">)</span>
 </code></pre></div></div>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['__init__', '__module__', '__qualname__']
@@ -546,7 +548,7 @@ Point(5, 10)
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
 </code></pre></div></div>
 
-<p>In the above example, at first, I’ve created a singleton class <code class="highlighter-rouge">A</code> by attaching the <code class="highlighter-rouge">Singleton</code> metaclass to it. Secondly, I’ve instantiated class <code class="highlighter-rouge">A</code> and assigned the instance of the class to a variable <code class="highlighter-rouge">a</code>. Thirdly, I’ve instantiated the class again and assigned variable a <code class="highlighter-rouge">b</code> to this seemingly new instance. Checking the identity of the two variables <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> reveals that both of them actually point to the same instance.</p>
+<p>In the above example, at first, I’ve created a singleton class <code class="highlighter-rouge">A</code> by attaching the <code class="highlighter-rouge">Singleton</code> metaclass to it. Secondly, I’ve instantiated class <code class="highlighter-rouge">A</code> and assigned the instance of the class to a variable <code class="highlighter-rouge">a</code>. Thirdly, I’ve instantiated the class again and assigned variable a <code class="highlighter-rouge">b</code> to this seemingly new instance. Checking the identity of the two variables <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> reveals that both of them are actually the same object.</p>
 
 <h3 id="implementing-a-class-that-cant-be-subclassed">
 <a class="anchor" href="#implementing-a-class-that-cant-be-subclassed" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementing a Class that Can’t be Subclassed</h3>
@@ -554,16 +556,16 @@ Point(5, 10)
 <p>Suppose you want to create a base class where the users of your class won’t be able to create any subclasses from the base class. In that case, you can write a metaclass and attach that your base class. The base class will raise <code class="highlighter-rouge">RuntimeError</code> if someone tries to create a subclass from it.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">TerminateMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
         <span class="n">type_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">base</span><span class="p">)</span> <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="n">type_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="n">cls</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="n">metacls</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="nb">RuntimeError</span><span class="p">(</span>
                     <span class="n">f</span><span class="s">"Subclassing a class that has "</span>
-                    <span class="o">+</span> <span class="n">f</span><span class="s">"{cls.__name__} metaclass is prohibited"</span>
+                    <span class="o">+</span> <span class="n">f</span><span class="s">"{metacls.__name__} metaclass is prohibited"</span>
                 <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">TerminateMeta</span><span class="p">):</span>
@@ -599,10 +601,10 @@ RuntimeError: Subclassing a class that has TerminateMeta metaclass is prohibited
 <p>Multiple inheritance can be fragile and error prone. So, if you don’t want to allow the users to use a base class with any other base classes to form multiple inheritance, you can do so by attaching a metaclass to that target base class.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NoMultiMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bases</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="nb">TypeError</span><span class="p">(</span><span class="s">"Inherited multiple base classes!"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">NoMultiMeta</span><span class="p">):</span>
@@ -644,8 +646,9 @@ TypeError: Inherited multiple base classes!
 
 <p>Suppose you want to measure the execution time of different methods of a class. One way of doing that is to define a timer decorator and decorating all the methods to measure and show the execution time. However, by using a metaclass, you can avoid decorating the methods in the class individually and the metaclass will dynamically apply the timer decorator to all of the methods of your target class. This can reduce code repetition and improve code readability.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">FunctionType</span><span class="p">,</span> <span class="n">MethodType</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">FunctionType</span><span class="p">,</span> <span class="n">MethodType</span>
 
 
 <span class="k">def</span> <span class="nf">timefunc</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -662,11 +665,11 @@ TypeError: Inherited multiple base classes!
 
 
 <span class="k">class</span> <span class="nc">TimerMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
+        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
         <span class="c1"># key is attribute name and val is attribute value in attribute dict
-</span>        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span>        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">classdict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">FunctionType</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">MethodType</span><span class="p">):</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="n">new_cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">timefunc</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">new_cls</span>
@@ -698,8 +701,8 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 
 
 <span class="k">class</span> <span class="nc">RegisterMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
+        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
         <span class="n">registry</span><span class="p">[</span><span class="n">new_cls</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cls</span>
         <span class="k">return</span> <span class="n">new_cls</span>
 
@@ -721,7 +724,7 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 
 
 <span class="n">b</span> <span class="o">=</span> <span class="n">B</span><span class="p">()</span>
-<span class="n">registry</span>
+<span class="k">print</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
 </code></pre></div></div>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'A': __main__.A, 'B': __main__.B, 'C': __main__.C, 'D': __main__.D}
@@ -748,11 +751,11 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 
 
 <span class="k">class</span> <span class="nc">DebugMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
+        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
         <span class="c1"># key is attribute name and val is attribute value in the attrs dict
-</span>        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span>        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">classdict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">FunctionType</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">MethodType</span><span class="p">):</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="n">new_cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">debug</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">new_cls</span>
@@ -786,6 +789,7 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 <p>Sometimes you need to handle exceptions in multiple methods of a class in a generic manner. That means all the methods of the class have the same exception handling, logging logic etc. Metaclasses can help you avoid adding repetitive exception handling and logging logics to your methods.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">FunctionType</span><span class="p">,</span> <span class="n">MethodType</span>
 
 
 <span class="k">def</span> <span class="nf">exc_handler</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -806,11 +810,11 @@ Executing Shouter.intro took 6.747245788574219e-05 seconds.
 
 
 <span class="k">class</span> <span class="nc">ExceptionMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
+        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
         <span class="c1"># key is attribute name and val is attribute value in attribute dict
-</span>        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span>        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">classdict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">FunctionType</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">MethodType</span><span class="p">):</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="n">new_cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">exc_handler</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">new_cls</span>
@@ -857,7 +861,9 @@ ZeroDivisionError: division by zero
 <h3 id="abstract-base-classes">
 <a class="anchor" href="#abstract-base-classes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Abstract Base Classes</h3>
 
-<p>An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods. An abstract method is a method that has a declaration but does not have an implementation. When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can’t directly initialize or use an abstract class. Rather, you’ve to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated <code class="highlighter-rouge">abc</code> module to help you create abstract classes. Let’s see how you can define a simple abstract class that provides four abstract methods:</p>
+<p>An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods.An abstract method is a method that has a declaration but does not have an implementation.</p>
+
+<p>When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can’t directly initialize or use an abstract class. Rather, you’ve to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated <code class="highlighter-rouge">abc</code> module to help you create abstract classes. Let’s see how you can define a simple abstract class that provides four abstract methods:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 
@@ -990,19 +996,19 @@ TypeError: Can't instantiate abstract class ICalc with abstract methods add, div
 
 
 <span class="k">class</span> <span class="nc">EventMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">):</span>
         <span class="s">"""__new__ is a classmethod, even without @classmethod decorator
 
         Parameters
         ----------
-        name : str
-            name of the class being defined (Event in this example)
+        cls : str
+            Name of the class being defined (Event in this example)
         bases : tuple
-            base classes for constructed class, empty tuple in this case
+            Base classes of the constructed class, empty tuple in this case
         attrs : dict
-            dict containing methods and fields defined in the class
+            Dict containing methods and fields defined in the class
         """</span>
-        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">metacls</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">classdict</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">dataclass</span><span class="p">(</span><span class="n">unsafe_hash</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">True</span><span class="p">)(</span><span class="n">new_cls</span><span class="p">)</span>
 
@@ -1051,7 +1057,7 @@ TypeError: Can't instantiate abstract class ICalc with abstract methods add, div
 
 <p>Wrapping your mind around metaclasses can be tricky. So, to avoid any unnecessary confusion, I’ve entirely evaded any discussion regarding the behavioral difference between <em>old style classes</em> and <em>new style classes</em> in Python. Also, I’ve intentionally excluded mentioning the differences between <code class="highlighter-rouge">type</code> in Python 2 and <code class="highlighter-rouge">type</code> in Python 3 entirely. Python 2.x has reached its EOL. Save yourself some trouble and switch to Python 3.x if you already haven’t done so.</p>
 
-<p>All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 20.04.</p>
+<p>All the pieces of codes in the blog were written and tested with Python 3.9 on a machine running Ubuntu 20.04.</p>
 
 <p>This article assumes familiarity with decorators, dataclasses etc. If your knowledge on them is rusty, checkout these posts on <a href="https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html">decorators</a> and <a href="https://rednafi.github.io/digressions/python/2020/03/12/python-dataclasses.html">dataclasses</a>.</p>
 
