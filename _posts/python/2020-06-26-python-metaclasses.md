@@ -102,25 +102,27 @@ The the last line of the above code snippet demonstrates that `type` is also an 
 
 ```python
 class PrintMeta(type):
-    def __new__(cls, name, bases, attrs):
+    def __new__(metacls, cls, bases, classdict):
         """__new__ gets executed before the target is created.
 
         Parameters
         ----------
-        name : str
-            name of the class being defined (Point in this example)
+        metaclass : PrintMeta
+            The PrintMeta class
+        cls : str
+            Name of the class being defined (Point in this example)
         bases : tuple
-            base classes for constructed class, empty tuple in this case
-        attrs : dict
-            dict containing methods and fields defined in the class
+            Base classes of the constructed class, empty tuple in this case
+        classdict : dict
+            Dict containing methods and fields defined in the class
 
         Returns
         -------
             instance class of this metaclass
         """
 
-        print(f"Name of this class is: {name}")
-        return super().__new__(cls, name, bases, attrs)
+        print(f"Name of this class is: {cls}")
+        return super().__new__(metacls, cls, bases, classdict)
 
 
 class A(metaclass=PrintMeta):
@@ -131,7 +133,7 @@ class A(metaclass=PrintMeta):
 Name of this class is A
 ```
 
-Despite the fact that we haven't called class `A` or created an instance of it, the `__new__` method of metaclass `PrintMeta` got executed and printed the name of the target class. In the return statement of `__new__` method, `super()` was used to call the `__new__` method of the base class (`type`) of the metaclass `PrintMeta`.
+Despite the fact that we haven't called class `A` or created an instance of it, the `__new__` method of metaclass `PrintMeta` was executed and printed the name of the target class. In the return statement of `__new__` method, `super()` was used to call the `__new__` method of the base class (`type`) of the metaclass `PrintMeta`.
 
 ## Special Methods Used by Metaclasses
 
@@ -154,43 +156,43 @@ class ExampleMeta(type):
     special methods."""
 
     @classmethod
-    def __prepare__(cls, name, bases):
+    def __prepare__(metacls, cls, bases):
         """Defines the class namespace in a mapping that stores
         the attributes
 
         Parameters
         ----------
-        name : str
+        cls : str
             name of the class being defined (Point in this example)
         bases : tuple
             base classes for constructed class, empty tuple in this case
         """
 
         print(f"Calling __prepare__ method of {super()}!")
-        return super().__prepare__(name, bases)
+        return super().__prepare__(cls, bases)
 
-    def __new__(cls, name, bases, attrs):
+    def __new__(metacls, cls, bases, classdict):
         """__new__ is a classmethod, even without @classmethod decorator
 
         Parameters
         ----------
-        name : str
+        cls : str
             name of the class being defined (Point in this example)
         bases : tuple
             base classes for constructed class, empty tuple in this case
-        attrs : dict
+        classdict : dict
             dict containing methods and fields defined in the class
         """
 
         print(f"Calling __new__ method of {super()}!")
-        return super().__new__(cls, name, bases, attrs)
+        return super().__new__(metacls, cls, bases, classdict)
 
-    def __init__(self, name, bases, attrs):
+    def __init__(self, cls, bases, classdict):
         """This method is called to set up values after the
         instance/object is created."""
 
         print(f"Calling __init__ method of {super()}!")
-        super().__init__(name, bases, attrs)
+        super().__init__(cls, bases, classdict)
 
     def __call__(self, *args, **kwargs):
         """This method is called when the constructor of the new class
@@ -294,12 +296,12 @@ logging.basicConfig(level=logging.INFO)
 
 
 class LittleMeta(type):
-    def __new__(cls, name, bases, attrs):
-        logging.info(f"classname: {name}")
+    def __new__(metacls, cls, bases, classdict):
+        logging.info(f"classname: {cls}")
         logging.info(f"baseclasses: {bases}")
-        logging.info(f"attrs: {attrs}")
+        logging.info(f"classdict: {classdict}")
 
-        return super().__new__(cls, name, bases, attrs)
+        return super().__new__(metacls, cls, bases, classdict)
 
 
 class Point(metaclass=LittleMeta):
@@ -337,15 +339,15 @@ from collections import OrderedDict
 
 class AttrsListMeta(type):
     @classmethod
-    def __prepare__(cls, name, bases):
+    def __prepare__(metacls, cls, bases):
         return OrderedDict()
 
-    def __new__(cls, name, bases, attrs, **kwargs):
-        attrs_names = [k for k in attrs.keys()]
+    def __new__(metacls, cls, bases, classdict, **kwargs):
+        attrs_names = [k for k in classdict.keys()]
         attrs_names_ordered = sorted(attrs_names)
-        attrs["__attrs_ordered__"] = attrs_names_ordered
+        classdict["__attrs_ordered__"] = attrs_names_ordered
 
-        return super().__new__(cls, name, bases, attrs, **kwargs)
+        return super().__new__(metacls, cls, bases, classdict, **kwargs)
 
 
 class A(metaclass=AttrsListMeta):
@@ -355,7 +357,7 @@ class A(metaclass=AttrsListMeta):
 
 
 a = A(1, 2)
-a.__attrs_ordered__
+print(a.__attrs_ordered__)
 ```
 
 ```
@@ -394,7 +396,7 @@ a is b
 True
 ```
 
-In the above example, at first, I've created a singleton class `A` by attaching the `Singleton` metaclass to it. Secondly, I've instantiated class `A` and assigned the instance of the class to a variable `a`. Thirdly, I've instantiated the class again and assigned variable a `b` to this seemingly new instance. Checking the identity of the two variables `a` and `b` reveals that both of them actually point to the same instance.
+In the above example, at first, I've created a singleton class `A` by attaching the `Singleton` metaclass to it. Secondly, I've instantiated class `A` and assigned the instance of the class to a variable `a`. Thirdly, I've instantiated the class again and assigned variable a `b` to this seemingly new instance. Checking the identity of the two variables `a` and `b` reveals that both of them are actually the same object.
 
 ### Implementing a Class that Can't be Subclassed
 
@@ -403,16 +405,16 @@ Suppose you want to create a base class where the users of your class won't be a
 
 ```python
 class TerminateMeta(type):
-    def __new__(cls, name, bases, attrs):
+    def __new__(metacls, cls, bases, classdict):
         type_list = [type(base) for base in bases]
 
         for typ in type_list:
-            if typ is cls:
+            if typ is metacls:
                 raise RuntimeError(
                     f"Subclassing a class that has "
-                    + f"{cls.__name__} metaclass is prohibited"
+                    + f"{metacls.__name__} metaclass is prohibited"
                 )
-        return super().__new__(cls, name, bases, attrs)
+        return super().__new__(metacls, cls, bases, classdict)
 
 
 class A(metaclass=TerminateMeta):
@@ -449,10 +451,10 @@ Multiple inheritance can be fragile and error prone. So, if you don't want to al
 
 ```python
 class NoMultiMeta(type):
-    def __new__(cls, name, bases, attrs):
+    def __new__(metacls, cls, bases, classdict):
         if len(bases) > 1:
             raise TypeError("Inherited multiple base classes!")
-        return super().__new__(cls, name, bases, attrs)
+        return super().__new__(metacls, cls, bases, classdict)
 
 
 class Base(metaclass=NoMultiMeta):
@@ -495,8 +497,9 @@ TypeError: Inherited multiple base classes!
 Suppose you want to measure the execution time of different methods of a class. One way of doing that is to define a timer decorator and decorating all the methods to measure and show the execution time. However, by using a metaclass, you can avoid decorating the methods in the class individually and the metaclass will dynamically apply the timer decorator to all of the methods of your target class. This can reduce code repetition and improve code readability.
 
 ```python
-from types import FunctionType, MethodType
+import time
 from functools import wraps
+from types import FunctionType, MethodType
 
 
 def timefunc(func):
@@ -513,11 +516,11 @@ def timefunc(func):
 
 
 class TimerMeta(type):
-    def __new__(cls, name, bases, attrs):
-        new_cls = super().__new__(cls, name, bases, attrs)
+    def __new__(metacls, cls, bases, classdict):
+        new_cls = super().__new__(metacls, cls, bases, classdict)
 
         # key is attribute name and val is attribute value in attribute dict
-        for key, val in attrs.items():
+        for key, val in classdict.items():
             if isinstance(val, FunctionType) or isinstance(val, MethodType):
                 setattr(new_cls, key, timefunc(val))
         return new_cls
@@ -550,8 +553,8 @@ registry = {}
 
 
 class RegisterMeta(type):
-    def __new__(cls, name, bases, attrs):
-        new_cls = super().__new__(cls, name, bases, attrs)
+    def __new__(metacls, cls, bases, classdict):
+        new_cls = super().__new__(metacls, cls, bases, classdict)
         registry[new_cls.__name__] = new_cls
         return new_cls
 
@@ -573,7 +576,7 @@ class D(B):
 
 
 b = B()
-registry
+print(registry)
 ```
 
 ```
@@ -601,11 +604,11 @@ def debug(func):
 
 
 class DebugMeta(type):
-    def __new__(cls, name, bases, attrs):
-        new_cls = super().__new__(cls, name, bases, attrs)
+    def __new__(metacls, cls, bases, classdict):
+        new_cls = super().__new__(metacls, cls, bases, classdict)
 
         # key is attribute name and val is attribute value in the attrs dict
-        for key, val in attrs.items():
+        for key, val in classdict.items():
             if isinstance(val, FunctionType) or isinstance(val, MethodType):
                 setattr(new_cls, key, debug(val))
         return new_cls
@@ -640,6 +643,7 @@ Sometimes you need to handle exceptions in multiple methods of a class in a gene
 
 ```python
 from functools import wraps
+from types import FunctionType, MethodType
 
 
 def exc_handler(func):
@@ -660,11 +664,11 @@ def exc_handler(func):
 
 
 class ExceptionMeta(type):
-    def __new__(cls, name, bases, attrs):
-        new_cls = super().__new__(cls, name, bases, attrs)
+    def __new__(metacls, cls, bases, classdict):
+        new_cls = super().__new__(metacls, cls, bases, classdict)
 
         # key is attribute name and val is attribute value in attribute dict
-        for key, val in attrs.items():
+        for key, val in classdict.items():
             if isinstance(val, FunctionType) or isinstance(val, MethodType):
                 setattr(new_cls, key, exc_handler(val))
         return new_cls
@@ -711,7 +715,9 @@ ZeroDivisionError: division by zero
 
 ### Abstract Base Classes
 
-An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods. An abstract method is a method that has a declaration but does not have an implementation. When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can't directly initialize or use an abstract class. Rather, you've to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated `abc` module to help you create abstract classes. Let's see how you can define a simple abstract class that provides four abstract methods:
+An abstract class can be regarded as a blueprint for other classes. It allows you to provide a set of methods that must be implemented within any child classes built from the abstract class. Abstract classes usually house multiple abstract methods.An abstract method is a method that has a declaration but does not have an implementation.
+
+When you want to provide a common interface for different implementations of a component, abstract classes are the way to go. You can't directly initialize or use an abstract class. Rather, you've to subclass the abstract base class and provide concrete implementations of all the abstract methods. Python has a dedicated `abc` module to help you create abstract classes. Let's see how you can define a simple abstract class that provides four abstract methods:
 
 
 ```python
@@ -850,19 +856,19 @@ from datetime import datetime
 
 
 class EventMeta(type):
-    def __new__(cls, name, bases, attrs):
+    def __new__(metacls, cls, bases, classdict):
         """__new__ is a classmethod, even without @classmethod decorator
 
         Parameters
         ----------
-        name : str
-            name of the class being defined (Event in this example)
+        cls : str
+            Name of the class being defined (Event in this example)
         bases : tuple
-            base classes for constructed class, empty tuple in this case
+            Base classes of the constructed class, empty tuple in this case
         attrs : dict
-            dict containing methods and fields defined in the class
+            Dict containing methods and fields defined in the class
         """
-        new_cls = super().__new__(cls, name, bases, attrs)
+        new_cls = super().__new__(metacls, cls, bases, classdict)
 
         return dataclass(unsafe_hash=True, frozen=True)(new_cls)
 
@@ -910,7 +916,7 @@ Also, metaclasses can easily veer into the realm of being a *“solution in sear
 
 Wrapping your mind around metaclasses can be tricky. So, to avoid any unnecessary confusion, I've entirely evaded any discussion regarding the behavioral difference between *old style classes* and *new style classes* in Python. Also, I've intentionally excluded mentioning the differences between `type` in Python 2 and `type` in Python 3 entirely. Python 2.x has reached its EOL. Save yourself some trouble and switch to Python 3.x if you already haven't done so.
 
-All the pieces of codes in the blog were written and tested with Python 3.8 on a machine running Ubuntu 20.04.
+All the pieces of codes in the blog were written and tested with Python 3.9 on a machine running Ubuntu 20.04.
 
 This article assumes familiarity with decorators, dataclasses etc. If your knowledge on them is rusty, checkout these posts on [decorators](https://rednafi.github.io/digressions/python/2020/05/13/python-decorators.html) and [dataclasses](https://rednafi.github.io/digressions/python/2020/03/12/python-dataclasses.html).
 
