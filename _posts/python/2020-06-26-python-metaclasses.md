@@ -165,9 +165,9 @@ class ExampleMeta(type):
         Parameters
         ----------
         cls : str
-            name of the class being defined (Point in this example)
+            Name of the class being defined (Point in this example)
         bases : tuple
-            base classes for constructed class, empty tuple in this case
+            Base classes for constructed class, empty tuple in this case
         """
 
         print(f"Calling __prepare__ method of {super()}!")
@@ -179,11 +179,11 @@ class ExampleMeta(type):
         Parameters
         ----------
         cls : str
-            name of the class being defined (Point in this example)
+            Name of the class being defined (Point in this example)
         bases : tuple
-            base classes for constructed class, empty tuple in this case
+            Base classes for constructed class, empty tuple in this case
         classdict : dict
-            dict containing methods and fields defined in the class
+            Dict containing methods and fields defined in the class
         """
 
         print(f"Calling __new__ method of {super()}!")
@@ -203,9 +203,9 @@ class ExampleMeta(type):
         Parameters
         ----------
         args : tuple
-            position only arguments of the new class
+            Position only arguments of the new class
         kwargs : dict
-            keyward only arguments of the new class
+            Keyward only arguments of the new class
 
         """
 
